@@ -92,6 +92,7 @@ public class Head {
 				System.out.printf("\n\n Insert the your ID: ");
 				id = input.nextInt();
 				list[id].showDetails();
+				break;
 			default:
 				System.out.println("\n\n Invalid Option! - Try Again");
 				break;
