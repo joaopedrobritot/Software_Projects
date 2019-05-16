@@ -17,7 +17,7 @@ public class Head {
 
         Scanner input = new Scanner(System.in);
         String system_password = "admin";
-        System.out.println("\n Insert the System Password (default: 'admin'): ");
+        System.out.printf("\n Insert the System Password (default: 'admin'): ");
         String password_given = input.nextLine();
 
         while(true)
@@ -39,7 +39,7 @@ public class Head {
 		
         		while(1 == 1)
         		{
-        		    System.out.printf("\n Insert the operation you want followed by a enter: \n\n 1 : Add - adds a new employee\n\n 2 : Del - Removes a employee\n\n 3 : TCard - Launch a Time Card\n\n 4 : SResult - Launch Selling Result\n\n 5 : Tax - Launch a tax of service\n\n 6 : EChange - Change employee details\n\n 7 : TPayment - Today Payments\n\n 8 : UR - Undo / Redo\n\n 9 : Payment Schedule\n\n 10 : Create New Payment Schedule\n\n 11 : Exit\n\n ");
+        		    System.out.printf("\n Insert the operation you want followed by a enter: \n\n 1 : Add - adds a new employee\n\n 2 : Del - Removes a employee\n\n 3 : TCard - Launch a Time Card\n\n 4 : SResult - Launch Selling Result\n\n 5 : Tax - Launch a tax of service\n\n 6 : EChange - Change employee details\n\n 7 : TPayment - Today Payments\n\n 8 : UR - Undo / Redo\n\n 9 : Payment Schedule\n\n 10 : Create New Payment Schedule\n\n 11 : Exit\n\n 12 : Shows a Employee Detail\n\n 13 : Change System Password\n\n ");
         		    System.out.printf("\n Operation: ");
         		    int option = input.nextInt();
         		    System.out.println("\n\n ");
@@ -122,6 +122,13 @@ public class Head {
         	    	        list[id].showDetails();
         	    	        break;
         	    	    
+        	    	    case 13:
+        	    	    	System.out.printf("\n\n Insert the new System Password: ");
+        	    	    	system_password = input.nextLine();
+        	    	    	System.out.printf("\n\n     System Password Changed With Sucess!!!");
+        	    	    	System.out.printf("\n\n Press anykey to continue...");
+                        	input.nextLine();
+
         	    	    default:
         	    	        System.out.println("\n\n Invalid Option! - Try Again");
         	    	        break;

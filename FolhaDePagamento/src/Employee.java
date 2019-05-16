@@ -29,7 +29,7 @@ public class Employee {
         this.address = input.nextLine();
         System.out.printf("\n\n Insert the type:\n hourly - 0\n salaried - 1\n commissioned - 2\n\n Type: ");
         this.type = input.nextInt();
-        System.out.printf("Choose your Payment Method: \n\n 0 - Postal Check\n 1 - Receive check in hands\n 2 - Bank Deposit\n\n  Your choice: ");
+        System.out.printf("\n\n Choose your Payment Method: \n\n 0 - Postal Check\n 1 - Receive check in hands\n 2 - Bank Deposit\n\n  Your choice: ");
         this.payment = input.nextInt();
         System.out.printf("\n\n Insert your salary: ");
         this.salary = input.nextDouble();
@@ -74,6 +74,7 @@ public class Employee {
         System.out.println("\n\n\n Save your ID number!!!!\n\n");
         System.out.printf("\n\n Press anykey to continue...");
         input.nextLine();
+        input.nextLine();
     }
 
     public int delEmployee(Employee list[], int id) 
@@ -88,6 +89,7 @@ public class Employee {
             flag = 1;
             System.out.println("\n\n Employee removed with sucess!\n\n");
             System.out.printf(" Press anykey to continue...");
+            input.nextLine();
             input.nextLine();
         }
         else
@@ -108,7 +110,8 @@ public class Employee {
         	int choice = input.nextInt();
         	if(choice == 0)
         	{
-        		System.out.println("\n\n\n Insert the hours (end): ");
+        		System.out.printf("\n\n\n Insert the hours (end): ");
+        		input.nextLine();
         		list[id].date_end = input.nextLine();
         		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         		Date start = null;
@@ -120,10 +123,19 @@ public class Employee {
 
                     long diff = end.getTime() - start.getTime();
                     int diffHours = (int)diff / (60 * 60 * 1000) % 24;
-                    System.out.print(diffHours + " hours today\n\n ");
+                    diffHours = Math.abs(diffHours);
+                    System.out.printf("\n\n alou: %d\n\n ",diffHours);
+                    if(start.getTime() > end.getTime())
+                    {
+                    	diffHours = 24 % diffHours;
+                    }
+                    System.out.print("\n\n\n\n  " + diffHours + " hours today\n\n ");
                     hour = diffHours;
 				    
 					list[id].hours = hour;
+					
+					System.out.printf("\n\n\n      Press any key to continue...\n\n ");
+					input.nextLine();
 					System.out.println("\n\n    Time Card approved!\n\n    Finishing the day...\n\n ");
 
 				} 
@@ -135,9 +147,12 @@ public class Employee {
         	else
         	{
         		System.out.printf("\n\n\n Insert the hours (start): ");
-        		String teste = input.nextLine();
-                list[id].date_start = teste;
-        		System.out.println("\n\n    Time Card approved!\n\n");
+        		input.nextLine();
+                list[id].date_start = input.nextLine();
+                
+        		System.out.println("\n\n    Time Card Approved!\n\n");
+        		System.out.printf("\n\n\n      Press any key to continue...\n\n ");
+				input.nextLine();
         	}   
         }
         else
@@ -148,7 +163,7 @@ public class Employee {
 
     public void showDetails() 
     {
-
+    	Scanner input = new Scanner(System.in);
         if(this.ID != -1)
         {
             System.out.printf("\n\n Name: %s\n Address: %s\n Type:", this.name, this.address);
@@ -175,6 +190,12 @@ public class Employee {
             {
             	System.out.printf(" Belong to Syndicate\n Syndicate ID: %d\n Syndicate Tax: %d\n Hours: %d\n Date Start: %s\n Date End: %s\n\n ", this.syndicate_id, this.syndicate_tax, this.hours, this.date_start, this.date_end);
             }
+            else
+            {
+            	System.out.printf(" Not in Syndicate\n Hours: %d\n Date Start: %s\n Date End: %s\n\n", this.hours, this.date_start, this.date_end);
+            }
+            System.out.printf("\n\n Press anykey to continue...");
+            input.nextLine();
         }
     }
 
@@ -183,24 +204,28 @@ public class Employee {
     	if(this.ID == id && this.ID != -1)
     	{
     		Scanner input = new Scanner(System.in);
-
-    		System.out.println("\n\n Insert what will you change:\n\n 1 - Name\n 2 - Address\n 3 - Type\n 4 - Payment Method\n 5 - Syndicate Status\n 6 - Syndicate ID\n 7 - Syndicate Tax\n 8 - Make another change\n 9 - Return to menu\n\n ");
-    		int choice = input.nextInt();
-    		switch(choice)
+    		while(true)
     		{
-    			case 1:
+
+    		  System.out.println("\n\n Insert what will you change:\n\n 1 - Name\n 2 - Address\n 3 - Type\n 4 - Payment Method\n 5 - Syndicate Status\n 6 - Syndicate ID\n 7 - Syndicate Tax\n 8 - Return to menu\n\n ");
+    		  int choice = input.nextInt();
+    		  switch(choice)
+    		  {
+    		  	case 1:
     				System.out.println("Insert the new name followed by a enter: ");
+    				input.nextLine();
     				this.name = input.nextLine();
     				System.out.println("\n\n    Change done!!\n\n ");
     				break;
-
-    			case 2:
+    
+    		  	case 2:
     				System.out.println("Insert the new address followed by a enter: ");
+    				input.nextLine();
     				this.address = input.nextLine();
     				System.out.println("\n\n    Change done!!\n\n ");
     				break;
-
-    			case 3:
+    
+    		  	case 3:
     				System.out.println("Insert the new type followed by a enter (0 - hourly / 1 - salaried / 2 - commissioned):");
     				int given = input.nextInt();
     				if(given == 0 || given == 1 || given == 2)
@@ -213,8 +238,8 @@ public class Employee {
     					System.out.println("\n\n Invalid type!!\n\n ");
     				}
     				break;
-
-    			case 4:
+    
+    		  	case 4:
     				System.out.printf("Choose your Payment Method: \n\n 0 - Postal Check\n 1 - Receive check in hands\n 2 - Bank Deposit\n\n  Your choice: ");
     				int dado = input.nextInt();
     				if(dado == 0 || dado == 1 || dado == 2)
@@ -227,8 +252,8 @@ public class Employee {
     					System.out.println("\n\n Invalid Method!!\n\n ");
     				}
     				break;
-
-    			case 5:
+    
+    		  	case 5:
     				System.out.println("\n\n Insert your new status: ( 1 - belong to syndicate // 2 - not in syndicate");
     				int alo = input.nextInt();
     				if(alo == 1)
@@ -246,25 +271,47 @@ public class Employee {
     					System.out.println("\n\n Invalid option!!\n\n ");
     				}
     				break;
-
-    			case 6:
-    				System.out.println("\n\n Insert the new Syndicate ID: ");
-    				this.syndicate_id = input.nextInt();
-    				System.out.println("\n\n    Change done!!\n\n ");
+    
+    		  	case 6:
+                    if(this.syndicate)
+                    {
+                        System.out.println("\n\n Insert the new Syndicate ID: ");
+                        this.syndicate_id = input.nextInt();
+                        System.out.println("\n\n    Change done!!\n\n ");
+                    }
+                    else
+                    {
+                        System.out.printf("\n\n    You do not belong to the Syndicate!!\n\n");
+                        System.out.printf("\n\n Press anykey to continue...");
+                        input.nextLine();
+                    }
+    				
     				break;
-
-    			case 7:
-    				System.out.println("\n Insert the new Syndicate Tax: ");
-        			this.syndicate_tax = input.nextInt();
-        			System.out.println("\n\n    Change done!!\n\n ");
+    
+    		  	case 7:
+                    if(this.syndicate)
+                    {
+                        System.out.println("\n Insert the new Syndicate Tax: ");
+                        this.syndicate_tax = input.nextInt();
+                        System.out.println("\n\n    Change done!!\n\n ");
+                    }
+    				else
+                    {
+                        System.out.printf("\n\n    You do not belong to the Syndicate!!\n\n");
+                        System.out.printf("\n\n Press anykey to continue...");
+                        input.nextLine();
+                    }
+                    
     				break;
+    
+    		  	case 8:
+    		  		return;
 
-    			case 8:
-    				list[id].changeDetails(list, id);
-    				break;
-
-    			case 9:
-    				return;
+                default:
+                    System.out.printf("\n\n   Invalid Option!! / Press enter to try again");
+                    input.nextLine();
+                    list[id].changeDetails(list, id);
+    		  }
     		}
     	}
     }
