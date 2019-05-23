@@ -20,6 +20,19 @@ public class Head {
     private static int syndicate[] = new int[99999];// 1 belong to syndicate // 0 - not in syndicate
     private static int syndicate_id[] = new int[99999];
 
+    private static int day = 1;
+    private static int month = 1;
+
+    private static String day_of_week[] = new String[7];
+    private static int d_w = 1;
+    day_of_week[0] = "Monday";
+    day_of_week[1] = "Tuesday";
+    day_of_week[2] = "Wednesday";
+    day_of_week[3] = "Thursday";
+    day_of_week[4] = "Friday";
+    day_of_week[5] = "Saturday";
+    day_of_week[6] = "Sunday";
+
     private static void addEmployee(int id) 
     {
 
@@ -428,6 +441,72 @@ public class Head {
     	}
     }
 
+    private static void todayPayments()
+    {
+    	int flag = 0;
+    	int cont = 1;
+
+    	System.out.printf("\n\n//////////////////////////////////////////////////////////////////////\n");
+    	System.out.printf("///                                                                ///\n");
+    	System.out.printf("///                        Today Payments                          ///\n");
+    	System.out.printf("///                                                                ///\n");
+
+    	
+
+    	for(int i = 0;i<99999;i++)
+    	{
+    		if(ID[i] != -1)//achou empregado
+    		{
+    			flag = 1;
+    			switch(type[i])
+    			{
+    				case 0: //hourly
+    					if(d_w = 4)// pagos dia de sexta
+    					{
+    						salary[i] += extra_hour[i];
+    						extra_hour[i] = 0;
+    						System.out.printf("/// %d - Name: %s   Salary: %.2f  Payment Method: ", cont);
+    						switch(payment[i])
+    						{
+    							case 0: System.out.printf("Postal Check\n");break;
+    							case 1: System.out.printf("Check in Hands\n");break;
+    							case 2: System.out.printf("Bank Deposit\n");break;
+    						}
+    						cont++;
+    					}
+    					break;
+
+    				case 1: //salaried
+    					if(day == 30)
+    					{
+    						////PAREI AQUI
+    					}
+    					break;
+
+    			}
+    		}
+    	}
+    }
+
+    private static void spendDay()
+    {
+    	day++;
+    	d_w++;
+    	if(d_w == 7)// day of week
+    	{
+    		d_w = 0;
+    	}
+    	if(day == 31)
+    	{
+    		day = 1;
+    		month++;
+    		if(month == 13)
+    		{
+    			month = 1;
+    		}
+    	}
+    }
+
     public static void main(String[] args)
     {
         Scanner input = new Scanner(System.in);
@@ -465,9 +544,29 @@ public class Head {
         			System.out.printf("/// 8 : UR - Undo / Redo                                           ///\n");
         			System.out.printf("/// 9 : Payment Schedule                                           ///\n");
         			System.out.printf("/// 10 : Create New Payment Schedule                               ///\n");
-        			System.out.printf("/// 11 : Exit                                                      ///\n");
+        			System.out.printf("/// 11 : Spend the Day                                             ///\n");
         			System.out.printf("/// 12 : Shows a Employee Detail                                   ///\n");
         			System.out.printf("/// 13 : Change System Password                                    ///\n");
+        			System.out.printf("/// 14 : Exit 		                                              ///\n");
+        			System.out.printf("///                                                                ///\n");
+        			/////gambiarra
+        			if(day < 10 && month < 10)
+        			{
+        				System.out.printf("/// Date : 0%d / 0%d / 2019                                        ///\n");
+        			}
+        			else if(day < 10)
+        			{
+        				System.out.printf("/// Date : 0%d / %d / 2019                                         ///\n");
+        			}
+        			else if(month < 10)
+        			{
+        				System.out.printf("/// Date : %d / 0%d / 2019                                         ///\n");
+        			}
+        			else
+        			{
+        				System.out.printf("/// Date : %d / %d / 2019                                          ///\n");
+        			}
+        			///
         			System.out.printf("///                                                                ///\n");
         			System.out.printf("//////////////////////////////////////////////////////////////////////\n");
         		    System.out.printf("\n Operation: ");
@@ -537,6 +636,7 @@ public class Head {
         	    	        break;
 		
         	    	    case 7:
+        	    	    	//todayPayments();
         	    	        break;
 		
         	    	    case 8:
@@ -549,7 +649,7 @@ public class Head {
         	    	        break;
 		
         	    	    case 11:
-        	    	    	o = 1;
+        	    	    	spendDay();
         	    	    	break;
 	
         	    	    case 12:
@@ -565,6 +665,11 @@ public class Head {
         	    	    	System.out.printf("\n\n     System Password Changed With Sucess!!!");
         	    	    	System.out.printf("\n\n Press anykey to continue...");
                         	input.nextLine();
+                        	break;
+
+                        case 14:
+                        	o = 1;
+                        	break;
 
         	    	    default:
         	    	        System.out.println("\n\n Invalid Option! - Try Again");
