@@ -27,28 +27,22 @@ public class Head {
     private static int day = 1;
     private static int month = 1;
 
-    private static String day_of_week[] = new String[7];
+    private static String day_of_week[] = {"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
     private static int d_w = 1;
-    day_of_week[0] = "Monday";
-    day_of_week[1] = "Tuesday";
-    day_of_week[2] = "Wednesday";
-    day_of_week[3] = "Thursday";
-    day_of_week[4] = "Friday";
-    day_of_week[5] = "Saturday";
-    day_of_week[6] = "Sunday";
+    
     private static int last_day_month[] = new int[13];
-    last_day_month[1] = 31;
-    last_day_month[2] = 28;
-    last_day_month[3] = 31;
-    last_day_month[4] = 30;
-    last_day_month[5] = 31;
-    last_day_month[6] = 30;
-    last_day_month[7] = 31;
-    last_day_month[8] = 31;
-    last_day_month[9] = 30;
-    last_day_month[10] = 31;
-    last_day_month[11] = 30;
-    last_day_month[12] = 31;
+    //last_day_month[1] = 31;
+    //last_day_month[2] = 28;
+    //last_day_month[3] = 31;
+    //last_day_month[4] = 30;
+    //last_day_month[5] = 31;
+    //last_day_month[6] = 30;
+    //last_day_month[7] = 31;
+    //last_day_month[8] = 31;
+    //last_day_month[9] = 30;
+    //last_day_month[10] = 31;
+    //last_day_month[11] = 30;
+    //last_day_month[12] = 31;
 
     private static void addEmployee(int id) 
     {
@@ -352,22 +346,26 @@ public class Head {
     {
     	Scanner input = new Scanner(System.in);
     	System.out.printf("\n\n      Comming soon....\n\n  ");
-    	System.out.printf("\n\n    Press anykey to return to menu... ");
-        input.nextLine();
-    	//if(ID[id] != -1)
-    	//{
-    	//	if(type[id] == 2)
-    	//	{
-    	//		System.out.printf("\n\n (dd/mm/aaaa) = d - day / m - month / y - year\n Insert the date: ");
-    	//		
-    	//	}
-    	//}
-    	//else
-    	//{
-    	//	System.out.println("\n\n\n\n    Invalid ID!!\n\n");
-    	//	System.out.printf("\n\n    Press anykey to continue... ");
-        //	input.nextLine();
-    	//}
+    	
+    	if(ID[id] != -1)
+    	{
+    		if(type[id] == 2)
+    		{
+    			System.out.printf("\n\n Insert the Selling Value: ");
+                selling_result[id] += input.nextDouble();
+                System.out.printf("\n\n\n       Selling added to user: %s with the ID: %d\n\n", name[id], ID[id]);
+                System.out.printf("\n\n    Press anykey to return to menu... ");
+                input.nextLine();
+                input.nextLine();
+    			
+    		}
+    	}
+    	else
+    	{
+    		System.out.println("\n\n\n\n    Invalid ID!!\n\n");
+    		System.out.printf("\n\n    Press anykey to continue... ");
+        	input.nextLine();
+    	}
     }
 
     private static void serviceTax(int sid)
@@ -754,6 +752,7 @@ public class Head {
         		{
         			ID[i] = -1;
                     two_friday[i] = 0;
+                    selling_result[i] = 0;
         		}
 		
         		while(o == 0)
