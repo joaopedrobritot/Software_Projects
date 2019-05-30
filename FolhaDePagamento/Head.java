@@ -4,21 +4,25 @@ import java.util.Date;
 
 public class Head {
 
-	private static String name[] = new String[99999];
-    private static String address[] = new String[99999];
-    private static String date_start[] = new String[99999];
-    private static String date_end[] = new String[99999];
-    private static double salary[] = new double[99999];
-    private static double extra_hour[] = new double[99999];
-    private static double selling_result[] = new double[99999];
-    private static double syndicate_tax[] = new double[99999];
-    private static double service_tax[] = new double[99999];
-    private static int payment[] = new int[99999];// 0 - Postal Check // 1 - Receive check in hands // 2 - Bank Deposit
-    private static int hours[] = new int[99999];
-    private static int ID[] = new int[99999];// indicates what's position of the employee
-    private static int type[] = new int[99999];// 0 - hourly // 1 - salaried // 2 - commissioned
-    private static int syndicate[] = new int[99999];// 1 belong to syndicate // 0 - not in syndicate
-    private static int syndicate_id[] = new int[99999];
+	private static String name[] = new String[1000];
+    private static String address[] = new String[1000];
+    private static String date_start[] = new String[1000];
+    private static String date_end[] = new String[1000];
+    private static String agenda[] = new String[1000];
+    private static double salary[] = new double[1000];
+    private static double extra_hour[] = new double[1000];
+    private static double selling_result[] = new double[1000];
+    private static double syndicate_tax[] = new double[1000];
+    private static double service_tax[] = new double[1000];
+    private static int two_friday[] = new int[1000];
+    private static int payment[] = new int[1000];// 0 - Postal Check // 1 - Receive check in hands // 2 - Bank Deposit
+    private static int hours[] = new int[1000];
+    private static int ID[] = new int[1000];// indicates what's position of the employee
+    private static int type[] = new int[1000];// 0 - hourly // 1 - salaried // 2 - commissioned
+    private static int hourly_day[] = new int[1000]; 
+    private static int salaried_week[] = new int[1000];
+    private static int syndicate[] = new int[1000];// 1 belong to syndicate // 0 - not in syndicate
+    private static int syndicate_id[] = new int[1000];
 
     private static int day = 1;
     private static int month = 1;
@@ -32,6 +36,19 @@ public class Head {
     day_of_week[4] = "Friday";
     day_of_week[5] = "Saturday";
     day_of_week[6] = "Sunday";
+    private static int last_day_month[] = new int[13];
+    last_day_month[1] = 31;
+    last_day_month[2] = 28;
+    last_day_month[3] = 31;
+    last_day_month[4] = 30;
+    last_day_month[5] = 31;
+    last_day_month[6] = 30;
+    last_day_month[7] = 31;
+    last_day_month[8] = 31;
+    last_day_month[9] = 30;
+    last_day_month[10] = 31;
+    last_day_month[11] = 30;
+    last_day_month[12] = 31;
 
     private static void addEmployee(int id) 
     {
@@ -357,7 +374,7 @@ public class Head {
     {
     	Scanner input = new Scanner(System.in);
     	int flag = 0;
-    	for(int i = 0;i<99999;i++)
+    	for(int i = 0;i<1000;i++)
     	{
     		if(sid == syndicate_id[i])
     		{
@@ -441,8 +458,35 @@ public class Head {
     	}
     }
 
+    private static int dayUtil(int mth)
+    {
+    	int result = last_day_month[mth];
+    	int week = d_w;
+    	int d = day;
+    	for(int i = d;i <= last_day_month[mth];i++)
+    	{
+    		week++;
+    		if(week == 7)
+    		{
+    			week = 0;
+    		}
+    	}
+    	switch(week)
+    	{
+    		case 5:
+    			result--;
+    			break;
+
+    		case 6:
+    			result -= 2;
+    			break;
+    	}
+    	return result;
+    }
+
     private static void todayPayments()
     {
+        Scanner input = new Scanner(System.in);
     	int flag = 0;
     	int cont = 1;
 
@@ -451,59 +495,242 @@ public class Head {
     	System.out.printf("///                        Today Payments                          ///\n");
     	System.out.printf("///                                                                ///\n");
 
-    	
-
-    	for(int i = 0;i<99999;i++)
+    	for(int i = 0;i<1000;i++)
     	{
     		if(ID[i] != -1)//achou empregado
     		{
-    			flag = 1;
     			switch(type[i])
     			{
     				case 0: //hourly
-    					if(d_w = 4)// pagos dia de sexta
+    					if(d_w == 4)// pagos dia de sexta
     					{
-    						salary[i] += extra_hour[i];
-    						extra_hour[i] = 0;
-    						System.out.printf("/// %d - Name: %s   Salary: %.2f  Payment Method: ", cont);
+    						System.out.printf("/// %d - Name: %s   Type: Hourly   Salary: %.2f  Payment Method: ", cont, name[i] , salary[i] + extra_hour[i]);
     						switch(payment[i])
     						{
     							case 0: System.out.printf("Postal Check\n");break;
     							case 1: System.out.printf("Check in Hands\n");break;
     							case 2: System.out.printf("Bank Deposit\n");break;
     						}
+                            extra_hour[i] = 0;
     						cont++;
+                            flag = 1;
     					}
     					break;
 
     				case 1: //salaried
-    					if(day == 30)
+    					if(day == dayUtil(month))
     					{
-    						////PAREI AQUI
+                            System.out.printf("/// %d - Name: %s   Type: Salaried   Salary: %.2f  Payment Method: ", cont, name[i], salary[i]);
+                            switch(payment[i])
+                            {
+                                case 0: System.out.printf("Postal Check\n");break;
+                                case 1: System.out.printf("Check in Hands\n");break;
+                                case 2: System.out.printf("Bank Deposit\n");break;
+                            }
+                            cont++;
+                            flag = 1;
     					}
     					break;
 
+                    case 3: // commissioned
+                        if(two_friday[i] == 2)
+                        { 
+                            System.out.printf("/// %d - Name: %s   Type: Commissioned   Salary: %.2f  Payment Method: ", cont, name[i], salary[i] + selling_result[i]);
+                            switch(payment[i])
+                            {
+                                case 0: System.out.printf("Postal Check\n");break;
+                                case 1: System.out.printf("Check in Hands\n");break;
+                                case 2: System.out.printf("Bank Deposit\n");break;
+                            }
+                            selling_result[i] = 0;
+                            cont++;
+                            two_friday[i] = 0;
+                            flag = 1;
+                        }
+                        break;
     			}
     		}
     	}
+
+        if(flag == 0)
+        {
+            System.out.printf("///                     No Payments Today!!!                       ///\n");
+        }
+        System.out.printf("///                                                                ///\n");
+        System.out.printf("///        Press any key to continue...                            ///\n");
+        System.out.printf("///                                                                ///\n");
+        System.out.printf("//////////////////////////////////////////////////////////////////////\n\n");
+        input.nextLine();
     }
 
     private static void spendDay()
     {
     	day++;
     	d_w++;
+        if(d_w == 4)
+        {
+            for(int i = 0; i < 1000 ; i++)
+            {
+                if(ID[i] != -1)
+                {
+                    if(type[i] == 2)
+                    {
+                        two_friday[i]++;
+                    }
+                }
+            }
+        }
     	if(d_w == 7)// day of week
     	{
     		d_w = 0;
     	}
-    	if(day == 31)
+    	switch(month)
     	{
-    		day = 1;
-    		month++;
-    		if(month == 13)
-    		{
-    			month = 1;
-    		}
+    		case 1:
+    			if(day == 31)
+    			{
+    				day = 1;
+    				month++;
+    				if(month == 13)
+    				{
+    					month = 1;
+    				}
+    			}
+    			break;
+
+    		case 2:
+    			if(day == 28)
+    			{
+    				day = 1;
+    				month++;
+    				if(month == 13)
+    				{
+    					month = 1;
+    				}
+    			}
+    			break;
+
+    		case 3:
+    			if(day == 31)
+    			{
+    				day = 1;
+    				month++;
+    				if(month == 13)
+    				{
+    					month = 1;
+    				}
+    			}
+    			break;
+
+    		case 4:
+    			if(day == 30)
+    			{
+    				day = 1;
+    				month++;
+    				if(month == 13)
+    				{
+    					month = 1;
+    				}
+    			}
+    			break;
+
+    		case 5:
+    			if(day == 31)
+    			{
+    				day = 1;
+    				month++;
+    				if(month == 13)
+    				{
+    					month = 1;
+    				}
+    			}
+    			break;
+
+    		case 6:
+    			if(day == 30)
+    			{
+    				day = 1;
+    				month++;
+    				if(month == 13)
+    				{
+    					month = 1;
+    				}
+    			}
+    			break;
+
+    		case 7:
+    			if(day == 31)
+    			{
+    				day = 1;
+    				month++;
+    				if(month == 13)
+    				{
+    					month = 1;
+    				}
+    			}
+    			break;
+
+    		case 8:
+    			if(day == 31)
+    			{
+    				day = 1;
+    				month++;
+    				if(month == 13)
+    				{
+    					month = 1;
+    				}
+    			}
+    			break;
+
+    		case 9:
+    			if(day == 30)
+    			{
+    				day = 1;
+    				month++;
+    				if(month == 13)
+    				{
+    					month = 1;
+    				}
+    			}
+    			break;
+
+    		case 10:
+    			if(day == 31)
+    			{
+    				day = 1;
+    				month++;
+    				if(month == 13)
+    				{
+    					month = 1;
+    				}
+    			}
+    			break;
+
+    		case 11:
+    			if(day == 30)
+    			{
+    				day = 1;
+    				month++;
+    				if(month == 13)
+    				{
+    					month = 1;
+    				}
+    			}
+    			break;
+
+    		case 12:
+    			if(day == 31)
+    			{
+    				day = 1;
+    				month++;
+    				if(month == 13)
+    				{
+    					month = 1;
+    				}
+    			}
+    			break;
+
+    		case 13: month = 1;break;
     	}
     }
 
@@ -523,9 +750,10 @@ public class Head {
         		int i;
         		int flag = 0;
         		int id;
-        		for(i=0;i<99999;i++)
+        		for(i=0;i<1000;i++)
         		{
         			ID[i] = -1;
+                    two_friday[i] = 0;
         		}
 		
         		while(o == 0)
@@ -552,7 +780,7 @@ public class Head {
         			/////gambiarra
         			if(day < 10 && month < 10)
         			{
-        				System.out.printf("/// Date : 0%d / 0%d / 2019                                        ///\n");
+        				System.out.printf("/// Date : 0g / 0%d / 2019                                        ///\n");
         			}
         			else if(day < 10)
         			{
@@ -577,7 +805,7 @@ public class Head {
         		    {
 		
         	    	    case 1:
-        	    	        for(i = 0;i<99999;i++)
+        	    	        for(i = 0;i<1000;i++)
         	    	        {
         	    	            if(ID[i] == -1)//procura uma posicao vaga//a posicao tambem eh o id
         	    	            {
@@ -587,7 +815,7 @@ public class Head {
         	    	                break;
         	    	            }
         	    	        }
-        	    	        if(flag > 99999)
+        	    	        if(flag > 1000)
         	    	        {
         	    	            System.out.println("\n\n No vacancy!");
         	    	        }
