@@ -4,7 +4,16 @@ import java.util.Date;
 
 public class Head {
 
-    //private static String agenda[] = new String[1000]; // payment agenda
+//     Schedules
+
+    private static String agenda_type[] = new String[1000];// Weekly / Monthly / Biweekly
+    private static String agenda_option[] = new String[1000];// day of week OR day of month
+    private static int agenda_id[] = new int[1000];// to select the correct Schedule in function 9
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//     Employees
+
     private static String name[] = new String[1000];
     private static String address[] = new String[1000];
     private static String date_start[] = new String[1000];// timecard for comming
@@ -17,7 +26,7 @@ public class Head {
     private static double service_tax[] = new double[1000];
     private static int payment_day[] = new int[1000];// displays a salaried day of payment (refreshed every month)
     private static int payment_week[] = new int[1000]; // displays a hourly or commissioned day of week of payment
-    private static int salaried_default[] = new int[1000];// displays if a salaried employee receives salary in last day util of month
+    private static int salaried_default[] = new int[1000];// displays if a salaried employee receives salary in last business day of the month
     private static int two_week[] = new int[1000];// verify if a commissioned is in his second week (to pay him)
     private static int payment[] = new int[1000];// 0 - Postal Check // 1 - Receive check in hands // 2 - Bank Deposit
     private static int hours[] = new int[1000];// hours worked in the last day timecard was registered
@@ -25,14 +34,17 @@ public class Head {
     private static int syndicate[] = new int[1000];// 1 belong to syndicate // 0 - not in syndicate
     private static int syndicate_id[] = new int[1000];
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//     Date Settings
+
     private static int day = 1;// starting the year
     private static int month = 1;// ^^^^^^^^^^^^
-
     private static String week_name[] = {"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};// aux for printing the day of week
     private static int day_of_week = 1;// this controls the day of week
-    
     private static int last_day_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};// last day of every month (not considering bisect years)
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
     /*
 
             CODE BEFORE UNDO / REDO
@@ -49,16 +61,16 @@ public class Head {
         address[id] = input.nextLine();
         System.out.printf("\n\n Insert the type:\n 'hourly'\n 'salaried'\n 'commissioned'\n\n Type: ");
         type[id] = input.nextLine();
-        if("hourly".equals(type[id].toLowerCase()) )
+        if("hourly".equalsIgnoreCase(type[id].toLowerCase()) )
         {
             payment_week[id] = 4; 
         }
-        else if("salaried".equals(type[id].toLowerCase()) )
+        else if("salaried".equalsIgnoreCase(type[id].toLowerCase()) )
         {
             salaried_default[id] = 1;
             payment_day[id] = dayUtil(month);
         }
-        else if("commissioned".equals(type[id].toLowerCase()) )
+        else if("commissioned".equalsIgnoreCase(type[id].toLowerCase()) )
         {
             payment_week[id] = 4;
         }
@@ -106,7 +118,7 @@ public class Head {
         
         System.out.printf("\n\n\n Save your ID number!!!!\n\n");
         System.out.printf("\n\n    Employee added in the system!\n\n");
-        System.out.printf("\n\n Press anykey to continue...\n\n\n\n");
+        System.out.printf("\n\n Press enter to continue...\n\n\n\n");
         input.nextLine();
         input.nextLine();
         System.out.printf("\n\n\n");
@@ -139,7 +151,7 @@ public class Head {
             /////
             flag = 1;
             System.out.println("\n\n Employee removed with sucess!\n\n");
-            System.out.printf(" Press anykey to continue...");
+            System.out.printf(" Press enter to continue...");
             input.nextLine();
         }
         else
@@ -182,7 +194,7 @@ public class Head {
                     hour = diffHours;
                     
                     hours[id] = hour;
-                    if(hours[id] > 8 && type[id].equals("hourly"))// hourly employees only
+                    if(hours[id] > 8 && type[id].equalsIgnoreCase("hourly"))// hourly employees only
                     {
                         int limit = (hours[id] - 8);
                         double bonus = (salary[id] * 1.5) / 100;
@@ -264,16 +276,16 @@ public class Head {
                     System.out.println("Insert the new type followed by a enter ('hourly' / 'salaried' / 'commissioned'):");
                     input.nextLine();
                     String given = input.nextLine();
-                    if("hourly".equals(given.toLowerCase()) )
+                    if("hourly".equalsIgnoreCase(given))
                     {
                         payment_week[id] = 4; 
                     }
-                    else if("salaried".equals(given.toLowerCase()) )
+                    else if("salaried".equalsIgnoreCase(given))
                     {
                         salaried_default[id] = 1;
                         payment_day[id] = dayUtil(month);
                     }
-                    else if("commissioned".equals(given.toLowerCase()) )
+                    else if("commissioned".equalsIgnoreCase(given))
                     {
                         payment_week[id] = 4;
                     }
@@ -357,7 +369,7 @@ public class Head {
                     changeDetails(id);
                     return;
               }
-              System.out.printf("\n\n Press anykey to continue...");
+              System.out.printf("\n\n Press enter to continue...");
               input.nextLine();
             }
         }
@@ -368,26 +380,26 @@ public class Head {
         Scanner input = new Scanner(System.in);
         if(ID[id] != -1)
         {
-            if(type[id].equals("commissioned"))// must be commissioned
+            if(type[id].equalsIgnoreCase("commissioned"))// must be commissioned
             {
                 System.out.printf("\n\n Insert the Selling Value: ");
                 selling_result[id] += input.nextDouble();
                 System.out.printf("\n\n\n       Selling added to user: %s with the ID: %d\n\n", name[id], ID[id]);
-                System.out.printf("\n\n    Press anykey to return to menu... ");
+                System.out.printf("\n\n    Press enter to return to menu... ");
                 input.nextLine();
                 input.nextLine();   
             }
             else
             {
                 System.out.printf("\n\n This Employee is not commissioned!!\n\n");
-                System.out.printf("\n\n    Press anykey to return to menu... ");
+                System.out.printf("\n\n    Press enter to return to menu... ");
                 input.nextLine();
             }
         }
         else
         {
             System.out.printf("\n\n\n\n    Invalid ID!!\n\n");
-            System.out.printf("\n\n    Press anykey to continue... ");
+            System.out.printf("\n\n    Press enter to continue... ");
             input.nextLine();
         }
         consoleClear();
@@ -404,7 +416,7 @@ public class Head {
                 System.out.printf("\n\n Insert the tax value: ");
                 service_tax[i] = input.nextDouble();
                 System.out.printf("\n\n    Tax added to the user: %s with ID: %d !!!", name[i], ID[i]);
-                System.out.printf("\n\n Press anykey to continue...");
+                System.out.printf("\n\n Press enter to continue...");
                 input.nextLine();
                 input.nextLine();
                 flag = 1;
@@ -470,13 +482,13 @@ public class Head {
             {
                 System.out.printf(" Not in Syndicate\n Hours: %d\n Date Start: %s\n Date End: %s\n\n", hours[id], date_start[id], date_end[id]);
             }
-            System.out.printf("\n\n Press anykey to continue...");
+            System.out.printf("\n\n Press enter to continue...");
             input.nextLine();
         }
         else
         {
             System.out.println("\n\n\n\n    Invalid ID!!\n\n");
-            System.out.printf("\n\n    Press anykey to continue... ");
+            System.out.printf("\n\n    Press enter to continue... ");
             input.nextLine();
         }
     }
@@ -528,7 +540,7 @@ public class Head {
                 {
                     System.out.printf(" Not in Syndicate\n Hours: %d\n Date Start: %s\n Date End: %s\n\n", hours[i], date_start[i], date_end[i]);
                 }
-                System.out.printf("\n\n Press anykey to go to next Employee...");
+                System.out.printf("\n\n Press enter to go to next Employee...");
                 input.nextLine();
             }
             System.out.printf("\n\n\n\n");
@@ -604,7 +616,7 @@ public class Head {
                         break;
 
                     case "salaried": //salaried
-                        if(salaried_default[i] == 1)// receives salary in the last day util
+                        if(salaried_default[i] == 1)// receives salary in the last business day
                         {
                             if(day == dayUtil(month))
                             {
@@ -698,19 +710,6 @@ public class Head {
         int i;
         day++;
         day_of_week++;
-        if(day_of_week == 4)
-        {
-            for(i = 0; i < 1000 ; i++)
-            {
-                if(ID[i] != -1)
-                {
-                    if(type[i].equals("commissioned"))
-                    {
-                        two_week[i]++;
-                    }
-                }
-            }
-        }
         if(day_of_week == 7)// day of week
         {
             day_of_week = 0;
@@ -995,6 +994,305 @@ public class Head {
                     }
                 break;
         }
+        for(i = 0; i < 1000 ; i++)
+        {
+            if(ID[i] != -1)
+            {
+                if(type[i].equals("commissioned") && day_of_week == payment_week[i])
+                {
+                    two_week[i]++;
+                }
+            }
+        }
+    }
+
+    private static void initiateSchedule()
+    {
+        for(int i = 0;i<1000;i++)
+        {
+            agenda_id[i] = -1;
+            agenda_option[i] = null;
+            agenda_type[i] = null;
+        }
+    }
+
+    private static void printSchedule(int id)
+    {
+        if(agenda_id[id] != -1)
+        {
+            System.out.printf(" Schedule ID: %d   / Schedule Type: %s   / Schedule Option: %s\n", agenda_id[id], agenda_type[id], agenda_option[id]);
+        }
+    }
+
+    private static int addSchedule()
+    {
+        Scanner input = new Scanner(System.in);
+        int i;
+        int choice;
+        int flag = 0;
+        int week;
+        consoleClear();
+        for(i = 0;i<1000;i++)
+        {
+            if(agenda_id[i] == -1)
+            {
+                System.out.printf("\n\n//////////////////////////////////////////////////////////////////////\n");
+                System.out.printf("///                                                                ///\n");
+                System.out.printf("///    Insert the type of the new Schedule:                        ///\n");
+                System.out.printf("///                                                                ///\n");
+                System.out.printf("///  1 - Weekly                                                    ///\n");
+                System.out.printf("///  2 - Monthly                                                   ///\n");
+                System.out.printf("///  3 - Biweekly                                                  ///\n");
+                System.out.printf("///                                                                ///\n");
+                System.out.printf("//////////////////////////////////////////////////////////////////////\n");
+                System.out.printf("\n\n Your choice: ");
+                choice = input.nextInt();
+                input.nextLine();
+                consoleClear();
+                switch(choice)
+                {
+                    case 1:
+                        agenda_id[i] = i;
+                        agenda_type[i] = "Weekly";
+                        System.out.printf("\n\n//////////////////////////////////////////////////////////////////////\n");
+                        System.out.printf("///                                                                ///\n");
+                        System.out.printf("///    Insert the day of the week from the new Schedule:           ///\n");
+                        System.out.printf("///                                                                ///\n");
+                        System.out.printf("///  0 - Monday                                                    ///\n");
+                        System.out.printf("///  1 - Tuesday                                                   ///\n");
+                        System.out.printf("///  2 - Wednesday                                                 ///\n");
+                        System.out.printf("///  3 - Thursday                                                  ///\n");
+                        System.out.printf("///  4 - Friday                                                    ///\n");
+                        System.out.printf("///                                                                ///\n");
+                        System.out.printf("//////////////////////////////////////////////////////////////////////\n");
+                        System.out.printf("\n\n Your choice: ");
+                        week = input.nextInt();
+                        input.nextLine();
+                        if(week >= 0 && week < 5)
+                        {
+                            agenda_option[i] = week_name[week];
+
+                        }
+                        else
+                        {
+                            System.out.printf("\n\n Invalid option, setting to default day: 'Friday'\n\n");
+                            agenda_option[i] = week_name[4];
+                            System.out.printf("\n Press enter to continue...\n\n\n\n");
+                            input.nextLine();
+                            
+                        }
+                        System.out.printf("\n\n\n\n");
+                        printSchedule(i);
+                        System.out.printf("\n\n Schedule added in the System!!\n");
+                        System.out.printf("\n Press enter to continue...\n\n\n\n");
+                        input.nextLine();
+                        break;
+
+                    case 2:
+                        agenda_id[i] = i;
+                        agenda_type[i] = "Monthly";
+                        System.out.printf("\n\n//////////////////////////////////////////////////////////////////////\n");
+                        System.out.printf("///                                                                ///\n");
+                        System.out.printf("///      Insert the day of the month from the new Schedule:        ///\n");
+                        System.out.printf("///                                                                ///\n");
+                        System.out.printf("///         (  Must be between or equal to 1 and 28!!  )           ///\n");
+                        System.out.printf("///  (  Insert 'last' to put on last business day of the month )   ///\n");
+                        System.out.printf("///                                                                ///\n");
+                        System.out.printf("//////////////////////////////////////////////////////////////////////\n");
+                        System.out.printf("\n\n Your choice: ");
+                        String day = input.nextLine();
+                        if(day.equalsIgnoreCase("last"))
+                        {
+                            agenda_option[i] = day;
+                        }
+                        else if(Integer.parseInt(day) >= 1 && Integer.parseInt(day) < 29)
+                        {
+                            agenda_option[i] = day;
+                        }
+                        else
+                        {
+                            System.out.printf("\n\n\n\n Invalid option!!, setting to default: 'last'...");
+                            agenda_option[i] = "last";
+                            System.out.printf("\n Press enter to continue...\n\n\n\n");
+                            input.nextLine();
+                        }
+                        System.out.printf("\n\n\n\n");
+                        printSchedule(i);
+                        System.out.printf("\n\n Schedule added in the System!!\n");
+                        System.out.printf("\n Press enter to continue...\n\n\n\n");
+                        input.nextLine();
+                        break;
+
+                    case 3:
+                        agenda_id[i] = i;
+                        agenda_type[i] = "Biweekly";
+                        System.out.printf("\n\n//////////////////////////////////////////////////////////////////////\n");
+                        System.out.printf("///                                                                ///\n");
+                        System.out.printf("///    Insert the day of the week from the new Schedule:           ///\n");
+                        System.out.printf("///                                                                ///\n");
+                        System.out.printf("///  0 - Monday                                                    ///\n");
+                        System.out.printf("///  1 - Tuesday                                                   ///\n");
+                        System.out.printf("///  2 - Wednesday                                                 ///\n");
+                        System.out.printf("///  3 - Thursday                                                  ///\n");
+                        System.out.printf("///  4 - Friday                                                    ///\n");
+                        System.out.printf("///                                                                ///\n");
+                        System.out.printf("//////////////////////////////////////////////////////////////////////\n");
+                        System.out.printf("\n\n Your choice: ");
+                        week = input.nextInt();
+                        input.nextLine();
+                        if(week >= 0 && week < 5)
+                        {
+                            agenda_option[i] = week_name[week];
+                        }
+                        else
+                        {
+                            System.out.printf("\n\n Invalid option, setting to default day: 'Friday'\n\n");
+                            agenda_option[i] = week_name[4];
+                            System.out.printf("\n Press enter to continue...\n\n\n\n");
+                            input.nextLine();
+                        }
+                        System.out.printf("\n\n\n\n");
+                        printSchedule(i);
+                        System.out.printf("\n\n Schedule added in the System!!\n");
+                        System.out.printf("\n Press enter to continue...\n\n\n\n");
+                        input.nextLine();
+                        break;
+
+                    default :
+                        System.out.printf("\n\n Invalid option, executing default action: 'return to menu'.\n\n\n");
+                        System.out.printf("\n Press enter to continue...\n\n\n\n");
+                        input.nextLine();
+                        return 0;
+                }
+                flag = 1;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    private static void listAllSchedules(int id)
+    {
+        Scanner input = new Scanner(System.in);
+        int cont = 1;
+        System.out.printf("\n\n//////////////////////////////////////////////////////////////////////\n");
+        System.out.printf("///                                                                ///\n");
+        System.out.printf("///                      Payment Schedules                         ///\n");
+        System.out.printf("///                                                                ///\n");
+        System.out.printf("//////////////////////////////////////////////////////////////////////\n\n\n\n\n");
+        for(int i = 0;i<1000;i++)
+        {
+            printSchedule(i);
+        }
+        while(true)
+        {
+            System.out.printf("\n\n Insert the Schedule ID you want to change to: ");
+            int choice = input.nextInt();
+            input.nextLine();
+            if(agenda_id[choice] != -1)
+            {
+                switch(agenda_type[choice])
+                {
+                    case "Weekly":
+                        if(type[id].equalsIgnoreCase("hourly"))
+                        {
+                            switch(agenda_option[choice])
+                            {
+                                case "Monday":
+                                    payment_week[id] = 0;
+                                    break;
+
+                                case "Tuesday":
+                                    payment_week[id] = 1;
+                                    break;
+
+                                case "Wednesday":
+                                    payment_week[id] = 2;
+                                    break;
+
+                                case "Thursday":
+                                    payment_week[id] = 3;
+                                    break;
+
+                                case "Friday":
+                                    payment_week[id] = 4;
+                                    break;
+                            }
+                            System.out.printf("\n\n\n Changes done!!");
+                        }
+                        else
+                        {
+                            System.out.printf("\n\n\n This Employee is not an Hourly!!, Please move to 'change settings' on menu.\n\n\n");
+                        }
+                        break;
+
+                    case "Monthly":
+                        if(type[id].equalsIgnoreCase("salaried"))
+                        {
+                            if(agenda_option[choice].equalsIgnoreCase("last"))
+                            {
+                                payment_day[id] = dayUtil(month);
+                                salaried_default[id] = 1;
+                            }
+                            else
+                            {
+                                salaried_default[id] = 0;
+                                payment_day[id] = Integer.parseInt(agenda_option[choice]);
+                            }
+                            System.out.printf("\n\n\n Changes done!!");
+                        }
+                        else
+                        {
+                            System.out.printf("\n\n\n This Employee is not an Salaried!!, Please move to 'change settings' on menu.\n\n\n");
+                        }
+                        break;
+
+                    case "Biweekly":
+                        if(type[id].equalsIgnoreCase("commissioned"))
+                        {
+                            switch(agenda_option[choice])
+                            {
+                                case "Monday":
+                                    payment_week[id] = 0;
+                                    break;
+
+                                case "Tuesday":
+                                    payment_week[id] = 1;
+                                    break;
+
+                                case "Wednesday":
+                                    payment_week[id] = 2;
+                                    break;
+
+                                case "Thursday":
+                                    payment_week[id] = 3;
+                                    break;
+
+                                case "Friday":
+                                    payment_week[id] = 4;
+                                    break;
+                            }
+                            System.out.printf("\n\n\n Changes done!!");
+                        }
+                        else
+                        {
+                            System.out.printf("\n\n\n This Employee is not an Commissioned!!, Please move to 'change settings' on menu.\n\n\n");
+                        }
+                        break;
+
+                }
+                System.out.printf("\n\n Press enter to continue...\n\n\n\n");
+                input.nextLine();
+                break;
+            }
+            else
+            {
+                System.out.printf("\n\n\n\n Invalid ID!!, Try Again!!..");
+                System.out.printf("\n\n Press enter to continue...\n\n\n\n");
+                input.nextLine();
+                System.out.printf("\n\n\n\n");
+            }
+        }    
     }
 
     public static void main(String[] args)
@@ -1002,6 +1300,7 @@ public class Head {
         Scanner input = new Scanner(System.in);
         String system_password = "admin";
         String password_given;
+        initiateSchedule();
         int o = 0;
 
         while(true)
@@ -1009,7 +1308,7 @@ public class Head {
             System.out.printf("\n Insert the System Password (default: 'admin', leave: 'exit'): ");
             password_given = input.nextLine();
             System.out.printf("\n\n\n\n\n");
-            if(password_given.equals(system_password))
+            if(password_given.equalsIgnoreCase(system_password))
             {
                 int i;
                 int flag = 0;
@@ -1086,6 +1385,7 @@ public class Head {
                             {
                                 System.out.println("\n\n No vacancy!");
                             }
+                            consoleClear();
                             break;
         
                         case 2:
@@ -1097,18 +1397,21 @@ public class Head {
                             {
                                 flag--;
                             }
+                            consoleClear();
                             break;
         
                         case 3:
                             System.out.printf("\n\n Insert the your ID: ");
                             id = input.nextInt();
                             timeCard(id);
+                            consoleClear();
                             break;
         
                         case 4:
                             System.out.printf("\n\n Insert your ID: ");
                             id = input.nextInt();
                             sellingResult(id);
+                            consoleClear();
                             break;
         
                         case 5:
@@ -1116,6 +1419,7 @@ public class Head {
                             System.out.printf("\n\n Insert the Syndicate ID: ");
                             id = input.nextInt();
                             serviceTax(id);
+                            consoleClear();
                             break;
         
                         case 6:
@@ -1128,35 +1432,53 @@ public class Head {
                             else
                             {
                                 System.out.println("\n\n\n\n    Invalid ID!!\n\n");
-                                System.out.printf("\n\n Press anykey to continue...");
+                                System.out.printf("\n\n Press enter to continue...");
                                 input.nextLine();
                                 input.nextLine();
                             }
+                            consoleClear();
                             break;
         
                         case 7:
                             todayPayments();
+                            consoleClear();
                             break;
         
                         case 8:
                             System.out.printf("\n\n Comming Soon...\n\n");
-                            System.out.printf("\n\n Press anykey to continue...");
+                            System.out.printf("\n\n Press enter to continue...");
                             input.nextLine();
                             input.nextLine();
+                            consoleClear();
                             break;
         
                         case 9:
-                            System.out.printf("\n\n Comming Soon...\n\n");
-                            System.out.printf("\n\n Press anykey to continue...");
-                            input.nextLine();
-                            input.nextLine();
+                            System.out.printf("\n\n Insert your ID: ");
+                            id = input.nextInt();
+                            if(ID[id] != -1)
+                            {
+                                listAllSchedules(id);
+                            }
+                            else
+                            {
+                                System.out.println("\n\n\n\n    Invalid ID!!\n\n");
+                                System.out.printf("\n\n Press enter to continue...");
+                                input.nextLine();
+                                input.nextLine();
+                            }
+                            consoleClear();
                             break;
         
                         case 10:
-                            System.out.printf("\n\n Comming Soon...\n\n");
-                            System.out.printf("\n\n Press anykey to continue...");
-                            input.nextLine();
-                            input.nextLine();
+                            int z = addSchedule();
+                            if(z == 0)
+                            {
+                                System.out.printf("\n\n Limit exceeded!!\n\n");
+                                System.out.printf("\n\n Press enter to continue...");
+                                input.nextLine();
+                                input.nextLine();
+                            }
+                            consoleClear();
                             break;
         
                         case 11:
@@ -1167,13 +1489,14 @@ public class Head {
                             System.out.printf("\n\n Insert your ID: ");
                             id = input.nextInt();
                             showDetails(id);
+                            consoleClear();
                             break;
                         
                         case 13:
                             listAllEmployees();
-                            System.out.printf("\n\n\n Last Employee!\n\n Press anykey to return to menu...\n\n\n\n\n");
+                            System.out.printf("\n\n\n Last Employee!\n\n Press enter to return to menu...\n\n\n\n\n");
                             input.nextLine();
-                            System.out.printf("\n\n\n\n");
+                            consoleClear();
                             break;
 
                         case 14:
@@ -1181,8 +1504,9 @@ public class Head {
                             input.nextLine();
                             system_password = input.nextLine();
                             System.out.printf("\n\n     System Password Changed With Sucess!!!");
-                            System.out.printf("\n\n Press anykey to continue...");
+                            System.out.printf("\n\n Press enter to continue...");
                             input.nextLine();
+                            consoleClear();
                             break;
 
                         case 15:
@@ -1192,11 +1516,14 @@ public class Head {
 
                         default:
                             System.out.println("\n\n Invalid Option! - Try Again");
+                            System.out.printf("\n\n Press enter to continue...");
+                            input.nextLine();
+                            input.nextLine();
                             break;
                     }
                 }
             }
-            else if(password_given.equals("exit"))
+            else if(password_given.equalsIgnoreCase("exit"))
             {
                 System.exit(0);
             }
