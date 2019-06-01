@@ -8,41 +8,29 @@ public class Head {
     private static String address[] = new String[1000];
     private static String date_start[] = new String[1000];
     private static String date_end[] = new String[1000];
-    private static String agenda[] = new String[1000];
+    //private static String agenda[] = new String[1000];
     private static double salary[] = new double[1000];
     private static double extra_hour[] = new double[1000];
     private static double selling_result[] = new double[1000];
     private static double syndicate_tax[] = new double[1000];
     private static double service_tax[] = new double[1000];
-    private static int two_friday[] = new int[1000];
+    private static int two_week[] = new int[1000];
     private static int payment[] = new int[1000];// 0 - Postal Check // 1 - Receive check in hands // 2 - Bank Deposit
     private static int hours[] = new int[1000];
     private static int ID[] = new int[1000];// indicates what's position of the employee
     private static int type[] = new int[1000];// 0 - hourly // 1 - salaried // 2 - commissioned
-    private static int hourly_day[] = new int[1000]; 
-    private static int salaried_week[] = new int[1000];
+    //private static int hourly_day[] = new int[1000]; 
+    //private static int salarieeek[] = new int[1000];
     private static int syndicate[] = new int[1000];// 1 belong to syndicate // 0 - not in syndicate
     private static int syndicate_id[] = new int[1000];
 
     private static int day = 1;
     private static int month = 1;
 
-    private static String day_of_week[] = {"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
-    private static int d_w = 1;
+    private static String week_name[] = {"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
+    private static int day_of_week = 1;
     
-    private static int last_day_month[] = new int[13];
-    //last_day_month[1] = 31;
-    //last_day_month[2] = 28;
-    //last_day_month[3] = 31;
-    //last_day_month[4] = 30;
-    //last_day_month[5] = 31;
-    //last_day_month[6] = 30;
-    //last_day_month[7] = 31;
-    //last_day_month[8] = 31;
-    //last_day_month[9] = 30;
-    //last_day_month[10] = 31;
-    //last_day_month[11] = 30;
-    //last_day_month[12] = 31;
+    private static int last_day_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     private static void addEmployee(int id) 
     {
@@ -58,14 +46,14 @@ public class Head {
         payment[id] = input.nextInt();
         System.out.printf("\n\n Insert your salary: ");
         salary[id] = input.nextDouble();
-        System.out.println("\n\n Do you belong to the syndicate?\n\n 0 - No\n 1 - Yes\n\n");
+        System.out.printf("\n\n Do you belong to the syndicate?\n\n 0 - No\n 1 - Yes\n\n Your Choice: ");
         int a = input.nextInt();
         if(a == 1)
         {
         	syndicate[id] = 1;
-        	System.out.println("\n Insert your Syndicate ID (Numbers Only): ");
+        	System.out.printf("\n Insert your Syndicate ID (Numbers Only): ");
         	syndicate_id[id] = input.nextInt();
-        	System.out.println("\n Insert your Syndicate Tax: ");
+        	System.out.printf("\n Insert your Syndicate Tax: ");
         	syndicate_tax[id] = input.nextDouble();
         }
         else
@@ -98,13 +86,15 @@ public class Head {
         }
         else
         {
-        	System.out.println("\n Belong to Syndicate: No\n");
+        	System.out.printf("\n Belong to Syndicate: No\n");
         }
         System.out.printf(" Salary: %.2f\n",salary[id]);
-        System.out.println("\n\n\n Save your ID number!!!!\n\n");
-        System.out.printf("\n\n Press anykey to continue...");
+        System.out.printf("\n\n\n Save your ID number!!!!\n\n");
+        System.out.printf("\n\n    Employee added in the system!\n\n");
+        System.out.printf("\n\n Press anykey to continue...\n\n\n\n");
         input.nextLine();
         input.nextLine();
+        System.out.printf("\n\n\n");
     }
 
     private static int delEmployee(int id) 
@@ -186,10 +176,10 @@ public class Head {
 						}
 						System.out.printf("\n\n  Extra salary: %.2f\n\n ", extra_hour[id]);
 					}
-					
+					System.out.printf("\n\n    Time Card approved!\n\n\n\n\n\n\n ");
 					System.out.printf("\n\n\n      Press any key to continue...\n\n ");
 					input.nextLine();
-					System.out.println("\n\n    Time Card approved!\n\n    Finishing the day...\n\n ");
+					
 
 				} 
 				catch(Exception e)
@@ -345,27 +335,31 @@ public class Head {
     private static void sellingResult(int id)
     {
     	Scanner input = new Scanner(System.in);
-    	System.out.printf("\n\n      Comming soon....\n\n  ");
-    	
     	if(ID[id] != -1)
     	{
-    		if(type[id] == 2)
+    		if(type[id] == 2)// must be commissioned
     		{
     			System.out.printf("\n\n Insert the Selling Value: ");
                 selling_result[id] += input.nextDouble();
                 System.out.printf("\n\n\n       Selling added to user: %s with the ID: %d\n\n", name[id], ID[id]);
                 System.out.printf("\n\n    Press anykey to return to menu... ");
                 input.nextLine();
+                input.nextLine();	
+    		}
+    		else
+    		{
+    			System.out.printf("\n\n This Employee is not commissioned!!\n\n");
+    			System.out.printf("\n\n    Press anykey to return to menu... ");
                 input.nextLine();
-    			
     		}
     	}
     	else
     	{
-    		System.out.println("\n\n\n\n    Invalid ID!!\n\n");
+    		System.out.printf("\n\n\n\n    Invalid ID!!\n\n");
     		System.out.printf("\n\n    Press anykey to continue... ");
         	input.nextLine();
     	}
+    	consoleClear();
     }
 
     private static void serviceTax(int sid)
@@ -456,10 +450,64 @@ public class Head {
     	}
     }
 
+    private static void listAllEmployees()
+    {
+    	Scanner input = new Scanner(System.in);
+    	for(int i = 0; i < 1000; i++)
+    	{
+        	if(ID[i] != -1)
+        	{
+        	    System.out.printf("\n\n Name: %s\n Address: %s\n Type:", name[i], address[i]);
+        	    switch(type[i])
+        	    {
+        	    	case 0:
+        	    		System.out.println(" Hourly");
+        	    		System.out.printf(" Salary: %.2f\n Extra Salary: %.2f\n Payment: ", salary[i], extra_hour[i]);
+        	    		break;
+	
+        	    	case 1:
+        	    		System.out.println(" Salaried");
+        	    		System.out.printf(" Salary: %.2f\n Payment: ", salary[i]);
+   	    	        	break;
+	
+        	    	case 2:
+        	    		System.out.println(" Commissioned");
+        	    		System.out.printf(" Salary: %.2f\n Selling Results: %.2f\n Payment: ", salary[i], selling_result[i]);
+        	    		break;
+	
+        	    	default:
+        	    	System.out.printf(" NULL");break;
+        	    }
+        	    switch(payment[i])
+        	    {
+        	    	case 0:
+        	    	System.out.println("Postal Check");break;
+        	    	case 1:
+        	    	System.out.println("Postal Check in hands");break;
+        	    	case 2:
+        	    	System.out.println("Bank Deposit");break;
+        	    	default:
+        	    	System.out.printf("NULL");break;
+        	    }
+        	    if(syndicate[i] == 1)
+        	    {
+        	    	System.out.printf(" Belong to Syndicate\n Syndicate ID: %d\n Syndicate Tax: %.2f\n Service Tax: %.2f\n Hours: %d\n Date Start: %s\n Date End: %s\n\n ", syndicate_id[i], syndicate_tax[i], service_tax[i], hours[i], date_start[i], date_end[i]);
+        	    }
+        	    else
+        	    {
+        	    	System.out.printf(" Not in Syndicate\n Hours: %d\n Date Start: %s\n Date End: %s\n\n", hours[i], date_start[i], date_end[i]);
+        	    }
+        	    System.out.printf("\n\n Press anykey to go to next Employee...");
+        	    input.nextLine();
+        	}
+    		System.out.printf("\n\n\n\n");
+    	}
+    }
+
     private static int dayUtil(int mth)
     {
     	int result = last_day_month[mth];
-    	int week = d_w;
+    	int week = day_of_week;
     	int d = day;
     	for(int i = d;i <= last_day_month[mth];i++)
     	{
@@ -492,6 +540,7 @@ public class Head {
     	System.out.printf("///                                                                ///\n");
     	System.out.printf("///                        Today Payments                          ///\n");
     	System.out.printf("///                                                                ///\n");
+    	System.out.printf("//////////////////////////////////////////////////////////////////////\n\n\n");
 
     	for(int i = 0;i<1000;i++)
     	{
@@ -500,9 +549,17 @@ public class Head {
     			switch(type[i])
     			{
     				case 0: //hourly
-    					if(d_w == 4)// pagos dia de sexta
+    					if(day_of_week == 4)// pagos dia de sexta
     					{
-    						System.out.printf("/// %d - Name: %s   Type: Hourly   Salary: %.2f  Payment Method: ", cont, name[i] , salary[i] + extra_hour[i]);
+    						if(syndicate[i] == 1)
+    						{
+    							System.out.printf("/// %d - ID: %d   Name: %s   Type: Hourly   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (salary[i] + extra_hour[i] - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
+    						}
+    						else
+    						{
+    							System.out.printf("/// %d - ID: %d   Name: %s   Type: Hourly   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , salary[i] + extra_hour[i]);
+    						}
+    						
     						switch(payment[i])
     						{
     							case 0: System.out.printf("Postal Check\n");break;
@@ -518,7 +575,15 @@ public class Head {
     				case 1: //salaried
     					if(day == dayUtil(month))
     					{
-                            System.out.printf("/// %d - Name: %s   Type: Salaried   Salary: %.2f  Payment Method: ", cont, name[i], salary[i]);
+    						if(syndicate[i] == 1)
+    						{
+    							System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (salary[i] - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
+    						}
+    						else
+    						{
+    							System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , salary[i]);
+    						}
+                            
                             switch(payment[i])
                             {
                                 case 0: System.out.printf("Postal Check\n");break;
@@ -530,10 +595,18 @@ public class Head {
     					}
     					break;
 
-                    case 3: // commissioned
-                        if(two_friday[i] == 2)
-                        { 
-                            System.out.printf("/// %d - Name: %s   Type: Commissioned   Salary: %.2f  Payment Method: ", cont, name[i], salary[i] + selling_result[i]);
+                    case 2: // commissioned
+                        if(two_week[i] >= 2)
+                        {
+                        	if(syndicate[i] == 1)
+    						{
+    							System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , salary[i] + selling_result[i] - syndicate_tax[i] - service_tax[i], syndicate_id[i]);
+    						}
+    						else
+    						{
+    							System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , salary[i] + selling_result[i]);
+    						}
+                            
                             switch(payment[i])
                             {
                                 case 0: System.out.printf("Postal Check\n");break;
@@ -542,7 +615,7 @@ public class Head {
                             }
                             selling_result[i] = 0;
                             cont++;
-                            two_friday[i] = 0;
+                            two_week[i] = 0;
                             flag = 1;
                         }
                         break;
@@ -552,20 +625,21 @@ public class Head {
 
         if(flag == 0)
         {
-            System.out.printf("///                     No Payments Today!!!                       ///\n");
+            System.out.printf("///                     No Payments Today!!!                       \n");
         }
-        System.out.printf("///                                                                ///\n");
-        System.out.printf("///        Press any key to continue...                            ///\n");
-        System.out.printf("///                                                                ///\n");
+        System.out.printf("///                                                                \n");
+        System.out.printf("///        Press any key to continue...                            \n");
+        System.out.printf("///                                                                \n");
         System.out.printf("//////////////////////////////////////////////////////////////////////\n\n");
         input.nextLine();
+        consoleClear();
     }
 
     private static void spendDay()
     {
     	day++;
-    	d_w++;
-        if(d_w == 4)
+    	day_of_week++;
+        if(day_of_week == 4)
         {
             for(int i = 0; i < 1000 ; i++)
             {
@@ -573,19 +647,19 @@ public class Head {
                 {
                     if(type[i] == 2)
                     {
-                        two_friday[i]++;
+                        two_week[i]++;
                     }
                 }
             }
         }
-    	if(d_w == 7)// day of week
+    	if(day_of_week == 7)// day of week
     	{
-    		d_w = 0;
+    		day_of_week = 0;
     	}
     	switch(month)
     	{
     		case 1:
-    			if(day == 31)
+    			if(day == 32)
     			{
     				day = 1;
     				month++;
@@ -597,7 +671,7 @@ public class Head {
     			break;
 
     		case 2:
-    			if(day == 28)
+    			if(day == 29)
     			{
     				day = 1;
     				month++;
@@ -609,7 +683,7 @@ public class Head {
     			break;
 
     		case 3:
-    			if(day == 31)
+    			if(day == 32)
     			{
     				day = 1;
     				month++;
@@ -621,7 +695,7 @@ public class Head {
     			break;
 
     		case 4:
-    			if(day == 30)
+    			if(day == 31)
     			{
     				day = 1;
     				month++;
@@ -633,7 +707,7 @@ public class Head {
     			break;
 
     		case 5:
-    			if(day == 31)
+    			if(day == 32)
     			{
     				day = 1;
     				month++;
@@ -645,7 +719,7 @@ public class Head {
     			break;
 
     		case 6:
-    			if(day == 30)
+    			if(day == 31)
     			{
     				day = 1;
     				month++;
@@ -657,7 +731,7 @@ public class Head {
     			break;
 
     		case 7:
-    			if(day == 31)
+    			if(day == 32)
     			{
     				day = 1;
     				month++;
@@ -669,7 +743,7 @@ public class Head {
     			break;
 
     		case 8:
-    			if(day == 31)
+    			if(day == 32)
     			{
     				day = 1;
     				month++;
@@ -681,7 +755,7 @@ public class Head {
     			break;
 
     		case 9:
-    			if(day == 30)
+    			if(day == 31)
     			{
     				day = 1;
     				month++;
@@ -693,7 +767,7 @@ public class Head {
     			break;
 
     		case 10:
-    			if(day == 31)
+    			if(day == 32)
     			{
     				day = 1;
     				month++;
@@ -705,7 +779,7 @@ public class Head {
     			break;
 
     		case 11:
-    			if(day == 30)
+    			if(day == 31)
     			{
     				day = 1;
     				month++;
@@ -717,7 +791,7 @@ public class Head {
     			break;
 
     		case 12:
-    			if(day == 31)
+    			if(day == 32)
     			{
     				day = 1;
     				month++;
@@ -743,6 +817,7 @@ public class Head {
         {
         	System.out.printf("\n Insert the System Password (default: 'admin', leave: 'exit'): ");
         	password_given = input.nextLine();
+        	System.out.printf("\n\n\n\n\n");
         	if(password_given.equals(system_password))
         	{
         		int i;
@@ -751,7 +826,7 @@ public class Head {
         		for(i=0;i<1000;i++)
         		{
         			ID[i] = -1;
-                    two_friday[i] = 0;
+                    two_week[i] = 0;
                     selling_result[i] = 0;
         		}
 		
@@ -772,29 +847,31 @@ public class Head {
         			System.out.printf("/// 9 : Payment Schedule                                           ///\n");
         			System.out.printf("/// 10 : Create New Payment Schedule                               ///\n");
         			System.out.printf("/// 11 : Spend the Day                                             ///\n");
-        			System.out.printf("/// 12 : Shows a Employee Detail                                   ///\n");
-        			System.out.printf("/// 13 : Change System Password                                    ///\n");
-        			System.out.printf("/// 14 : Exit 		                                              ///\n");
+        			System.out.printf("/// 12 : Shows a Employee Details                                  ///\n");
+        			System.out.printf("/// 13 : Show all Employees                                        ///\n");
+        			System.out.printf("/// 14 : Change System Password                                    ///\n");
+        			System.out.printf("/// 15 : Exit                                                      ///\n");
         			System.out.printf("///                                                                ///\n");
         			/////gambiarra
         			if(day < 10 && month < 10)
         			{
-        				System.out.printf("/// Date : 0g / 0%d / 2019                                        ///\n");
+        				System.out.printf("/// Date : 0%d / 0%d / 2019                                          ///\n", day, month);
         			}
         			else if(day < 10)
         			{
-        				System.out.printf("/// Date : 0%d / %d / 2019                                         ///\n");
+        				System.out.printf("/// Date : 0%d / %d / 2019                                          ///\n", day, month);
         			}
         			else if(month < 10)
         			{
-        				System.out.printf("/// Date : %d / 0%d / 2019                                         ///\n");
+        				System.out.printf("/// Date : %d / 0%d / 2019                                          ///\n", day, month);
         			}
         			else
         			{
-        				System.out.printf("/// Date : %d / %d / 2019                                          ///\n");
+        				System.out.printf("/// Date : %d / %d / 2019                                          ///\n", day, month);
         			}
         			///
         			System.out.printf("///                                                                ///\n");
+        			System.out.printf("/// %s\n", week_name[day_of_week]);
         			System.out.printf("//////////////////////////////////////////////////////////////////////\n");
         		    System.out.printf("\n Operation: ");
         		    int option = input.nextInt();
@@ -810,7 +887,6 @@ public class Head {
         	    	            {
         	    	                addEmployee(i);
         	    	                flag++;
-        	    	                System.out.println("\n\n  Employee added in the system!\n\n");
         	    	                break;
         	    	            }
         	    	        }
@@ -859,20 +935,35 @@ public class Head {
         	    	        else
         	    	        {
         	    	        	System.out.println("\n\n\n\n    Invalid ID!!\n\n");
+        	    	        	System.out.printf("\n\n Press anykey to continue...");
+                        		input.nextLine();
+                        		input.nextLine();
         	    	        }
         	    	        break;
 		
         	    	    case 7:
-        	    	    	//todayPayments();
+        	    	    	todayPayments();
         	    	        break;
 		
         	    	    case 8:
+        	    	    	System.out.printf("\n\n Comming Soon...\n\n");
+        	    	    	System.out.printf("\n\n Press anykey to continue...");
+                        	input.nextLine();
+                        	input.nextLine();
         	    	        break;
 		
         	    	    case 9:
+        	    	    	System.out.printf("\n\n Comming Soon...\n\n");
+        	    	    	System.out.printf("\n\n Press anykey to continue...");
+                        	input.nextLine();
+                        	input.nextLine();
         	    	        break;
 		
         	    	    case 10:
+        	    	    	System.out.printf("\n\n Comming Soon...\n\n");
+        	    	    	System.out.printf("\n\n Press anykey to continue...");
+                        	input.nextLine();
+                        	input.nextLine();
         	    	        break;
 		
         	    	    case 11:
@@ -886,7 +977,14 @@ public class Head {
         	    	        break;
         	    	    
         	    	    case 13:
-        	    	    	System.out.printf("\n\n Insert the new System Password: ");
+        	    	    	listAllEmployees();
+        	    	    	System.out.printf("\n\n\n Last Employee!\n\n Press anykey to return to menu...\n\n\n\n\n");
+                        	input.nextLine();
+                        	System.out.printf("\n\n\n\n");
+                        	break;
+
+                        case 14:
+                        	System.out.printf("\n\n Insert the new System Password: ");
         	    	    	input.nextLine();
         	    	    	system_password = input.nextLine();
         	    	    	System.out.printf("\n\n     System Password Changed With Sucess!!!");
@@ -894,7 +992,8 @@ public class Head {
                         	input.nextLine();
                         	break;
 
-                        case 14:
+                        case 15:
+                        	input.nextLine();
                         	o = 1;
                         	break;
 
@@ -910,7 +1009,7 @@ public class Head {
         	}
         	else
         	{
-        		System.out.println("\n\n\n              Invalid Password!!\n                  Try again!!!\n\n\n\n   ");
+        		System.out.printf("\n\n\n              Invalid Password!!\n                  Try again!!!\n\n\n\n   ");
         	}
         }     
     }
