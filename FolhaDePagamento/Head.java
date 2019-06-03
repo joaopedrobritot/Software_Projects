@@ -33,6 +33,35 @@ public class Head {
     private static int ID[] = new int[1000];// indicates what's position of the employee
     private static int syndicate[] = new int[1000];// 1 belong to syndicate // 0 - not in syndicate
     private static int syndicate_id[] = new int[1000];
+    private static boolean received_tax[] = new boolean[1000]; // true if a employee has been taxed by syndicate in that month
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//     States Saves
+
+    private static int state_index = 0; // display the current state in use
+    private static int states_size = 0; // display the size of the states
+
+    private static String STATE_name[][] = new String[51][1000];
+    private static String STATE_address[][] = new String[51][1000];
+    private static String STATE_date_start[][] = new String[51][1000];
+    private static String STATE_date_end[][] = new String[51][1000];
+    private static String STATE_type[][] = new String[51][1000];                      //////////////////
+    private static double STATE_salary[][] = new double[51][1000];                    //              //
+    private static double STATE_extra_hour[][] = new double[51][1000];                //     Undo     //
+    private static double STATE_selling_result[][] = new double[51][1000];            //     Redo     //
+    private static double STATE_syndicate_tax[][] = new double[51][1000];             //              //
+    private static double STATE_service_tax[][] = new double[51][1000];               //////////////////
+    private static int STATE_payment_day[][] = new int[51][1000];
+    private static int STATE_payment_week[][] = new int[51][1000];
+    private static int STATE_salaried_default[][] = new int[51][1000];
+    private static int STATE_two_week[][] = new int[51][1000];
+    private static int STATE_payment[][] = new int[51][1000];
+    private static int STATE_hours[][] = new int[51][1000];
+    private static int STATE_ID[][] = new int[51][1000];
+    private static int STATE_syndicate[][] = new int[51][1000];
+    private static int STATE_syndicate_id[][] = new int[51][1000];
+    private static boolean STATE_received_tax[][] = new boolean[51][1000];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,11 +74,6 @@ public class Head {
     private static int last_day_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};// last day of every month (not considering bisect years)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-    /*
-
-            CODE BEFORE UNDO / REDO
-        
-    */
 
     private static void addEmployee(int id) 
     {
@@ -57,7 +81,7 @@ public class Head {
         Scanner input = new Scanner(System.in);
         System.out.printf("\n Insert your name followed by a enter: ");
         name[id] = input.nextLine();
-        System.out.printf("\n\n Insert you address followed by a enter: ");
+        System.out.printf("\n\n Insert your address followed by a enter: ");
         address[id] = input.nextLine();
         System.out.printf("\n\n Insert the type:\n 'hourly'\n 'salaried'\n 'commissioned'\n\n Type: ");
         type[id] = input.nextLine();
@@ -147,6 +171,8 @@ public class Head {
             selling_result[id] = 0;
             service_tax[id] = 0;
             type[id] = null;
+            payment_week[id] = -1;
+            payment_day[id] = -1;
             /////////////////////
             /////
             flag = 1;
@@ -161,7 +187,7 @@ public class Head {
         return flag;
     }
 
-    private static void timeCard(int id) 
+    private static boolean timeCard(int id) 
     {
         Scanner input = new Scanner(System.in);
         int hour;
@@ -224,21 +250,24 @@ public class Head {
                 System.out.println("\n\n    Time Card Approved!\n\n");
                 System.out.printf("\n\n\n      Press any key to continue...\n\n ");
                 input.nextLine();
-            }   
+            }
+            return true;   
         }
         else
         {
             System.out.println("\n\n Employee not found");
             System.out.printf("\n\n\n      Press any key to continue...\n\n ");
             input.nextLine();
+            return false;
         }
     }
 
-    private static void changeDetails(int id)
+    private static boolean changeDetails(int id)
     {
+        Scanner input = new Scanner(System.in);
+        boolean change = false;
         if(ID[id] != -1)
         {
-            Scanner input = new Scanner(System.in);
             while(true)
             {
               System.out.printf("//////////////////////////////////////////////////////////////////////\n");
@@ -263,6 +292,7 @@ public class Head {
                     input.nextLine();
                     name[id] = input.nextLine();
                     System.out.println("\n\n    Change done!!\n\n ");
+                    change = true;
                     break;
     
                 case 2:
@@ -270,6 +300,7 @@ public class Head {
                     input.nextLine();
                     address[id] = input.nextLine();
                     System.out.println("\n\n    Change done!!\n\n ");
+                    change = true;
                     break;
     
                 case 3:
@@ -297,6 +328,7 @@ public class Head {
                     }
                     type[id] = given;
                     System.out.println("\n\n    Change done!!\n\n ");
+                    change = true;
                     break;
     
                 case 4:
@@ -306,6 +338,7 @@ public class Head {
                     {
                         payment[id] = dado;
                         System.out.println("\n\n    Change done!!\n\n ");
+                        change = true;
                     }
                     else
                     {
@@ -320,11 +353,13 @@ public class Head {
                     {
                         syndicate[id] = 1;
                         System.out.println("\n\n    Change done!!\n\n ");
+                        change = true;
                     }
                     else if(alo == 0)
                     {
                         syndicate[id] = 0;
                         System.out.println("\n\n    Change done!!\n\n ");
+                        change = true;
                     }
                     else
                     {
@@ -338,6 +373,7 @@ public class Head {
                         System.out.println("\n\n Insert the new Syndicate ID: ");
                         syndicate_id[id] = input.nextInt();
                         System.out.println("\n\n    Change done!!\n\n ");
+                        change = true;
                     }
                     else
                     {
@@ -352,6 +388,7 @@ public class Head {
                         System.out.println("\n Insert the new Syndicate Tax: ");
                         syndicate_tax[id] = input.nextDouble();
                         System.out.println("\n\n    Change done!!\n\n ");
+                        change = true;
                     }
                     else
                     {
@@ -361,21 +398,29 @@ public class Head {
                     break;
     
                 case 8:
-                    return;
+                    return false;
 
                 default:
                     System.out.printf("\n\n   Invalid Option!! / Press enter to try again");
                     input.nextLine();
-                    changeDetails(id);
-                    return;
+                    return changeDetails(id);
+
               }
               System.out.printf("\n\n Press enter to continue...");
               input.nextLine();
+              return change;
             }
+        }
+        else
+        {
+            System.out.printf("\n\n\n Invalid ID!!!\n\n\n");
+            System.out.printf("\n\n Press enter to return to menu...\n\n");
+            input.nextLine();
+            return change;
         }
     }
 
-    private static void sellingResult(int id)
+    private static boolean sellingResult(int id)
     {
         Scanner input = new Scanner(System.in);
         if(ID[id] != -1)
@@ -387,7 +432,9 @@ public class Head {
                 System.out.printf("\n\n\n       Selling added to user: %s with the ID: %d\n\n", name[id], ID[id]);
                 System.out.printf("\n\n    Press enter to return to menu... ");
                 input.nextLine();
-                input.nextLine();   
+                input.nextLine();
+                consoleClear();
+                return true;   
             }
             else
             {
@@ -399,13 +446,14 @@ public class Head {
         else
         {
             System.out.printf("\n\n\n\n    Invalid ID!!\n\n");
-            System.out.printf("\n\n    Press enter to continue... ");
+            System.out.printf("\n\n    Press enter to return to menu... ");
             input.nextLine();
         }
         consoleClear();
+        return false;
     }
 
-    private static void serviceTax(int sid)
+    private static boolean serviceTax(int sid)
     {
         Scanner input = new Scanner(System.in);
         int flag = 0;
@@ -426,7 +474,10 @@ public class Head {
         {
             System.out.printf("\n\n     Typed Syndicate ID not found in the System!!\n\n\n     Press any key to return to menu... ");
             input.nextLine();
+            return false;
         }
+        else
+            return true;
     }
 
     private static void consoleClear()
@@ -496,6 +547,7 @@ public class Head {
     private static void listAllEmployees()
     {
         Scanner input = new Scanner(System.in);
+        int flag = 0;
         for(int i = 0; i < 1000; i++)
         {
             if(ID[i] != -1)
@@ -542,8 +594,15 @@ public class Head {
                 }
                 System.out.printf("\n\n Press enter to go to next Employee...");
                 input.nextLine();
+                flag = 1;
             }
             System.out.printf("\n\n\n\n");
+        }
+        if(flag == 0)
+        {
+            System.out.printf("\n\n\n No Employees found in the System!!\n\n");
+            System.out.printf("\n\n\n Press enter to return to menu...\n\n");
+            input.nextLine();
         }
     }
 
@@ -573,11 +632,12 @@ public class Head {
         return result;
     }
 
-    private static void todayPayments()
+    private static boolean todayPayments()
     {
         Scanner input = new Scanner(System.in);
         int flag = 0;
         int cont = 1;
+        boolean change = false;
 
         System.out.printf("\n\n//////////////////////////////////////////////////////////////////////\n");
         System.out.printf("///                                                                ///\n");
@@ -594,9 +654,10 @@ public class Head {
                     case "hourly": //hourly
                         if(day_of_week == payment_week[i])// pagos dia de sexta por default
                         {
-                            if(syndicate[i] == 1)
+                            if(syndicate[i] == 1 && !received_tax[i])
                             {
                                 System.out.printf("/// %d - ID: %d   Name: %s   Type: Hourly   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (salary[i] + extra_hour[i] - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
+                                received_tax[i] = true;
                             }
                             else
                             {
@@ -612,6 +673,7 @@ public class Head {
                             extra_hour[i] = 0;
                             cont++;
                             flag = 1;
+                            change = true;
                         }
                         break;
 
@@ -620,9 +682,10 @@ public class Head {
                         {
                             if(day == dayUtil(month))
                             {
-                                if(syndicate[i] == 1)
+                                if(syndicate[i] == 1 && !received_tax[i])
                                 {
                                     System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (salary[i] - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
+                                    received_tax[i] = true;
                                 }
                                 else
                                 {
@@ -637,15 +700,17 @@ public class Head {
                                 }
                                 cont++;
                                 flag = 1;
+                                change = true;
                             }
                         }
                         else // receives in the day he choose in the payment agenda
                         {
                             if(day == payment_day[i])
                             {
-                                if(syndicate[i] == 1)
+                                if(syndicate[i] == 1 && !received_tax[i])
                                 {
                                     System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (salary[i] - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
+                                    received_tax[i] = true;
                                 }
                                 else
                                 {
@@ -660,6 +725,7 @@ public class Head {
                                 }
                                 cont++;
                                 flag = 1;
+                                change = true;
                             }
                         }
                         
@@ -668,13 +734,15 @@ public class Head {
                     case "commissioned": // commissioned
                         if(two_week[i] >= 2)
                         {
-                            if(syndicate[i] == 1)
+                            double commissioned_tax = Math.abs((i/10000) + 0.2);
+                            if(syndicate[i] == 1 && !received_tax[i])
                             {
-                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , salary[i] + selling_result[i] - syndicate_tax[i] - service_tax[i], syndicate_id[i]);
+                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , salary[i] + (selling_result[i] * commissioned_tax) - syndicate_tax[i] - service_tax[i], syndicate_id[i]);
+                                received_tax[i] = true;
                             }
                             else
                             {
-                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , salary[i] + selling_result[i]);
+                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , salary[i] + (selling_result[i] * commissioned_tax));
                             }
                             
                             switch(payment[i])
@@ -687,6 +755,7 @@ public class Head {
                             cont++;
                             two_week[i] = 0;
                             flag = 1;
+                            change = true;
                         }
                         break;
                 }
@@ -703,6 +772,7 @@ public class Head {
         System.out.printf("///////////////////////////////////////////\n\n");
         input.nextLine();
         consoleClear();
+        return change;
     }
 
     private static void spendDay()
@@ -714,285 +784,28 @@ public class Head {
         {
             day_of_week = 0;
         }
-        switch(month)
+        if(day == last_day_month[month] + 1)
         {
-            case 1:
-                if(day == 32)
+            day = 1;
+            month++;
+            if(month == 13)
+            {
+                for(i=0;i<1000;i++)// refresh the received syndicate tax (mensal tax)
                 {
-                    day = 1;
-                    month++;
-                    if(month == 13)
-                    {
-                        month = 1;
-                    }
-                    for(i = 0;i<1000;i++)// refresh payment days for default salaried
-                    {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
-                    }
+                    received_tax[i] = false;
                 }
-                break;
-
-            case 2:
-                if(day == 29)
-                {
-                    day = 1;
-                    month++;
-                    if(month == 13)
-                    {
-                        month = 1;
-                    }
-                    for(i = 0;i<1000;i++)// refresh payment days for default salaried
-                    {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case 3:
-                if(day == 32)
-                {
-                    day = 1;
-                    month++;
-                    if(month == 13)
-                    {
-                        month = 1;
-                    }
-                    for(i = 0;i<1000;i++)// refresh payment days for default salaried
-                    {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case 4:
-                if(day == 31)
-                {
-                    day = 1;
-                    month++;
-                    if(month == 13)
-                    {
-                        month = 1;
-                    }
-                    for(i = 0;i<1000;i++)// refresh payment days for default salaried
-                    {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case 5:
-                if(day == 32)
-                {
-                    day = 1;
-                    month++;
-                    if(month == 13)
-                    {
-                        month = 1;
-                    }
-                    for(i = 0;i<1000;i++)// refresh payment days for default salaried
-                    {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case 6:
-                if(day == 31)
-                {
-                    day = 1;
-                    month++;
-                    if(month == 13)
-                    {
-                        month = 1;
-                    }
-                    for(i = 0;i<1000;i++)// refresh payment days for default salaried
-                    {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case 7:
-                if(day == 32)
-                {
-                    day = 1;
-                    month++;
-                    if(month == 13)
-                    {
-                        month = 1;
-                    }
-                    for(i = 0;i<1000;i++)// refresh payment days for default salaried
-                    {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case 8:
-                if(day == 32)
-                {
-                    day = 1;
-                    month++;
-                    if(month == 13)
-                    {
-                        month = 1;
-                    }
-                    for(i = 0;i<1000;i++)// refresh payment days for default salaried
-                    {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case 9:
-                if(day == 31)
-                {
-                    day = 1;
-                    month++;
-                    if(month == 13)
-                    {
-                        month = 1;
-                    }
-                    for(i = 0;i<1000;i++)// refresh payment days for default salaried
-                    {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case 10:
-                if(day == 32)
-                {
-                    day = 1;
-                    month++;
-                    if(month == 13)
-                    {
-                        month = 1;
-                    }
-                    for(i = 0;i<1000;i++)// refresh payment days for default salaried
-                    {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case 11:
-                if(day == 31)
-                {
-                    day = 1;
-                    month++;
-                    if(month == 13)
-                    {
-                        month = 1;
-                    }
-                    for(i = 0;i<1000;i++)// refresh payment days for default salaried
-                    {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case 12:
-                if(day == 32)
-                {
-                    day = 1;
-                    month++;
-                    if(month == 13)
-                    {
-                        month = 1;
-                    }
-                    for(i = 0;i<1000;i++)// refresh payment days for default salaried
-                    {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
-                    }
-                }
-                break;
-
-            case 13: 
                 month = 1;
-                for(i = 0;i<1000;i++)// refresh payment days for default salaried
+            }
+            for(i = 0;i<1000;i++)// refresh payment days for default salaried
+            {
+                if(ID[i] != -1)
+                {
+                    if(type[i].equals("salaried") && salaried_default[i] == 1)
                     {
-                        if(ID[i] != -1)
-                        {
-                            if(type[i].equals("salaried") && salaried_default[i] == 1)
-                            {
-                                payment_day[i] = dayUtil(month);
-                            }
-                        }
+                        payment_day[i] = dayUtil(month);
                     }
-                break;
+                }
+            }
         }
         for(i = 0; i < 1000 ; i++)
         {
@@ -1295,6 +1108,135 @@ public class Head {
         }    
     }
 
+    private static void initiateStates()
+    {
+        for(int i = 0;i < 1000;i++)
+        {
+            STATE_name[0][i] = null;
+            STATE_address[0][i] = null;
+            STATE_date_start[0][i] = null;
+            STATE_date_end[0][i] = null;
+            STATE_type[0][i] = null;
+            STATE_salary[0][i] = 0;
+            STATE_extra_hour[0][i] = 0;
+            STATE_selling_result[0][i] = 0;
+            STATE_syndicate_tax[0][i] = 0;
+            STATE_service_tax[0][i] = 0;
+            STATE_payment_day[0][i] = -1;
+            STATE_payment_week[0][i] = -1;
+            STATE_salaried_default[0][i] = -1;
+            STATE_two_week[0][i] = 0;
+            STATE_payment[0][i] = -1;
+            STATE_hours[0][i] = 0;
+            STATE_ID[0][i] = -1;
+            STATE_syndicate[0][i] = -1;
+            STATE_syndicate_id[0][i] = -1;
+            STATE_received_tax[0][i] = true;
+        }
+    }
+
+    private static void saveState()
+    {
+        int i;
+        if(states_size < 50)
+        {
+            state_index++;
+            states_size = state_index;
+            for(i = 0 ; i < 1000 ; i++)
+            {
+                STATE_name[state_index][i] = name[i];
+                STATE_address[state_index][i] = address[i];
+                STATE_date_start[state_index][i] = date_start[i];
+                STATE_date_end[state_index][i] = date_end[i];
+                STATE_type[state_index][i] = type[i];
+                STATE_salary[state_index][i] = salary[i];
+                STATE_extra_hour[state_index][i] = extra_hour[i];
+                STATE_selling_result[state_index][i] = selling_result[i];
+                STATE_syndicate_tax[state_index][i] = syndicate_tax[i];
+                STATE_service_tax[state_index][i] = service_tax[i];
+                STATE_payment_day[state_index][i] = payment_day[i];
+                STATE_payment_week[state_index][i] = payment_week[i];
+                STATE_salaried_default[state_index][i] = salaried_default[i];
+                STATE_two_week[state_index][i] = two_week[i];
+                STATE_payment[state_index][i] = payment[i];
+                STATE_hours[state_index][i] = hours[i];
+                STATE_ID[state_index][i] = ID[i];
+                STATE_syndicate[state_index][i] = syndicate[i];
+                STATE_syndicate_id[state_index][i] = syndicate_id[i];
+                STATE_received_tax[state_index][i] = received_tax[i];
+            }
+        }
+        else
+        {
+            System.out.printf("\n\n\n Can't add anymore state (undoRedo capacity full!!)\n\n\n");
+            System.out.printf(" Press enter to continue...\n\n\n");
+            Scanner input = new Scanner(System.in);
+            input.nextLine();
+        }
+    }
+
+    private static void applyState()
+    {
+        for(int i = 0 ; i < 1000 ; i++)
+        {
+            name[i] = STATE_name[state_index][i];
+            address[i] = STATE_address[state_index][i];
+            date_start[i] = STATE_date_start[state_index][i];
+            date_end[i] = STATE_date_end[state_index][i];
+            type[i] = STATE_type[state_index][i];
+            salary[i] = STATE_salary[state_index][i];
+            extra_hour[i] = STATE_extra_hour[state_index][i];
+            selling_result[i] = STATE_selling_result[state_index][i];
+            syndicate_tax[i] = STATE_syndicate_tax[state_index][i];
+            service_tax[i] = STATE_service_tax[state_index][i];
+            payment_day[i] = STATE_payment_day[state_index][i];
+            payment_week[i] = STATE_payment_week[state_index][i];
+            salaried_default[i] = STATE_salaried_default[state_index][i];
+            two_week[i] = STATE_two_week[state_index][i];
+            payment[i] = STATE_payment[state_index][i];
+            hours[i] = STATE_hours[state_index][i];
+            ID[i] = STATE_ID[state_index][i];
+            syndicate[i] = STATE_syndicate[state_index][i];
+            syndicate_id[i] = STATE_syndicate_id[state_index][i];
+            received_tax[i] = STATE_received_tax[state_index][i];
+        }
+    }
+
+    private static void undoRedo()
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.printf("\n\n Insert the option you want:\n 1 - UNDO (undone the previous action)\n 0 - REDO (if a undone was made, then you can step back to before the undone)\n\n\n Choice: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        if(choice == 1)
+        {
+            if(state_index > 0)
+            {
+                state_index--;
+                applyState();
+                System.out.printf("\n\n\n\n Settings UN-done!!\n\n\n");
+            }
+            else
+                System.out.printf("\n\n\n\n Undo Limit reached!!\n\n\n");
+        }
+        else if(choice == 0)
+        {
+            if(state_index < states_size && state_index <= 50)
+            {
+                state_index++;
+                applyState();
+                System.out.printf("\n\n\n\n Settings RE-done!!\n\n\n");
+            }
+            else
+                System.out.printf("\n\n\n\n Redo Limit reached!!\n\n\n");
+        }
+        else
+            System.out.printf("\n\n\n\n Invalid option!!! , executing default action: 'return to menu'...");
+
+        System.out.printf("\n\n\n Press enter to continue...\n\n");
+        input.nextLine();
+    }
+
     public static void main(String[] args)
     {
         Scanner input = new Scanner(System.in);
@@ -1302,6 +1244,7 @@ public class Head {
         String password_given;
         initiateSchedule();
         int o = 0;
+        boolean change = false;
 
         while(true)
         {
@@ -1378,6 +1321,7 @@ public class Head {
                                 {
                                     addEmployee(i);
                                     flag++;
+                                    change = true;
                                     break;
                                 }
                             }
@@ -1395,6 +1339,7 @@ public class Head {
                             q = delEmployee(id);
                             if(q == 1)
                             {
+                                change = true;
                                 flag--;
                             }
                             consoleClear();
@@ -1403,14 +1348,14 @@ public class Head {
                         case 3:
                             System.out.printf("\n\n Insert the your ID: ");
                             id = input.nextInt();
-                            timeCard(id);
+                            change = timeCard(id);
                             consoleClear();
                             break;
         
                         case 4:
                             System.out.printf("\n\n Insert your ID: ");
                             id = input.nextInt();
-                            sellingResult(id);
+                            change = sellingResult(id);
                             consoleClear();
                             break;
         
@@ -1418,7 +1363,7 @@ public class Head {
                             System.out.printf("\n\n If have two or more employee with the same Syndicate ID\n you will have to add service tax to both of them\n");
                             System.out.printf("\n\n Insert the Syndicate ID: ");
                             id = input.nextInt();
-                            serviceTax(id);
+                            change = serviceTax(id);
                             consoleClear();
                             break;
         
@@ -1427,7 +1372,7 @@ public class Head {
                             id = input.nextInt();
                             if(id >= 0)
                             {
-                                changeDetails(id);
+                                change = changeDetails(id);
                             }
                             else
                             {
@@ -1440,15 +1385,12 @@ public class Head {
                             break;
         
                         case 7:
-                            todayPayments();
+                            change = todayPayments();
                             consoleClear();
                             break;
         
                         case 8:
-                            System.out.printf("\n\n Comming Soon...\n\n");
-                            System.out.printf("\n\n Press enter to continue...");
-                            input.nextLine();
-                            input.nextLine();
+                            undoRedo();
                             consoleClear();
                             break;
         
@@ -1520,6 +1462,11 @@ public class Head {
                             input.nextLine();
                             input.nextLine();
                             break;
+                    }
+                    if(change) // if any change was made, the program save the current state of the employees
+                    {
+                        saveState();
+                        change = false;
                     }
                 }
             }
