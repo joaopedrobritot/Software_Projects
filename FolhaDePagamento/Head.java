@@ -4,6 +4,12 @@ import java.util.Date;
 
 public class Head {
 
+//     Constants
+
+    final int tax_hourly = 30;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //     Schedules
 
     private static String agenda_type[] = new String[1000];// Weekly / Monthly / Biweekly
@@ -34,6 +40,7 @@ public class Head {
     private static int syndicate[] = new int[1000];// 1 belong to syndicate // 0 - not in syndicate
     private static int syndicate_id[] = new int[1000];
     private static boolean received_tax[] = new boolean[1000]; // true if a employee has been taxed by syndicate in that month
+    private static int days_worked[] = new int[1000];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -62,6 +69,7 @@ public class Head {
     private static int STATE_syndicate[][] = new int[51][1000];
     private static int STATE_syndicate_id[][] = new int[51][1000];
     private static boolean STATE_received_tax[][] = new boolean[51][1000];
+    private static int STATE_days_worked[][] = new int[51][1000];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -106,8 +114,16 @@ public class Head {
         }
         System.out.printf("\n\n Choose your Payment Method: \n\n 0 - Postal Check\n 1 - Receive check in hands\n 2 - Bank Deposit\n\n  Your choice: ");
         payment[id] = input.nextInt();
-        System.out.printf("\n\n Insert your salary: ");
-        salary[id] = input.nextDouble();
+        if("hourly".equalsIgnoreCase(type[id].toLowerCase()) )
+        {
+            salary[id] = 0;
+        }
+        else
+        {
+            System.out.printf("\n\n Insert the salary per day: ");
+            salary[id] = input.nextDouble();
+        }
+        
         System.out.printf("\n\n Do you belong to the syndicate?\n\n 0 - No\n 1 - Yes\n\n Your Choice: ");
         int a = input.nextInt();
         if(a == 1)
@@ -219,22 +235,31 @@ public class Head {
                     System.out.print("\n\n\n\n  " + diffHours + " hours today\n\n ");
                     hour = diffHours;
                     
-                    hours[id] = hour;
-                    if(hours[id] > 8 && type[id].equalsIgnoreCase("hourly"))// hourly employees only
+                    hours[id] += hour;
+                    if(hour > 8 && type[id].equalsIgnoreCase("hourly"))// hourly employees only
                     {
-                        int limit = (hours[id] - 8);
-                        double bonus = (salary[id] * 1.5) / 100;
+                        int limit = (hour - 8);
+                        double bonus = (limit * 1.5 * 30);
                         for(int i = 0;i < limit;i++)
                         {
                             extra_hour[id] += bonus;
                         }
                         System.out.printf("\n\n  Extra salary: %.2f\n\n ", extra_hour[id]);
                     }
+                    if(type[id].equalsIgnoreCase("hourly"))
+                    {
+                        salary[id] += (hour * 30);
+                    }
+                    else
+                    {
+                        if(day_of_week != 5 && day_of_week != 6)
+                        {
+                            days_worked[id]++;
+                        }
+                    }
                     System.out.printf("\n\n    Time Card approved!\n\n\n\n\n\n\n ");
                     System.out.printf("\n\n\n      Press any key to continue...\n\n ");
                     input.nextLine();
-                    
-
                 } 
                 catch(Exception e)
                 {
@@ -309,20 +334,47 @@ public class Head {
                     String given = input.nextLine();
                     if("hourly".equalsIgnoreCase(given))
                     {
+                        days_worked[id] = 0;
+                        selling_result[id] = 0;
+                        System.out.printf("\n\n Insert the salary per hour: ");
+                        salary[id] = input.nextDouble();
+                        input.nextLine();
+                        System.out.printf("\n\n ");
                         payment_week[id] = 4; 
                     }
                     else if("salaried".equalsIgnoreCase(given))
                     {
                         salaried_default[id] = 1;
+                        days_worked[id] = 0;
+                        extra_hour[id] = 0;
+                        selling_result[id] = 0;
+                        System.out.printf("\n\n Insert the salary per day: ");
+                        salary[id] = input.nextDouble();
+                        input.nextLine();
+                        System.out.printf("\n\n ");
                         payment_day[id] = dayUtil(month);
                     }
                     else if("commissioned".equalsIgnoreCase(given))
                     {
+                        days_worked[id] = 0;
+                        extra_hour[id] = 0;
+                        selling_result[id] = 0;
+                        System.out.printf("\n\n Insert the salary per day: ");
+                        salary[id] = input.nextDouble();
+                        input.nextLine();
+                        System.out.printf("\n\n ");
                         payment_week[id] = 4;
                     }
                     else
                     {
                         System.out.printf("\n\n Invalid Type...Setting to Default: 'hourly'\n\n");
+                        days_worked[id] = 0;
+                        selling_result[id] = 0;
+                        extra_hour[id] = 0;
+                        System.out.printf("\n\n Insert the salary per hour: ");
+                        salary[id] = input.nextDouble();
+                        input.nextLine();
+                        System.out.printf("\n\n ");
                         given = "hourly";
                         payment_week[id] = 4;
                     }
@@ -357,7 +409,9 @@ public class Head {
                     }
                     else if(alo == 0)
                     {
-                        syndicate[id] = 0;
+                        syndicate[id] = -1;
+                        service_tax[id] = 0;
+                        syndicate_tax[id] = 0;
                         System.out.println("\n\n    Change done!!\n\n ");
                         change = true;
                     }
@@ -635,6 +689,7 @@ public class Head {
     private static boolean todayPayments()
     {
         Scanner input = new Scanner(System.in);
+        int result;
         int flag = 0;
         int cont = 1;
         boolean change = false;
@@ -674,22 +729,24 @@ public class Head {
                             cont++;
                             flag = 1;
                             change = true;
+                            salary[i] = 0;
                         }
                         break;
 
                     case "salaried": //salaried
+                        result = salary[i] * days_worked[i];
                         if(salaried_default[i] == 1)// receives salary in the last business day
                         {
                             if(day == dayUtil(month))
                             {
                                 if(syndicate[i] == 1 && !received_tax[i])
                                 {
-                                    System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (salary[i] - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
+                                    System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (result - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
                                     received_tax[i] = true;
                                 }
                                 else
                                 {
-                                    System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , salary[i]);
+                                    System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , result);
                                 }
                                 
                                 switch(payment[i])
@@ -701,6 +758,7 @@ public class Head {
                                 cont++;
                                 flag = 1;
                                 change = true;
+                                days_worked[i] = 0;
                             }
                         }
                         else // receives in the day he choose in the payment agenda
@@ -709,12 +767,12 @@ public class Head {
                             {
                                 if(syndicate[i] == 1 && !received_tax[i])
                                 {
-                                    System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (salary[i] - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
+                                    System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (result - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
                                     received_tax[i] = true;
                                 }
                                 else
                                 {
-                                    System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , salary[i]);
+                                    System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , result);
                                 }
                                 
                                 switch(payment[i])
@@ -726,23 +784,25 @@ public class Head {
                                 cont++;
                                 flag = 1;
                                 change = true;
+                                days_worked[i] = 0;
                             }
                         }
                         
                         break;
 
                     case "commissioned": // commissioned
+                        result = salary[i] * days_worked[i];
                         if(two_week[i] >= 2)
                         {
-                            double commissioned_tax = Math.abs((i/10000) + 0.2);
+                            double commissioned_tax = (i/10000) + 0.2);
                             if(syndicate[i] == 1 && !received_tax[i])
                             {
-                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , salary[i] + (selling_result[i] * commissioned_tax) - syndicate_tax[i] - service_tax[i], syndicate_id[i]);
+                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , result + (selling_result[i] * commissioned_tax) - syndicate_tax[i] - service_tax[i], syndicate_id[i]);
                                 received_tax[i] = true;
                             }
                             else
                             {
-                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , salary[i] + (selling_result[i] * commissioned_tax));
+                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , result + (selling_result[i] * commissioned_tax));
                             }
                             
                             switch(payment[i])
@@ -756,7 +816,9 @@ public class Head {
                             two_week[i] = 0;
                             flag = 1;
                             change = true;
+                            days_worked[i] = 0;
                         }
+
                         break;
                 }
             }
@@ -769,7 +831,7 @@ public class Head {
         System.out.printf("///                                                                \n");
         System.out.printf("///        Press any key to continue...                            \n");
         System.out.printf("///                                                                \n");
-        System.out.printf("///////////////////////////////////////////\n\n");
+        System.out.printf("///________________________________________________________________\n\n");
         input.nextLine();
         consoleClear();
         return change;
@@ -984,7 +1046,7 @@ public class Head {
         return flag;
     }
 
-    private static void listAllSchedules(int id)
+    private static void listAllSchedules(int id) //parei aqui, tava fazendo o days worked e aquele negocio de pagar por horas trabalhadas
     {
         Scanner input = new Scanner(System.in);
         int cont = 1;
@@ -1009,6 +1071,8 @@ public class Head {
                     case "Weekly":
                         if(type[id].equalsIgnoreCase("hourly"))
                         {
+                            extra_hour[id] = 0;
+                            salary[id] = 0;
                             switch(agenda_option[choice])
                             {
                                 case "Monday":
@@ -1042,6 +1106,7 @@ public class Head {
                     case "Monthly":
                         if(type[id].equalsIgnoreCase("salaried"))
                         {
+                            days_worked[id] = 0;
                             if(agenda_option[choice].equalsIgnoreCase("last"))
                             {
                                 payment_day[id] = dayUtil(month);
@@ -1063,6 +1128,7 @@ public class Head {
                     case "Biweekly":
                         if(type[id].equalsIgnoreCase("commissioned"))
                         {
+                            days_worked[id] = 0;
                             switch(agenda_option[choice])
                             {
                                 case "Monday":
@@ -1132,6 +1198,7 @@ public class Head {
             STATE_syndicate[0][i] = -1;
             STATE_syndicate_id[0][i] = -1;
             STATE_received_tax[0][i] = true;
+            STATE_days_worked[0][i] = 0;
         }
     }
 
@@ -1164,6 +1231,7 @@ public class Head {
                 STATE_syndicate[state_index][i] = syndicate[i];
                 STATE_syndicate_id[state_index][i] = syndicate_id[i];
                 STATE_received_tax[state_index][i] = received_tax[i];
+                STATE_days_worked[state_index][i] = days_worked[i];
             }
         }
         else
@@ -1199,6 +1267,7 @@ public class Head {
             syndicate[i] = STATE_syndicate[state_index][i];
             syndicate_id[i] = STATE_syndicate_id[state_index][i];
             received_tax[i] = STATE_received_tax[state_index][i];
+            days_worked[i] = STATE_days_worked[state_index][i];
         }
     }
 
@@ -1262,6 +1331,7 @@ public class Head {
                     two_week[i] = 0;
                     selling_result[i] = 0;
                     salaried_default[i] = -1;
+                    days_worked[i] = 0;
                 }
         
                 while(o == 0)
