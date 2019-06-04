@@ -1,4 +1,4 @@
-## _**Folha de Pagamento📃✔️**_
+<pre> <h1>                 Folha de Pagamento📃✔️</h1></pre>
 
 <pre>                                              <img src="https://i.imgur.com/zS1yciT.gif" align="center" width="104" height="140" /></pre>
 <pre>
