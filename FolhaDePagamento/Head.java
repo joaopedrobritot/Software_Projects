@@ -6,7 +6,7 @@ public class Head {
 
 //     Constants
 
-    final int tax_hourly = 30;
+    final static double tax_hourly = 30.0;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -39,9 +39,9 @@ public class Head {
     private static int ID[] = new int[1000];// indicates what's position of the employee
     private static int syndicate[] = new int[1000];// 1 belong to syndicate // 0 - not in syndicate
     private static int syndicate_id[] = new int[1000];
+    private static int days_worked[] = new int[1000]; // displays the worked days of an employee
     private static boolean received_tax[] = new boolean[1000]; // true if a employee has been taxed by syndicate in that month
-    private static int days_worked[] = new int[1000];
-
+    
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //     States Saves
@@ -68,8 +68,8 @@ public class Head {
     private static int STATE_ID[][] = new int[51][1000];
     private static int STATE_syndicate[][] = new int[51][1000];
     private static int STATE_syndicate_id[][] = new int[51][1000];
-    private static boolean STATE_received_tax[][] = new boolean[51][1000];
     private static int STATE_days_worked[][] = new int[51][1000];
+    private static boolean STATE_received_tax[][] = new boolean[51][1000];
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -87,23 +87,28 @@ public class Head {
     {
 
         Scanner input = new Scanner(System.in);
+
         System.out.printf("\n Insert your name followed by a enter: ");
         name[id] = input.nextLine();
         System.out.printf("\n\n Insert your address followed by a enter: ");
         address[id] = input.nextLine();
-        System.out.printf("\n\n Insert the type:\n 'hourly'\n 'salaried'\n 'commissioned'\n\n Type: ");
-        type[id] = input.nextLine();
-        if("hourly".equalsIgnoreCase(type[id].toLowerCase()) )
+        System.out.printf("\n\n Insert the type:\n 1 - 'hourly'\n 2 - 'salaried'\n 3 - 'commissioned'\n\n Type: ");
+        int choice = input.nextInt();
+        input.nextLine();
+        if(choice == 1)
         {
+            type[id] = "hourly";
             payment_week[id] = 4; 
         }
-        else if("salaried".equalsIgnoreCase(type[id].toLowerCase()) )
+        else if(choice == 2)
         {
+            type[id] = "salaried";
             salaried_default[id] = 1;
             payment_day[id] = dayUtil(month);
         }
-        else if("commissioned".equalsIgnoreCase(type[id].toLowerCase()) )
+        else if(choice == 3)
         {
+            type[id] = "commissioned";
             payment_week[id] = 4;
         }
         else
@@ -133,6 +138,7 @@ public class Head {
             syndicate_id[id] = input.nextInt();
             System.out.printf("\n Insert your Syndicate Tax: ");
             syndicate_tax[id] = input.nextDouble();
+            service_tax[id] = 0;
         }
         else
         {
@@ -142,26 +148,26 @@ public class Head {
         }
         ID[id] = id;
         extra_hour[id] = 0;
-        service_tax[id] = 0;
         //////printando
         System.out.printf("\n\n Employee ID: %d\n Name: %s\n Address: %s\n Type: %s\n", ID[id], name[id], address[id], type[id]);
-        System.out.printf(" Salary: %.2f\n",salary[id]);
+        if(type[id].equalsIgnoreCase("hourly"))
+            System.out.printf(" Salary per hour worked: 30.0\n Salary: %.2f\n", salary[id], salary[id]);
+        else
+            System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n", salary[id], salary[id] * days_worked[id]);
         if(a == 1)
         {
             System.out.println(" Belong to Syndicate: Yes\n Syndicate ID: " + syndicate_id[id]);
             System.out.println("\n\n\n Save your Syndicate ID number!!!!\n\n");
         }
         else
-        {
             System.out.printf("\n Belong to Syndicate: No\n");
-        }
         
         System.out.printf("\n\n\n Save your ID number!!!!\n\n");
         System.out.printf("\n\n    Employee added in the system!\n\n");
         System.out.printf("\n\n Press enter to continue...\n\n\n\n");
         input.nextLine();
         input.nextLine();
-        System.out.printf("\n\n\n");
+        System.out.printf("\n\n\n"); 
     }
 
     private static int delEmployee(int id) 
@@ -189,6 +195,9 @@ public class Head {
             type[id] = null;
             payment_week[id] = -1;
             payment_day[id] = -1;
+            hours[id] = 0;
+            days_worked[id] = 0;
+            two_week[id] = 0;
             /////////////////////
             /////
             flag = 1;
@@ -200,6 +209,7 @@ public class Head {
         {
             System.out.println("\n\n Employee not found!\n");
         }
+        
         return flag;
     }
 
@@ -209,7 +219,7 @@ public class Head {
         int hour;
         if(ID[id] != -1)
         {
-            System.out.println("\n\n Insert the hours in the format : 'HH:mm' where 'HH' is hours and 'mm' minutes, followed by enter\n\n\n");
+            System.out.println("\n\n Insert the hours in the format : 'HH:mm' where 'HH' is hours and 'mm' minutes, followed by enter\n\n Be sure to check this: if hour/minutes < 10 put '01', '09'.!!\n\n ");
             System.out.println("\n\n Are you starting to work? (1 - yes / 0 - no)   ");
             int choice = input.nextInt();
             if(choice == 0)
@@ -235,20 +245,18 @@ public class Head {
                     System.out.print("\n\n\n\n  " + diffHours + " hours today\n\n ");
                     hour = diffHours;
                     
-                    hours[id] += hour;
+                    hours[id] += hour; // total worked hours
                     if(hour > 8 && type[id].equalsIgnoreCase("hourly"))// hourly employees only
                     {
                         int limit = (hour - 8);
-                        double bonus = (limit * 1.5 * 30);
-                        for(int i = 0;i < limit;i++)
-                        {
-                            extra_hour[id] += bonus;
-                        }
+                        double bonus = (limit * 1.5 * tax_hourly);
+                        extra_hour[id] += bonus;
                         System.out.printf("\n\n  Extra salary: %.2f\n\n ", extra_hour[id]);
                     }
                     if(type[id].equalsIgnoreCase("hourly"))
                     {
-                        salary[id] += (hour * 30);
+                        System.out.printf("\n\n Current Salary: %.2f\n Today salary: %.2f\n Total (No Extra included) : %.2f\n\n ", salary[id], (hour * tax_hourly), salary[id] + (hour * tax_hourly));
+                        salary[id] += (hour * tax_hourly);
                     }
                     else
                     {
@@ -276,6 +284,7 @@ public class Head {
                 System.out.printf("\n\n\n      Press any key to continue...\n\n ");
                 input.nextLine();
             }
+            
             return true;   
         }
         else
@@ -283,6 +292,7 @@ public class Head {
             System.out.println("\n\n Employee not found");
             System.out.printf("\n\n\n      Press any key to continue...\n\n ");
             input.nextLine();
+            
             return false;
         }
     }
@@ -334,8 +344,10 @@ public class Head {
                     String given = input.nextLine();
                     if("hourly".equalsIgnoreCase(given))
                     {
+                        two_week[id] = 0;
                         days_worked[id] = 0;
                         selling_result[id] = 0;
+                        extra_hour[id] = 0;
                         System.out.printf("\n\n Insert the salary per hour: ");
                         salary[id] = input.nextDouble();
                         input.nextLine();
@@ -344,6 +356,7 @@ public class Head {
                     }
                     else if("salaried".equalsIgnoreCase(given))
                     {
+                        two_week[id] = 0;
                         salaried_default[id] = 1;
                         days_worked[id] = 0;
                         extra_hour[id] = 0;
@@ -356,6 +369,7 @@ public class Head {
                     }
                     else if("commissioned".equalsIgnoreCase(given))
                     {
+                        two_week[id] = 0;
                         days_worked[id] = 0;
                         extra_hour[id] = 0;
                         selling_result[id] = 0;
@@ -384,7 +398,7 @@ public class Head {
                     break;
     
                 case 4:
-                    System.out.printf("Choose your Payment Method: \n\n 0 - Postal Check\n 1 - Receive check in hands\n 2 - Bank Deposit\n\n  Your choice: ");
+                    System.out.printf("Choose your Payment Method: \n\n 0 - Postal Check via Mail\n 1 - Receive Postal Check in hands\n 2 - Bank Deposit\n\n  Your choice: ");
                     int dado = input.nextInt();
                     if(dado == 0 || dado == 1 || dado == 2)
                     {
@@ -404,7 +418,13 @@ public class Head {
                     if(alo == 1)
                     {
                         syndicate[id] = 1;
-                        System.out.println("\n\n    Change done!!\n\n ");
+                        System.out.printf("\n Insert your Syndicate ID (Numbers Only): ");
+                        syndicate_id[id] = input.nextInt();
+                        System.out.printf("\n\n Insert your Syndicate Tax (Numbers Only): ");
+                        syndicate_tax[id] = input.nextDouble();
+                        input.nextLine();
+                        service_tax[id] = 0;
+                        System.out.println("\n\n\n    Change done!!\n\n ");
                         change = true;
                     }
                     else if(alo == 0)
@@ -439,7 +459,7 @@ public class Head {
                 case 7:
                     if(syndicate[id] == 1)
                     {
-                        System.out.println("\n Insert the new Syndicate Tax: ");
+                        System.out.println("\n Insert the new Syndicate Tax (Numbers Only): ");
                         syndicate_tax[id] = input.nextDouble();
                         System.out.println("\n\n    Change done!!\n\n ");
                         change = true;
@@ -452,16 +472,19 @@ public class Head {
                     break;
     
                 case 8:
+                    
                     return false;
 
                 default:
                     System.out.printf("\n\n   Invalid Option!! / Press enter to try again");
                     input.nextLine();
+                    
                     return changeDetails(id);
 
               }
               System.out.printf("\n\n Press enter to continue...");
               input.nextLine();
+              
               return change;
             }
         }
@@ -470,6 +493,7 @@ public class Head {
             System.out.printf("\n\n\n Invalid ID!!!\n\n\n");
             System.out.printf("\n\n Press enter to return to menu...\n\n");
             input.nextLine();
+            
             return change;
         }
     }
@@ -488,6 +512,7 @@ public class Head {
                 input.nextLine();
                 input.nextLine();
                 consoleClear();
+                
                 return true;   
             }
             else
@@ -504,6 +529,7 @@ public class Head {
             input.nextLine();
         }
         consoleClear();
+        
         return false;
     }
 
@@ -516,7 +542,7 @@ public class Head {
             if(sid == syndicate_id[i])
             {
                 System.out.printf("\n\n Insert the tax value: ");
-                service_tax[i] = input.nextDouble();
+                service_tax[i] += input.nextDouble();
                 System.out.printf("\n\n    Tax added to the user: %s with ID: %d !!!", name[i], ID[i]);
                 System.out.printf("\n\n Press enter to continue...");
                 input.nextLine();
@@ -528,10 +554,14 @@ public class Head {
         {
             System.out.printf("\n\n     Typed Syndicate ID not found in the System!!\n\n\n     Press any key to return to menu... ");
             input.nextLine();
+            
             return false;
         }
         else
+        {
+            
             return true;
+        }
     }
 
     private static void consoleClear()
@@ -545,6 +575,7 @@ public class Head {
     private static void showDetails(int id) 
     {
         Scanner input = new Scanner(System.in);
+        double result;
         if(ID[id] != -1)
         {
             System.out.printf("\n\n Name: %s\n Address: %s\n Type:", name[id], address[id]);
@@ -552,17 +583,19 @@ public class Head {
             {
                 case "hourly":
                     System.out.println(" Hourly");
-                    System.out.printf(" Salary: %.2f\n Extra Salary: %.2f\n Payment: ", salary[id], extra_hour[id]);
+                    System.out.printf(" Salary per hour worked: 30.0\n Salary (No Extra): %.2f\n Extra Salary: %.2f\n Payment: ", salary[id], extra_hour[id]);
                     break;
 
                 case "salaried":
+                    result = salary[id] * days_worked[id];
                     System.out.println(" Salaried");
-                    System.out.printf(" Salary: %.2f\n Payment: ", salary[id]);
+                    System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Payment: ", salary[id], result);
                     break;
 
                 case "commissioned":
+                    result = salary[id] * days_worked[id];
                     System.out.println(" Commissioned");
-                    System.out.printf(" Salary: %.2f\n Selling Results: %.2f\n Payment: ", salary[id], selling_result[id]);
+                    System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Selling Results: %.2f\n Payment: ", salary[id], result, selling_result[id]);
                     break;
 
                 default:
@@ -585,7 +618,7 @@ public class Head {
             }
             else
             {
-                System.out.printf(" Not in Syndicate\n Hours: %d\n Date Start: %s\n Date End: %s\n\n", hours[id], date_start[id], date_end[id]);
+                System.out.printf(" Not in Syndicate\n Total Hours Worked (Hourly): %d\n Date Start: %s\n Date End: %s\n\n", hours[id], date_start[id], date_end[id]);
             }
             System.out.printf("\n\n Press enter to continue...");
             input.nextLine();
@@ -595,12 +628,13 @@ public class Head {
             System.out.println("\n\n\n\n    Invalid ID!!\n\n");
             System.out.printf("\n\n    Press enter to continue... ");
             input.nextLine();
-        }
+        }  
     }
 
     private static void listAllEmployees()
     {
         Scanner input = new Scanner(System.in);
+        double result;
         int flag = 0;
         for(int i = 0; i < 1000; i++)
         {
@@ -611,17 +645,19 @@ public class Head {
                 {
                     case "hourly":
                         System.out.println(" Hourly");
-                        System.out.printf(" Salary: %.2f\n Extra Salary: %.2f\n Payment: ", salary[i], extra_hour[i]);
+                        System.out.printf(" Salary per hour worked: 30.0\n Salary (No Extra): %.2f\n Extra Salary: %.2f\n Payment: ", salary[i], extra_hour[i]);
                         break;
     
                     case "salaried":
+                        result = salary[i] * days_worked[i];
                         System.out.println(" Salaried");
-                        System.out.printf(" Salary: %.2f\n Payment: ", salary[i]);
+                        System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Payment: ", salary[i], result);
                         break;
     
                     case "commissioned":
+                        result = salary[i] * days_worked[i];
                         System.out.println(" Commissioned");
-                        System.out.printf(" Salary: %.2f\n Selling Results: %.2f\n Payment: ", salary[i], selling_result[i]);
+                        System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Selling Results: %.2f\n Payment: ", salary[i], result, selling_result[i]);
                         break;
     
                     default:
@@ -644,7 +680,7 @@ public class Head {
                 }
                 else
                 {
-                    System.out.printf(" Not in Syndicate\n Hours: %d\n Date Start: %s\n Date End: %s\n\n", hours[i], date_start[i], date_end[i]);
+                    System.out.printf(" Not in Syndicate\n Total Hours Worked (Hourly): %d\n Date Start: %s\n Date End: %s\n\n", hours[i], date_start[i], date_end[i]);
                 }
                 System.out.printf("\n\n Press enter to go to next Employee...");
                 input.nextLine();
@@ -657,7 +693,7 @@ public class Head {
             System.out.printf("\n\n\n No Employees found in the System!!\n\n");
             System.out.printf("\n\n\n Press enter to return to menu...\n\n");
             input.nextLine();
-        }
+        } 
     }
 
     private static int dayUtil(int mth)
@@ -689,7 +725,7 @@ public class Head {
     private static boolean todayPayments()
     {
         Scanner input = new Scanner(System.in);
-        int result;
+        double result;
         int flag = 0;
         int cont = 1;
         boolean change = false;
@@ -711,12 +747,12 @@ public class Head {
                         {
                             if(syndicate[i] == 1 && !received_tax[i])
                             {
-                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Hourly   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (salary[i] + extra_hour[i] - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
+                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Hourly   Salary ( - Syndicate Taxes + Extra Salary): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (salary[i] + extra_hour[i] - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
                                 received_tax[i] = true;
                             }
                             else
                             {
-                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Hourly   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , salary[i] + extra_hour[i]);
+                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Hourly   Salary ( + Extra Salary): %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , salary[i] + extra_hour[i]);
                             }
                             
                             switch(payment[i])
@@ -741,7 +777,7 @@ public class Head {
                             {
                                 if(syndicate[i] == 1 && !received_tax[i])
                                 {
-                                    System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (result - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
+                                    System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary ( - Syndicate Taxes): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (result - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
                                     received_tax[i] = true;
                                 }
                                 else
@@ -767,7 +803,7 @@ public class Head {
                             {
                                 if(syndicate[i] == 1 && !received_tax[i])
                                 {
-                                    System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (result - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
+                                    System.out.printf("/// %d - ID: %d   Name: %s   Type: Salaried   Salary ( - Syndicate Taxes): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , (result - syndicate_tax[i] - service_tax[i]), syndicate_id[i]);
                                     received_tax[i] = true;
                                 }
                                 else
@@ -794,15 +830,15 @@ public class Head {
                         result = salary[i] * days_worked[i];
                         if(two_week[i] >= 2)
                         {
-                            double commissioned_tax = (i/10000) + 0.2);
+                            double commissioned_tax = (i/10000) + 0.2;
                             if(syndicate[i] == 1 && !received_tax[i])
                             {
-                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary: %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , result + (selling_result[i] * commissioned_tax) - syndicate_tax[i] - service_tax[i], syndicate_id[i]);
+                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary ( - Syndicate Taxes + Commissions): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, name[i] , result + (selling_result[i] * commissioned_tax) - syndicate_tax[i] - service_tax[i], syndicate_id[i]);
                                 received_tax[i] = true;
                             }
                             else
                             {
-                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary: %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , result + (selling_result[i] * commissioned_tax));
+                                System.out.printf("/// %d - ID: %d   Name: %s   Type: Commissioned   Salary ( + Commissions): %.2f   Syndicate: No  Payment Method: ", cont, i, name[i] , result + (selling_result[i] * commissioned_tax));
                             }
                             
                             switch(payment[i])
@@ -834,6 +870,7 @@ public class Head {
         System.out.printf("///________________________________________________________________\n\n");
         input.nextLine();
         consoleClear();
+        
         return change;
     }
 
@@ -1037,19 +1074,20 @@ public class Head {
                         System.out.printf("\n\n Invalid option, executing default action: 'return to menu'.\n\n\n");
                         System.out.printf("\n Press enter to continue...\n\n\n\n");
                         input.nextLine();
+                        
                         return 0;
                 }
                 flag = 1;
                 break;
             }
         }
+        
         return flag;
     }
 
-    private static void listAllSchedules(int id) //parei aqui, tava fazendo o days worked e aquele negocio de pagar por horas trabalhadas
+    private static void listAllSchedules(int id)
     {
         Scanner input = new Scanner(System.in);
-        int cont = 1;
         System.out.printf("\n\n//////////////////////////////////////////////////////////////////////\n");
         System.out.printf("///                                                                ///\n");
         System.out.printf("///                      Payment Schedules                         ///\n");
@@ -1071,8 +1109,8 @@ public class Head {
                     case "Weekly":
                         if(type[id].equalsIgnoreCase("hourly"))
                         {
-                            extra_hour[id] = 0;
-                            salary[id] = 0;
+                            //extra_hour[id] = 0;
+                            //salary[id] = 0;
                             switch(agenda_option[choice])
                             {
                                 case "Monday":
@@ -1106,7 +1144,7 @@ public class Head {
                     case "Monthly":
                         if(type[id].equalsIgnoreCase("salaried"))
                         {
-                            days_worked[id] = 0;
+                            //days_worked[id] = 0;
                             if(agenda_option[choice].equalsIgnoreCase("last"))
                             {
                                 payment_day[id] = dayUtil(month);
@@ -1128,7 +1166,8 @@ public class Head {
                     case "Biweekly":
                         if(type[id].equalsIgnoreCase("commissioned"))
                         {
-                            days_worked[id] = 0;
+                            //days_worked[id] = 0;
+                            two_week[id] = 0;
                             switch(agenda_option[choice])
                             {
                                 case "Monday":
@@ -1171,7 +1210,7 @@ public class Head {
                 input.nextLine();
                 System.out.printf("\n\n\n\n");
             }
-        }    
+        }   
     }
 
     private static void initiateStates()
@@ -1240,6 +1279,7 @@ public class Head {
             System.out.printf(" Press enter to continue...\n\n\n");
             Scanner input = new Scanner(System.in);
             input.nextLine();
+            
         }
     }
 
@@ -1274,7 +1314,7 @@ public class Head {
     private static void undoRedo()
     {
         Scanner input = new Scanner(System.in);
-        System.out.printf("\n\n Insert the option you want:\n 1 - UNDO (undone the previous action)\n 0 - REDO (if a undone was made, then you can step back to before the undone)\n\n\n Choice: ");
+        System.out.printf("\n\n Insert the option you want:\n    1 - UNDO (undone the previous action)\n    0 - REDO (if a undone was made, then you can step back to before the undone)\n\n\n Choice: ");
         int choice = input.nextInt();
         input.nextLine();
         if(choice == 1)
@@ -1283,27 +1323,27 @@ public class Head {
             {
                 state_index--;
                 applyState();
-                System.out.printf("\n\n\n\n Settings UN-done!!\n\n\n");
+                System.out.printf("\n\n\n\n    Settings UN-done!!\n\n\n");
             }
             else
-                System.out.printf("\n\n\n\n Undo Limit reached!!\n\n\n");
+                System.out.printf("\n\n\n\n    Undo Limit reached!!\n\n\n");
         }
         else if(choice == 0)
         {
-            if(state_index < states_size && state_index <= 50)
+            if(state_index < states_size && state_index < 50)
             {
                 state_index++;
                 applyState();
-                System.out.printf("\n\n\n\n Settings RE-done!!\n\n\n");
+                System.out.printf("\n\n\n\n    Settings RE-done!!\n\n\n");
             }
             else
-                System.out.printf("\n\n\n\n Redo Limit reached!!\n\n\n");
+                System.out.printf("\n\n\n\n    Redo Limit reached!!\n\n\n");
         }
         else
             System.out.printf("\n\n\n\n Invalid option!!! , executing default action: 'return to menu'...");
 
         System.out.printf("\n\n\n Press enter to continue...\n\n");
-        input.nextLine();
+        input.nextLine();  
     }
 
     public static void main(String[] args)
@@ -1312,12 +1352,13 @@ public class Head {
         String system_password = "admin";
         String password_given;
         initiateSchedule();
+        initiateStates();
         int o = 0;
         boolean change = false;
 
         while(true)
         {
-            System.out.printf("\n Insert the System Password (default: 'admin', leave: 'exit'): ");
+            System.out.printf("\n\n\n Insert the System Password (default: 'admin', leave: 'exit'): ");
             password_given = input.nextLine();
             System.out.printf("\n\n\n\n\n");
             if(password_given.equalsIgnoreCase(system_password))
@@ -1356,7 +1397,7 @@ public class Head {
                     System.out.printf("/// 14 : Change System Password                                    ///\n");
                     System.out.printf("/// 15 : Exit                                                      ///\n");
                     System.out.printf("///                                                                ///\n");
-                    /////gambiarra
+
                     if(day < 10 && month < 10)
                     {
                         System.out.printf("/// Date : 0%d / 0%d / 2019                                          ///\n", day, month);
@@ -1373,17 +1414,19 @@ public class Head {
                     {
                         System.out.printf("/// Date : %d / %d / 2019                                          ///\n", day, month);
                     }
-                    ///
+                    
                     System.out.printf("///                                                                ///\n");
                     System.out.printf("/// %s\n", week_name[day_of_week]);
                     System.out.printf("//////////////////////////////////////////////////////////////////////\n");
+
                     System.out.printf("\n Operation: ");
                     int option = input.nextInt();
+
                     System.out.println("\n\n ");
                     consoleClear();
+
                     switch(option)
                     {
-        
                         case 1:
                             for(i = 0;i<1000;i++)
                             {
@@ -1500,7 +1543,9 @@ public class Head {
                         case 12:
                             System.out.printf("\n\n Insert your ID: ");
                             id = input.nextInt();
+                            
                             showDetails(id);
+                            
                             consoleClear();
                             break;
                         
@@ -1516,8 +1561,10 @@ public class Head {
                             input.nextLine();
                             system_password = input.nextLine();
                             System.out.printf("\n\n     System Password Changed With Sucess!!!");
+                            
                             System.out.printf("\n\n Press enter to continue...");
                             input.nextLine();
+                            
                             consoleClear();
                             break;
 
@@ -1548,6 +1595,6 @@ public class Head {
             {
                 System.out.printf("\n\n\n              Invalid Password!!\n                  Try again!!!\n\n\n\n   ");
             }
-        }     
+        }
     }
 }
