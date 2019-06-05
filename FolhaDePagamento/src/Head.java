@@ -1275,11 +1275,12 @@ public class Head {
         }
         else
         {
-            System.out.printf("\n\n\n Can't add anymore state (undoRedo capacity full!!)\n\n\n");
+            System.out.printf("\n\n\n Can't add anymore state (undoRedo capacity full!!)\n Reseting the UndoRedo Configurations...\n\n");
+            states_size = 0;
+            state_index = 0;
             System.out.printf(" Press enter to continue...\n\n\n");
             Scanner input = new Scanner(System.in);
-            input.nextLine();
-            
+            input.nextLine(); 
         }
     }
 
