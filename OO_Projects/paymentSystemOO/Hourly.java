@@ -7,6 +7,10 @@ public class Hourly extends Employee{
 	private int payment_week;
 	private int total_hours;
 	
+	public void setExtra_hour(double extra_hour)
+	{
+		this.extra_hour = extra_hour;
+	}
 	public double getExtra_hour() {
 		return extra_hour;
 	}

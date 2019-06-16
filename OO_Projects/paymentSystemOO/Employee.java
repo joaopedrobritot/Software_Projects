@@ -1,6 +1,6 @@
 package paymentSystemOO;
 
-public class Employee {
+public class Employee extends Syndicate{ // coloquei extends aqui (testar depois)
 	
 	private int ID;
 	private String name;
