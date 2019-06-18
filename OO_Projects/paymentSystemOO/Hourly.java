@@ -31,4 +31,5 @@ public class Hourly extends Employee{
 	{
 		this.total_hours += hours;
 	}
+	
 }

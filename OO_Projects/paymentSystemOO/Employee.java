@@ -56,4 +56,5 @@ public class Employee extends Syndicate{ // coloquei extends aqui (testar depois
 	public void setPayment_method(int payment_method) {
 		this.payment_method = payment_method;
 	}
+	
 }
