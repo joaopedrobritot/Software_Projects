@@ -1,6 +1,6 @@
 package paymentSystemOO;
 
-public abstract class Syndicate {
+abstract class Syndicate {
 
 	private int syndicate_id;
 	private double syndicate_tax;

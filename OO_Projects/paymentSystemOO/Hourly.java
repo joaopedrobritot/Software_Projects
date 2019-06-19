@@ -31,5 +31,9 @@ public class Hourly extends Employee{
 	{
 		this.total_hours += hours;
 	}
+	public void setTotal_hours(int hours)
+	{
+		this.total_hours = hours;
+	}
 	
 }

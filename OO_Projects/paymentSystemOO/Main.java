@@ -1,10 +1,13 @@
 package paymentSystemOO;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main extends Functions{
 
 	private static Scanner input = new Scanner(System.in);
+	private static String system_pass = "admin";
+	private static String employee_pass = "0000";
 	
 	// Undo \ Redo
 	
@@ -16,8 +19,7 @@ public class Main extends Functions{
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static void main(String[] args) {
-		String system_pass = "admin";
-		String employee_pass = "0000";
+		
 		String given_pass;
 		int option;
 		int i;
@@ -83,8 +85,8 @@ public class Main extends Functions{
 						System.out.printf("       /// 6 - Undo / Redo                              ///\n");
 						System.out.printf("       /// 7 - Create a new Payment Schedule            ///\n");// TODO
 						System.out.printf("       /// 8 - Show Details of an Employee              ///\n");
-						System.out.printf("       /// 9 - Show Details of All Employees            ///\n");// TODO
-						System.out.printf("       /// 10 - Change System Password                  ///\n");// TODO
+						System.out.printf("       /// 9 - Show Details of All Employees            ///\n");
+						System.out.printf("       /// 10 - Change System Password                  ///\n");
 						System.out.printf("       /// 11 - Back to Main Menu                       ///\n");
 						System.out.printf("       ///                                              ///\n");
 						System.out.printf("       ////////////////////////////////////////////////////\n\n");
@@ -188,14 +190,14 @@ public class Main extends Functions{
 									
 								case 9:
 									input.nextLine();
-									System.out.printf("\n\n Comming soon...\n\n Press enter to continue...");
-									input.nextLine();
+									consoleClear();
+									showAllEmployees(Employee_list);
 									break;
 									
 								case 10:
 									input.nextLine();
-									System.out.printf("\n\n Comming soon...\n\n Press enter to continue...");
-									input.nextLine();
+									consoleClear();
+									changePassword();
 									break;
 									
 								case 11:
@@ -475,6 +477,141 @@ public class Main extends Functions{
 			}
 		}
 		return list;
+	}
+	
+	private static void showAllEmployees(Employee list[])
+	{
+		double result;
+		boolean flag = false;
+		for(int i = 0;i<1000;i++)
+		{
+			if(list[i] != null)
+			{
+				System.out.printf("\n\n Name: %s\n Address: %s\n Type:", list[i].getName(), list[i].getAddress());
+				if(list[i] instanceof Hourly)
+				{
+					System.out.println(" Hourly");
+		                System.out.printf(" Salary per hour worked: 30,00\n Salary (No Extra): %.2f\n Extra Salary: %.2f\n Payment: ", list[i].getSalary(), ( (Hourly) list[i]).getExtra_hour());
+				}
+				else if(list[i] instanceof Salaried)
+				{
+					result = list[i].getSalary() * ( (Salaried) list[i]).getDays_worked();
+		                System.out.println(" Salaried");
+		                System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Payment: ", list[i].getSalary(), result);
+				}
+				else if(list[i] instanceof Commissioned)
+				{
+					result = list[i].getSalary() * ( (Commissioned) list[i]).getDays_worked();
+		                System.out.println(" Commissioned");
+		                System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Selling Results: %.2f\n Payment: ", list[i].getSalary(), result, ( (Commissioned) list[i]).getSellings());
+				}
+				else
+				{
+					System.out.printf(" NULL");
+				}
+			       
+			    switch(list[i].getPayment_method())
+			    {
+			        case 1:
+			        System.out.println("Postal Check");break;
+			        case 2:
+			        System.out.println("Check in hands");break;
+			        case 3:
+			        System.out.println("Bank Deposit");break;
+			        default:
+			        System.out.printf("NULL");break;
+			    }
+			    if(list[i].isSyndicate())
+			    {
+			    	if(list[i] instanceof Hourly)
+			    	{
+			    		System.out.printf(" Belong to Syndicate\n Syndicate ID: %d\n Syndicate Tax: %.2f\n Syndicate Service Tax: %.2f\n Total Hours Worked: %d\n\n ", list[i].getSyndicate_id(), list[i].getSyndicate_tax(), list[i].getService_taxes(), ( (Hourly) list[i]).getTotal_hours());
+			    	}
+			    	else
+			    	{
+			    		System.out.printf(" Belong to Syndicate\n Syndicate ID: %d\n Syndicate Tax: %.2f\n Syndicate Service Tax: %.2f\n\n ", list[i].getSyndicate_id(), list[i].getSyndicate_tax(), list[i].getService_taxes());
+			    	}
+			    }
+			    else
+			    {
+			    	if(list[i] instanceof Hourly)
+			    	{
+			    		System.out.printf(" Not in Syndicate\n Total Hours Worked: %d\n\n", ( (Hourly) list[i]).getTotal_hours());
+			    	}
+			    	else
+			    	{
+			    		System.out.printf(" Not in Syndicate\n\n");
+			    	}
+			    }
+			    System.out.printf("\n\n Press enter to go to the next Employee...\n\n\n");
+			    input.nextLine();
+			    consoleClear();
+			    flag = true;
+			}
+		}
+		if(!flag)
+		{
+			System.out.printf("\n\n\n\n  No Employees found in the System!\n\n\n");
+		}
+		System.out.printf("\n\n\n  Press enter to return to Functions...\n\n\n");
+	    input.nextLine();
+	}
+	
+	private static void changePassword()
+	{
+		String given_pass;
+		int choice;
+		System.out.printf("\n\n\n  Insert the System Password: ");
+		given_pass = input.nextLine();
+		if(given_pass.equals(system_pass))
+		{
+			while(true)
+			{
+				consoleClear();
+				while(true)
+				{
+					try {
+						System.out.printf("\n\n\n  Insert the Password you want to change:\n\n  1 - System Password / Current Password: %s\n  2 - Employee Password / Current Password: %s\n  3 - Return to Admin Functions\n\n\n  Your Option: ");
+						choice = input.nextInt();
+						input.nextLine();
+						break;
+					}
+					catch(InputMismatchException e)
+					{
+						input.nextLine();
+						System.out.printf("\n\n\n  The given password is not an integer...\n\n\n");
+						input.nextLine();
+					}
+				}
+				switch(choice)
+				{
+					case 1:
+						System.out.printf("\n\n\n  Insert the new System Password: ");
+						system_pass = input.nextLine();
+						System.out.printf("\n\n\n  System Password Changed!!\n\n  Press enter to go back to menu...\n\n\n");
+						input.nextLine();
+						break;
+						
+					case 2:
+						System.out.printf("\n\n\n  Insert the new Employee Password: ");
+						employee_pass = input.nextLine();
+						System.out.printf("\n\n\n  Employee Password Changed!!\n\n  Press enter to go back to menu...\n\n\n");
+						input.nextLine();
+						break;
+						
+					case 3:
+						return;
+						
+					default:
+						System.out.printf("\n\n\n  Invalid option!!\n\n  Press enter to try again...\n\n\n");
+						input.nextLine();
+						break;
+				}
+			}
+			
+			
+		}
+		
 	}
 	
 }
