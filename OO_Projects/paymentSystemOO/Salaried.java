@@ -1,15 +1,32 @@
 package paymentSystemOO;
 
-public class Salaried extends Employee{
+public class Salaried extends Employee implements GeneralInterface{
 	
 	private int payment_day;
 	private boolean salaried_default;
 	private int days_worked;
 	
-	public int getPayment_day() {
+	public Salaried(int iD, String name, String address, double salary, boolean syndicate, int payment_method, String arrival_time, int payment, boolean salaried, int days_w)
+	{
+		super(iD, name, address, salary, syndicate, payment_method, arrival_time);
+		this.payment_day = payment;
+		this.salaried_default = salaried;
+		this.days_worked = days_w;
+		
+	}
+	
+	public Salaried()
+	{
+		super(0, null, null, 0, false, 0, null);
+		this.payment_day = 0;
+		this.salaried_default = true;
+		this.days_worked = 0;
+	}
+	
+	public int getPayment_date() {
 		return payment_day;
 	}
-	public void setPayment_day(int payment_day) {
+	public void setPayment_date(int payment_day) {
 		this.payment_day = payment_day;
 	}
 	public boolean isSalaried_default() {

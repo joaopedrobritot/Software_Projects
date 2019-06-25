@@ -3,6 +3,7 @@ package paymentSystemOO;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.InputMismatchException;
 
 abstract class Functions {
 	
@@ -51,7 +52,7 @@ abstract class Functions {
 		if(choice == 1)
 		{
 			new_employee = new Hourly();
-			( (Hourly) new_employee).setPayment_week(4);
+			( (Hourly) new_employee).setPayment_date(4);
 			( (Hourly) new_employee).setExtra_hour(0);
 			( (Hourly) new_employee).setSalary(0);
 		}
@@ -59,7 +60,7 @@ abstract class Functions {
 		{
 			new_employee = new Salaried();
 			( (Salaried) new_employee).setSalaried_default(true);
-			( (Salaried) new_employee).setPayment_day(dayUtil(month));
+			( (Salaried) new_employee).setPayment_date(dayUtil(month));
 			( (Salaried) new_employee).setDays_worked(0);
 			while(true)
 			{
@@ -80,7 +81,7 @@ abstract class Functions {
 		else if(choice == 3)
 		{
 			new_employee = new Commissioned();
-			( (Commissioned) new_employee).setPayment_week(4);
+			( (Commissioned) new_employee).setPayment_date(4);
 			( (Commissioned) new_employee).setSellings(0);
 			( (Commissioned) new_employee).setDays_worked(0);
 			( (Commissioned) new_employee).setTwo_week(0);
@@ -238,6 +239,7 @@ abstract class Functions {
 	protected static Employee[] timeCard(Employee list[])
 	{
 		int given;
+		int choice;
 		while(true)
 		{
 			try {
@@ -255,7 +257,7 @@ abstract class Functions {
 					{
 						try{
 							System.out.printf("\n\n  Are you comming now? (1 - yes / 0 - no)\n\n  Your option: ");
-		            		int choice = input.nextInt();
+		            		choice = input.nextInt();
 		            		input.nextLine();
 		            		break;
 						}
@@ -553,7 +555,7 @@ abstract class Functions {
                             new_type.setSyndicate_id(list[i].getSyndicate_id());
                             new_type.setSyndicate_tax(list[i].getSyndicate_tax());
                             
-                            ( (Hourly) new_type).setPayment_week(4);
+                            ( (Hourly) new_type).setPayment_date(4);
                 			( (Hourly) new_type).setExtra_hour(0);
                 			
                             
@@ -594,7 +596,7 @@ abstract class Functions {
                             }
                             
                             ( (Salaried) new_type).setSalaried_default(true);
-                			( (Salaried) new_type).setPayment_day(dayUtil(month));
+                			( (Salaried) new_type).setPayment_date(dayUtil(month));
                 			( (Salaried) new_type).setDays_worked(0);
                 			
                 			list[i] = new_type;
@@ -633,7 +635,7 @@ abstract class Functions {
                             	}
                             }
                             
-                            ( (Commissioned) new_type).setPayment_week(4);
+                            ( (Commissioned) new_type).setPayment_date(4);
                 			( (Commissioned) new_type).setSellings(0);
                 			( (Commissioned) new_type).setDays_worked(0);
                 			( (Commissioned) new_type).setTwo_week(0);
@@ -944,7 +946,7 @@ abstract class Functions {
                     {
                     	if(( (Salaried)list[i]).isSalaried_default())
                     	{
-                    		( (Salaried)list[i]).setPayment_day(dayUtil(month)); // refresh salaried default day of payment for each month
+                    		( (Salaried)list[i]).setPayment_date(dayUtil(month)); // refresh salaried default day of payment for each month
                     	}
                     }
                 }
@@ -956,7 +958,7 @@ abstract class Functions {
             {
                 if(list[i] instanceof Commissioned)
                 {
-                	if(( (Commissioned)list[i]).getPayment_week() == day_of_week)
+                	if(( (Commissioned)list[i]).getPayment_date() == day_of_week)
                 	{
                 		( (Commissioned)list[i]).addWeek();
                 	}
@@ -982,7 +984,7 @@ abstract class Functions {
         	{
         		if(list[i] instanceof Hourly)
         		{
-        			if(day_of_week == ( (Hourly)list[i]).getPayment_week())// pagos dia de sexta por default
+        			if(day_of_week == ( (Hourly)list[i]).getPayment_date())// pagos dia de sexta por default
                     {
                         if(list[i].isSyndicate() && !list[i].isReceived_tax())
                         {
@@ -1040,7 +1042,7 @@ abstract class Functions {
                     }
                     else // receives in the day he choose in the payment agenda
                     {
-                        if(day == ( (Salaried)list[i]).getPayment_day())
+                        if(day == ( (Salaried)list[i]).getPayment_date())
                         {
                         	if(list[i].isSyndicate() && !list[i].isReceived_tax())
                             {

@@ -1,17 +1,35 @@
 package paymentSystemOO;
 
-public class Commissioned extends Employee{
-	
+public class Commissioned extends Employee implements GeneralInterface{
 	
 	private double sellings;
 	private int payment_week;
 	private int two_week;
 	private int days_worked;
 	
-	public int getPayment_week() {
+	public Commissioned(int iD, String name, String address, double salary, boolean syndicate, int payment_method, String arrival_time, double sell, int payment, int two, int days_w)
+	{
+		super(iD, name, address, salary, syndicate, payment_method, arrival_time);
+		this.sellings = sell;
+		this.payment_week = payment;
+		this.two_week = two;
+		this.days_worked = days_w;
+		
+	}
+	
+	public Commissioned()
+	{
+		super(-1, null, null, 0, false, 0, null);
+		this.sellings = 0;
+		this.payment_week = 4;
+		this.two_week = 0;
+		this.days_worked = 0;
+	}
+	
+	public int getPayment_date() {
 		return payment_week;
 	}
-	public void setPayment_week(int payment_week) {
+	public void setPayment_date(int payment_week) {
 		this.payment_week = payment_week;
 	}
 	public int getDays_worked() {

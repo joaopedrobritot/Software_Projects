@@ -21,7 +21,7 @@ public class Main extends Functions{
 	public static void main(String[] args) {
 		
 		String given_pass;
-		int option;
+		int option = 0;
 		int i;
 		boolean choice = true;
 		
@@ -52,7 +52,10 @@ public class Main extends Functions{
                 System.out.printf("       Date : %d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
 			
 			try {
-				System.out.printf("\n\n Option: ");option = input.nextInt();input.nextLine();System.out.printf("\n\n");
+				System.out.printf("\n\n Option: ");
+				option = input.nextInt();
+				input.nextLine();
+				System.out.printf("\n\n");
 			}
 			catch(InputMismatchException e)
 			{
@@ -852,23 +855,23 @@ public class Main extends Functions{
                             switch(list2[choice].getSchedule_option())
                             {
                                 case "Monday":
-                                    ( (Hourly)list1[id]).setPayment_week(0);
+                                    ( (Hourly)list1[id]).setPayment_date(0);
                                     break;
 
                                 case "Tuesday":
-                                	( (Hourly)list1[id]).setPayment_week(1);
+                                	( (Hourly)list1[id]).setPayment_date(1);
                                     break;
 
                                 case "Wednesday":
-                                	( (Hourly)list1[id]).setPayment_week(2);
+                                	( (Hourly)list1[id]).setPayment_date(2);
                                     break;
 
                                 case "Thursday":
-                                	( (Hourly)list1[id]).setPayment_week(3);
+                                	( (Hourly)list1[id]).setPayment_date(3);
                                     break;
 
                                 case "Friday":
-                                	( (Hourly)list1[id]).setPayment_week(4);
+                                	( (Hourly)list1[id]).setPayment_date(4);
                                     break;
                             }
                             System.out.printf("\n\n\n\n  Change Done!!\n\n");
@@ -879,23 +882,23 @@ public class Main extends Functions{
                         	switch(list2[choice].getSchedule_option())
                             {
                                 case "Monday":
-                                    ( (Commissioned)list1[id]).setPayment_week(0);
+                                    ( (Commissioned)list1[id]).setPayment_date(0);
                                     break;
 
                                 case "Tuesday":
-                                	( (Commissioned)list1[id]).setPayment_week(1);
+                                	( (Commissioned)list1[id]).setPayment_date(1);
                                     break;
 
                                 case "Wednesday":
-                                	( (Commissioned)list1[id]).setPayment_week(2);
+                                	( (Commissioned)list1[id]).setPayment_date(2);
                                     break;
 
                                 case "Thursday":
-                                	( (Commissioned)list1[id]).setPayment_week(3);
+                                	( (Commissioned)list1[id]).setPayment_date(3);
                                     break;
 
                                 case "Friday":
-                                	( (Commissioned)list1[id]).setPayment_week(4);
+                                	( (Commissioned)list1[id]).setPayment_date(4);
                                     break;
                             }
                             System.out.printf("\n\n\n\n  Change Done!!\n\n");
@@ -911,14 +914,14 @@ public class Main extends Functions{
                         {
                             if(list2[choice].getSchedule_option().equalsIgnoreCase("last"))
                             {
-                                ( (Salaried)list1[id]).setPayment_day(dayUtil(month));
+                                ( (Salaried)list1[id]).setPayment_date(dayUtil(month));
                                 ( (Salaried)list1[id]).setSalaried_default(true);
                             }
                             else
                             {
                             	( (Salaried)list1[id]).setSalaried_default(false);
                             	aux = Integer.parseInt(list2[choice].getSchedule_option());//           POSSIVEL ERRO (favor verificar addSchedule)
-                            	( (Salaried)list1[id]).setPayment_day(aux);
+                            	( (Salaried)list1[id]).setPayment_date(aux);
                                 
                             }
                             System.out.printf("\n\n\n  Change Done!!");
