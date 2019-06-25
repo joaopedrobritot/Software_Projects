@@ -1,6 +1,6 @@
 package paymentSystemOO;
 
-interface GeneralInterface {
-	int getPayment_date();
-	void setPayment_date(int date);
+public interface GeneralInterface {
+	public int getPayment_date();
+	public void setPayment_date(int date);
 }

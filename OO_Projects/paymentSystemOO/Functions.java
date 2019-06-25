@@ -53,7 +53,7 @@ abstract class Functions {
 		{
 			new_employee = new Hourly();
 			( (Hourly) new_employee).setPayment_date(4);
-			( (Hourly) new_employee).setExtra_hour(0);
+			( (Hourly) new_employee).setExtra_salary(0);
 			( (Hourly) new_employee).setSalary(0);
 		}
 		else if(choice == 2)
@@ -296,7 +296,7 @@ abstract class Functions {
 		                        int limit = (hour - 8);
 		                        double bonus = (limit * 1.5 * 30.00);
 		                        ( (Hourly) list[given]).addExtra(bonus);
-		                        System.out.printf("\n\n  Extra salary: %.2f\n\n ", ( (Hourly) list[given]).getExtra_hour());
+		                        System.out.printf("\n\n  Extra salary: %.2f\n\n ", ( (Hourly) list[given]).getExtra_salary());
 		                    }
 		                    if(list[given] instanceof Hourly)
 		                    {
@@ -387,7 +387,7 @@ abstract class Functions {
 			if(list[i] instanceof Hourly)
 			{
 				System.out.println(" Hourly");
-	                System.out.printf(" Salary per hour worked: 30,00\n Salary (No Extra): %.2f\n Extra Salary: %.2f\n Payment: ", list[i].getSalary(), ( (Hourly) list[i]).getExtra_hour());
+	                System.out.printf(" Salary per hour worked: 30,00\n Salary (No Extra): %.2f\n Extra Salary: %.2f\n Payment: ", list[i].getSalary(), ( (Hourly) list[i]).getExtra_salary());
 			}
 			else if(list[i] instanceof Salaried)
 			{
@@ -449,6 +449,84 @@ abstract class Functions {
 		    input.nextLine();
 		}
 		
+	}
+	
+	protected static void showAllEmployees(Employee list[])
+	{
+		double result;
+		boolean flag = false;
+		for(int i = 0;i<1000;i++)
+		{
+			if(list[i] != null)
+			{
+				System.out.printf("\n\n Name: %s\n Address: %s\n Type:", list[i].getName(), list[i].getAddress());
+				if(list[i] instanceof Hourly)
+				{
+					System.out.println(" Hourly");
+		            System.out.printf(" Salary per hour worked: 30,00\n Salary (No Extra): %.2f\n Extra Salary: %.2f\n Payment: ", list[i].getSalary(), ( (Hourly) list[i]).getExtra_salary());
+				}
+				else if(list[i] instanceof Salaried)
+				{
+					result = list[i].getSalary() * ( (Salaried) list[i]).getDays_worked();
+		            System.out.println(" Salaried");
+		            System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Payment: ", list[i].getSalary(), result);
+				}
+				else if(list[i] instanceof Commissioned)
+				{
+					result = list[i].getSalary() * ( (Commissioned) list[i]).getDays_worked();
+		            System.out.println(" Commissioned");
+		            System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Selling Results: %.2f\n Payment: ", list[i].getSalary(), result, ( (Commissioned) list[i]).getSellings());
+				}
+				else
+				{
+					System.out.printf(" NULL");
+				}
+			       
+			    switch(list[i].getPayment_method())
+			    {
+			        case 1:
+			        System.out.println("Postal Check");break;
+			        case 2:
+			        System.out.println("Check in hands");break;
+			        case 3:
+			        System.out.println("Bank Deposit");break;
+			        default:
+			        System.out.printf("NULL");break;
+			    }
+			    if(list[i].isSyndicate())
+			    {
+			    	if(list[i] instanceof Hourly)
+			    	{
+			    		System.out.printf(" Belong to Syndicate\n Syndicate ID: %d\n Syndicate Tax: %.2f\n Syndicate Service Tax: %.2f\n Total Hours Worked: %d\n\n ", list[i].getSyndicate_id(), list[i].getSyndicate_tax(), list[i].getService_taxes(), ( (Hourly) list[i]).getTotal_hours());
+			    	}
+			    	else
+			    	{
+			    		System.out.printf(" Belong to Syndicate\n Syndicate ID: %d\n Syndicate Tax: %.2f\n Syndicate Service Tax: %.2f\n\n ", list[i].getSyndicate_id(), list[i].getSyndicate_tax(), list[i].getService_taxes());
+			    	}
+			    }
+			    else
+			    {
+			    	if(list[i] instanceof Hourly)
+			    	{
+			    		System.out.printf(" Not in Syndicate\n Total Hours Worked: %d\n\n", ( (Hourly) list[i]).getTotal_hours());
+			    	}
+			    	else
+			    	{
+			    		System.out.printf(" Not in Syndicate\n\n");
+			    	}
+			    }
+			    System.out.printf("\n\n Press enter to go to the next Employee...\n\n\n");
+			    input.nextLine();
+			    consoleClear();
+			    flag = true;
+			}
+		}
+		if(!flag)
+		{
+			System.out.printf("\n\n\n\n  No Employees found in the System!\n\n\n");
+		}
+		System.out.printf("\n\n\n  Press enter to return to Functions...\n\n\n");
+	    input.nextLine();
 	}
 	
 	protected static Employee[] changeDetails(Employee list[])
@@ -556,7 +634,7 @@ abstract class Functions {
                             new_type.setSyndicate_tax(list[i].getSyndicate_tax());
                             
                             ( (Hourly) new_type).setPayment_date(4);
-                			( (Hourly) new_type).setExtra_hour(0);
+                			( (Hourly) new_type).setExtra_salary(0);
                 			
                             
                             list[i] = new_type;
@@ -988,13 +1066,13 @@ abstract class Functions {
                     {
                         if(list[i].isSyndicate() && !list[i].isReceived_tax())
                         {
-                            System.out.printf("       /// %d - ID: %d   Name: %s   Type: Hourly   Salary ( - Syndicate Taxes + Extra Salary): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, list[i].getName() , (list[i].getSalary() + ( (Hourly)list[i]).getExtra_hour() - list[i].getSyndicate_tax() - list[i].getService_taxes()), list[i].getSyndicate_id());
+                            System.out.printf("       /// %d - ID: %d   Name: %s   Type: Hourly   Salary ( - Syndicate Taxes + Extra Salary): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, list[i].getName() , (list[i].getSalary() + ( (Hourly)list[i]).getExtra_salary() - list[i].getSyndicate_tax() - list[i].getService_taxes()), list[i].getSyndicate_id());
                             list[i].setReceived_tax(true);
                             list[i].setService_taxes(0);
                         }
                         else
                         {
-                            System.out.printf("       /// %d - ID: %d   Name: %s   Type: Hourly   Salary ( + Extra Salary): %.2f   Syndicate: No  Payment Method: ", cont, i, list[i].getName(), list[i].getSalary() + ( (Hourly)list[i]).getExtra_hour());
+                            System.out.printf("       /// %d - ID: %d   Name: %s   Type: Hourly   Salary ( + Extra Salary): %.2f   Syndicate: No  Payment Method: ", cont, i, list[i].getName(), list[i].getSalary() + ( (Hourly)list[i]).getExtra_salary());
                         }
                         
                         switch(list[i].getPayment_method())
@@ -1003,7 +1081,7 @@ abstract class Functions {
                             case 2: System.out.printf("Check in Hands\n");break;
                             case 3: System.out.printf("Bank Deposit\n");break;
                         }
-                        ( (Hourly)list[i]).setExtra_hour(0);
+                        ( (Hourly)list[i]).setExtra_salary(0);
                         cont++;
                         flag = 1;
                         list[i].setSalary(0);
