@@ -41,7 +41,7 @@ abstract class Functions {
 				input.nextLine();
 				break;
 			}
-			catch(Exception e)
+			catch(InputMismatchException e)
 			{
 				input.nextLine();
 				System.out.printf("\n\n  The given value is not a integer!!\n  Press enter to try again...\n\n\n");
@@ -69,7 +69,7 @@ abstract class Functions {
 					input.nextLine();
 					break;
 				}
-				catch(Exception e)
+				catch(InputMismatchException e)
 				{
 					input.nextLine();
 					System.out.printf("\n\n  Salary is not an integer!!\n  Press enter to try again...\n\n\n");
@@ -92,7 +92,7 @@ abstract class Functions {
 					input.nextLine();
 					break;
 				}
-				catch(Exception e)
+				catch(InputMismatchException e)
 				{
 					input.nextLine();
 					System.out.printf("\n\n  Salary is not an integer!!\n  Press enter to try again...\n\n\n");
@@ -119,7 +119,7 @@ abstract class Functions {
 				input.nextLine();
 				break;
 			}
-			catch(Exception e)
+			catch(InputMismatchException e)
 			{
 				input.nextLine();
 				System.out.printf("\n\n  The given value is not a integer!!\n  Press enter to try again...\n\n\n");
@@ -144,7 +144,7 @@ abstract class Functions {
 				input.nextLine();
 				break;
 			}
-			catch(Exception e)
+			catch(InputMismatchException e)
 			{
 				input.nextLine();
 				System.out.printf("\n\n  The given value is not a integer!!\n  Press enter to try again...\n\n\n");
@@ -166,7 +166,7 @@ abstract class Functions {
 					input.nextLine();
 					break;
 				}
-				catch(Exception e)
+				catch(InputMismatchException e)
 				{
 					input.nextLine();
 					System.out.printf("\n\n\n  The given ID is not an integer!!\n\n  Press enter to try again...\n\n\n");
@@ -182,7 +182,7 @@ abstract class Functions {
 					input.nextLine();
 					break;
 				}
-				catch(Exception e)
+				catch(InputMismatchException e)
 				{
 					input.nextLine();
 					System.out.printf("\n\n\n  The given Syndicate Tax is not an numeric value!!\n\n  Press enter to try again...\n\n\n");
@@ -251,9 +251,21 @@ abstract class Functions {
 					
 					
 					System.out.println("\n\n  Insert the hours in the format : 'HH:mm' where 'HH' is hours and 'mm' minutes, followed by enter\n\n Be sure to check this: if hour/minutes < 10 put '01', '09'.!!\n\n ");
-		            System.out.printf("\n\n  Are you comming now? (1 - yes / 0 - no)\n\n  Your option: ");
-		            int choice = input.nextInt();
-		            input.nextLine();
+					while(true)
+					{
+						try{
+							System.out.printf("\n\n  Are you comming now? (1 - yes / 0 - no)\n\n  Your option: ");
+		            		int choice = input.nextInt();
+		            		input.nextLine();
+		            		break;
+						}
+						catch(InputMismatchException e)
+						{
+							input.nextLine();
+							System.out.printf("\n\n\n  the typed option is not an integer!!\n\n  Press enter to try again...\n\n\n");
+							input.nextLine();
+						}
+					}
 		            if(choice == 0)
 		            {
 		                System.out.printf("\n\n\n  Insert the hours (end): ");
@@ -360,7 +372,7 @@ abstract class Functions {
 				input.nextLine();
 				break;
 			}
-			catch(Exception e)
+			catch(InputMismatchException e)
 			{
 				input.nextLine();
 				System.out.printf("\n\n\n  the typed ID is not an integer!!\n\n  Press enter to try again...\n\n\n\n");
@@ -449,7 +461,7 @@ abstract class Functions {
 				input.nextLine();
 				break;
 			}
-			catch(Exception e)
+			catch(InputMismatchException e)
 			{
 				input.nextLine();
 				System.out.printf("\n\n The typed ID is not a Integer!!\n Press enter to try again...\n\n\n\n");
@@ -484,7 +496,7 @@ abstract class Functions {
 			              input.nextLine();
 			              break;
 					}
-					catch(Exception e)
+					catch(InputMismatchException e)
 					{
 						input.nextLine();
 						System.out.printf("\n\n\n\n  Invalid option!!\n\n  Press enter to try again...\n\n\n");
@@ -519,7 +531,7 @@ abstract class Functions {
                                 input.nextLine();
                                 break;
                     		}
-                    		catch(Exception e)
+                    		catch(InputMismatchException e)
                     		{
                     			input.nextLine();
                     			System.out.printf("\n\n\n  Invalid type value!!\n\n  Press enter to try again...");
@@ -573,7 +585,7 @@ abstract class Functions {
                                     input.nextLine();
                                     break;
                             	}
-                            	catch(Exception e)
+                            	catch(InputMismatchException e)
                             	{
                             		input.nextLine();
                             		System.out.printf("\n\n\n  The typed salary is not an numeric value!!\n\n  Press enter to try again...\n\n\n\n");
@@ -613,7 +625,7 @@ abstract class Functions {
                                     input.nextLine();
                                     break;
                             	}
-                            	catch(Exception e)
+                            	catch(InputMismatchException e)
                             	{
                             		input.nextLine();
                             		System.out.printf("\n\n\n  The typed salary is not an numeric value!!\n\n  Press enter to try again...\n\n\n\n");
@@ -647,7 +659,7 @@ abstract class Functions {
                             input.nextLine();
                             break;
                 		}
-                		catch(Exception e)
+                		catch(InputMismatchException e)
                 		{
                 			input.nextLine();
                 			System.out.printf("\n\n\n  The given value is not an integer!!\n\n  Press enter to try again...\n\n\n");
@@ -677,7 +689,7 @@ abstract class Functions {
                             input.nextLine();
                             break;
                 		}
-                		catch(Exception e)
+                		catch(InputMismatchException e)
                 		{
                 			input.nextLine();
     						System.out.printf("\n\n\n\n  Invalid value!!\n\n  Press enter to try again...\n\n\n");
@@ -695,7 +707,7 @@ abstract class Functions {
                                 input.nextLine();
                                 break;
                         	}
-                        	catch(Exception e)
+                        	catch(InputMismatchException e)
                     		{
                     			input.nextLine();
         						System.out.printf("\n\n\n\n  The value of this ID is not an integer!!\n\n  Press enter to try again...\n\n\n");
@@ -711,7 +723,7 @@ abstract class Functions {
                                 input.nextLine();
                                 break;
                         	}
-                        	catch(Exception e)
+                        	catch(InputMismatchException e)
                     		{
                     			input.nextLine();
         						System.out.printf("\n\n\n\n  The value of this Syndicate tax is not an numeric value!!\n\n  Press enter to try again...\n\n\n");
@@ -749,7 +761,7 @@ abstract class Functions {
                                 input.nextLine();
                                 break;
                         	}
-                        	catch(Exception e)
+                        	catch(InputMismatchException e)
                     		{
                     			input.nextLine();
         						System.out.printf("\n\n\n\n  The value of this ID is not an integer!!\n\n  Press enter to try again...\n\n\n");
@@ -778,7 +790,7 @@ abstract class Functions {
                                 input.nextLine();
                                 break;
                         	}
-                        	catch(Exception e)
+                        	catch(InputMismatchException e)
                     		{
                     			input.nextLine();
         						System.out.printf("\n\n\n\n  The value of this Syndicate tax is not an numeric value!!\n\n  Press enter to try again...\n\n\n");
@@ -830,7 +842,7 @@ abstract class Functions {
 				input.nextLine();
 				break;
 			}
-			catch(Exception e)
+			catch(InputMismatchException e)
 			{
 				input.nextLine();
 				System.out.printf("\n\n\n  The given ID is not valid!!\n\n  Press enter to try again...\n\n\n");
@@ -849,7 +861,7 @@ abstract class Functions {
 						input.nextLine();
 						break;
 					}
-					catch(Exception e)
+					catch(InputMismatchException e)
 					{
 						input.nextLine();
 						System.out.printf("\n\n\n  The given Selling is not an numeric value!!\n\n  Press enter to try again...\n\n\n");
@@ -1113,7 +1125,7 @@ abstract class Functions {
 				input.nextLine();
 				break;
 			}
-			catch(Exception e)
+			catch(InputMismatchException e)
 			{
 				input.nextLine();
 				System.out.printf("\n\n\n  The given Syndicate ID is not an integer!!\n\n  Press enter to try again...\n\n\n");
@@ -1132,7 +1144,7 @@ abstract class Functions {
 						input.nextLine();
 						break;
 					}
-					catch(Exception e)
+					catch(InputMismatchException e)
 					{
 						input.nextLine();
 						System.out.printf("\n\n\n  The given tax is not an numeric value!!\n\n  Press enter to try again...\n\n\n");

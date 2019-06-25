@@ -53,314 +53,314 @@ public class Main extends Functions{
 			
 			try {
 				System.out.printf("\n\n Option: ");option = input.nextInt();input.nextLine();System.out.printf("\n\n");
-				if(option == 1)
-				{
-					while(choice)
-					{
-						System.out.printf("\n\n Insert the System Password (Default: 'admin'): ");given_pass = input.nextLine();System.out.printf("\n");
-						if(given_pass.equalsIgnoreCase(system_pass))
-						{
-							choice = false;
-						}
-						else
-						{
-							System.out.printf("\n\n Incorrect Password!!\n Insert 'back' to go back to menu or simply press enter to try again\n\n Option :");
-							if(input.nextLine().equalsIgnoreCase("back"))
-							{
-								break;
-							}
-						}
-					}
-					while(!choice)
-					{
-						consoleClear();
-						System.out.printf("\n       ////////////////////////////////////////////////////\n");
-						System.out.printf("       ///                                              ///\n");
-						System.out.printf("       ///           *Administrator Functions*          ///\n");
-						System.out.printf("       ///                                              ///\n");
-						System.out.printf("       /// 1 - Add a Employee                           ///\n");
-						System.out.printf("       /// 2 - Remove an Employee                       ///\n");
-						System.out.printf("       /// 3 - Change an Employee's Details             ///\n");
-						System.out.printf("       /// 4 - Payments for Today                       ///\n");
-						System.out.printf("       /// 5 - Launch a Tax of Service                  ///\n");
-						System.out.printf("       /// 6 - Undo / Redo                              ///\n");
-						System.out.printf("       /// 7 - Create a new Payment Schedule            ///\n");
-						System.out.printf("       /// 8 - Delete a Payment Schedule                ///\n");
-						System.out.printf("       /// 9 - Show Details of an Employee              ///\n");
-						System.out.printf("       /// 10 - Show Details of All Employees           ///\n");
-						System.out.printf("       /// 11 - Change System Password                  ///\n");
-						System.out.printf("       /// 12 - Back to Main Menu                       ///\n");
-						System.out.printf("       ///                                              ///\n");
-						System.out.printf("       ////////////////////////////////////////////////////\n\n");
-						
-						if(day < 10 && month < 10)
-			                System.out.printf("       Date : 0%d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-			            else if(day < 10)
-			                System.out.printf("       Date : 0%d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-			            else if(month < 10)
-			                System.out.printf("       Date : %d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-			            else
-			                System.out.printf("       Date : %d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-						
-						System.out.printf("\n\n       Option: ");
-						try {
-							switch(input.nextInt())
-							{
-								case 1:
-									input.nextLine();
-									consoleClear();
-									for(i = 0; i< 1000;i++)
-									{
-										if(Employee_list[i] == null)
-										{
-											Employee_list[i] = addEmployee(Employee_list[i], i);
-											break;
-										}
-									}
-									break;
-									
-								case 2:
-									input.nextLine();
-									consoleClear();
-									int a;
-									
-									while(true)
-									{
-										try {
-											System.out.printf("\n\n\n  Insert the ID from the Employee you want to Remove: ");
-											a = input.nextInt();
-											input.nextLine();
-											break;
-										}
-										catch(Exception e)
-										{
-											input.nextLine();
-											System.out.printf("\n\n\n  The given ID is not an integer!!\n\n  Press enter to Try Again...\n\n\n");
-											input.nextLine();
-										}
-									}
-									
-									if(Employee_list[a] != null)
-									{
-										Employee_list[a] = null;
-										System.out.printf("\n\n\n  Employee Removed from the System!!\n\n  Press enter to return to Adminstrator Functions...\n\n\n");
-										setChange(true);
-									}
-									else
-									{
-										System.out.printf("\n\n  There's no Employee with this Identification!!\n\n  Press enter to return to Adminstrator Functions...\n\n\n");
-									}
-									input.nextLine();
-									
-									break;
-									
-								case 3:
-									input.nextLine();
-									consoleClear();
-									Employee_list = changeDetails(Employee_list);
-									break;
-									
-								case 4:
-									input.nextLine();
-									consoleClear();
-									todayPayments(Employee_list);
-									break;
-									
-								case 5:
-									input.nextLine();
-									consoleClear();
-									Employee_list = serviceSubmit(Employee_list);
-									break;
-									
-								case 6:
-									input.nextLine();
-									consoleClear();
-									Employee_list = undoRedo(Employee_list);
-									break;
-									
-								case 7:
-									input.nextLine();
-									consoleClear();
-									Schedule_list = addSchedule(Schedule_list);
-									break;
-									
-								case 8:
-									input.nextLine();
-									consoleClear();
-									Schedule_list = delSchedule(Schedule_list);
-									break;
-									
-								case 9:
-									input.nextLine();
-									consoleClear();
-									showDetails(Employee_list);
-									break;
-									
-								case 10:
-									input.nextLine();
-									consoleClear();
-									showAllEmployees(Employee_list);
-									break;
-									
-								case 11:
-									consoleClear();
-									changePassword();
-									break;
-									
-								case 12:
-									choice = true;
-									break;
-									
-								default:
-									input.nextLine();
-									System.out.printf("\n\n Invalid Option!!\n Press enter to try again...");
-									input.nextLine();
-									break;
-							}
-						}
-						catch(Exception e)
-						{
-							input.nextLine();
-							System.out.printf("\n\n The typed value is not an integer!!\n Press enter to try again...\n\n\n\n");
-							input.nextLine();
-						}
-						if(isChange())
-						{
-							saveState(Employee_list);
-							setChange(false);
-						}
-					}
-				}
-				else if(option == 2)
-				{
-					while(choice)
-					{
-						System.out.printf("\n\n Insert the Employee Password (Default: '0000'): ");given_pass = input.nextLine();System.out.printf("\n");
-						if(given_pass.equalsIgnoreCase(employee_pass))
-						{
-							choice = false;
-						}
-						else
-						{
-							System.out.printf("\n\n Incorrect Password!!\n Insert 'back' to go back to menu or simply press enter to try again");
-							if(input.nextLine().equalsIgnoreCase("back"))
-							{
-								break;
-							}
-						}
-					}
-					while(!choice)
-					{
-						consoleClear();
-						System.out.printf("\n       ////////////////////////////////////////////////////\n");
-						System.out.printf("       ///                                              ///\n");
-						System.out.printf("       ///             *Employee Functions*             ///\n");
-						System.out.printf("       ///                                              ///\n");
-						System.out.printf("       /// 1 - Launch a TimeCard                        ///\n");
-						System.out.printf("       /// 2 - Launch a Selling                         ///\n");
-						System.out.printf("       /// 3 - Change an Employee's Details             ///\n");
-						System.out.printf("       /// 4 - Payment Schedules                        ///\n");
-						System.out.printf("       /// 5 - Undo / Redo                              ///\n");
-						System.out.printf("       /// 6 - Show Details of an Employee              ///\n");
-						System.out.printf("       /// 7 - Back to Main Menu                        ///\n");
-						System.out.printf("       ///                                              ///\n");
-						System.out.printf("       ////////////////////////////////////////////////////\n\n");
-						
-						if(day < 10 && month < 10)
-			                System.out.printf("       Date : 0%d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-			            else if(day < 10)
-			                System.out.printf("       Date : 0%d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-			            else if(month < 10)
-			                System.out.printf("       Date : %d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-			            else
-			                System.out.printf("       Date : %d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-						
-						System.out.printf("\n\n       Option: ");
-						
-						try {
-							switch(input.nextInt())
-							{
-								case 1:
-									input.nextLine();
-									consoleClear();
-									Employee_list = timeCard(Employee_list);
-									break;
-									
-								case 2:
-									input.nextLine();
-									consoleClear();
-									Employee_list = sellingSubmit(Employee_list);
-									break;
-									
-								case 3:
-									input.nextLine();
-									consoleClear();
-									Employee_list = changeDetails(Employee_list);
-									break;
-									
-								case 4:
-									input.nextLine();
-									consoleClear();
-									Employee_list = chooseSchedule(Employee_list, Schedule_list);
-									break;
-									
-								case 5:
-									input.nextLine();
-									consoleClear();
-									Employee_list = undoRedo(Employee_list);
-									break;
-									
-								case 6:
-									input.nextLine();
-									consoleClear();
-									showDetails(Employee_list);
-									break;
-									
-								case 7:
-									input.nextLine();
-									choice = true;
-									break;
-									
-								default:
-									input.nextLine();
-									System.out.printf("\n\n  Invalid Option!!\n  Press enter to try again...");
-									input.nextLine();
-									break;
-							}
-						}
-						catch(Exception e)
-						{
-							input.nextLine();
-							System.out.printf("\n\n  The typed value is not an integer!!\n  Press enter to try again...\n\n\n\n");
-							input.nextLine();
-						}
-						if(isChange())
-						{
-							saveState(Employee_list);
-							setChange(false);
-						}
-					}
-				}
-				else if(option == 3)
-				{
-					spendDay(Employee_list);
-				}
-				else if(option == 4)
-				{
-					System.out.printf("\n\n\n  Program Stopped!!\n\n");
-					input.close();
-					System.exit(0);
-				}
-				else
-				{
-					System.out.printf("\n\n  Invalid operation !!\n  Press enter to try again...");
-					input.nextLine();
-				}
 			}
-			catch(Exception e)
+			catch(InputMismatchException e)
 			{
 				input.nextLine();
 				System.out.printf("\n\n  The typed value is not a Integer!!\n Press enter to try again...\n\n\n\n");
+				input.nextLine();
+			}
+			if(option == 1)
+			{
+				while(choice)
+				{
+					System.out.printf("\n\n Insert the System Password (Default: 'admin'): ");given_pass = input.nextLine();System.out.printf("\n");
+					if(given_pass.equalsIgnoreCase(system_pass))
+					{
+						choice = false;
+					}
+					else
+					{
+						System.out.printf("\n\n Incorrect Password!!\n Insert 'back' to go back to menu or simply press enter to try again\n\n Option :");
+						if(input.nextLine().equalsIgnoreCase("back"))
+						{
+							break;
+						}
+					}
+				}
+				while(!choice)
+				{
+					consoleClear();
+					System.out.printf("\n       ////////////////////////////////////////////////////\n");
+					System.out.printf("       ///                                              ///\n");
+					System.out.printf("       ///           *Administrator Functions*          ///\n");
+					System.out.printf("       ///                                              ///\n");
+					System.out.printf("       /// 1 - Add a Employee                           ///\n");
+					System.out.printf("       /// 2 - Remove an Employee                       ///\n");
+					System.out.printf("       /// 3 - Change an Employee's Details             ///\n");
+					System.out.printf("       /// 4 - Payments for Today                       ///\n");
+					System.out.printf("       /// 5 - Launch a Tax of Service                  ///\n");
+					System.out.printf("       /// 6 - Undo / Redo                              ///\n");
+					System.out.printf("       /// 7 - Create a new Payment Schedule            ///\n");
+					System.out.printf("       /// 8 - Delete a Payment Schedule                ///\n");
+					System.out.printf("       /// 9 - Show Details of an Employee              ///\n");
+					System.out.printf("       /// 10 - Show Details of All Employees           ///\n");
+					System.out.printf("       /// 11 - Change System Password                  ///\n");
+					System.out.printf("       /// 12 - Back to Main Menu                       ///\n");
+					System.out.printf("       ///                                              ///\n");
+					System.out.printf("       ////////////////////////////////////////////////////\n\n");
+					
+					if(day < 10 && month < 10)
+			               System.out.printf("       Date : 0%d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
+			           else if(day < 10)
+			               System.out.printf("       Date : 0%d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
+			           else if(month < 10)
+			               System.out.printf("       Date : %d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
+			           else
+			               System.out.printf("       Date : %d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
+					
+					System.out.printf("\n\n       Option: ");
+					try {
+						switch(input.nextInt())
+						{
+							case 1:
+								input.nextLine();
+								consoleClear();
+								for(i = 0; i< 1000;i++)
+								{
+									if(Employee_list[i] == null)
+									{
+										Employee_list[i] = addEmployee(Employee_list[i], i);
+										break;
+									}
+								}
+								break;
+								
+							case 2:
+								input.nextLine();
+								consoleClear();
+								int a;
+								
+								while(true)
+								{
+									try {
+										System.out.printf("\n\n\n  Insert the ID from the Employee you want to Remove: ");
+										a = input.nextInt();
+										input.nextLine();
+										break;
+									}
+									catch(Exception e)
+									{
+										input.nextLine();
+										System.out.printf("\n\n\n  The given ID is not an integer!!\n\n  Press enter to Try Again...\n\n\n");
+										input.nextLine();
+									}
+								}
+								
+								if(Employee_list[a] != null)
+								{
+									Employee_list[a] = null;
+									System.out.printf("\n\n\n  Employee Removed from the System!!\n\n  Press enter to return to Adminstrator Functions...\n\n\n");
+									setChange(true);
+								}
+								else
+								{
+									System.out.printf("\n\n  There's no Employee with this Identification!!\n\n  Press enter to return to Adminstrator Functions...\n\n\n");
+								}
+								input.nextLine();
+								
+								break;
+								
+							case 3:
+								input.nextLine();
+								consoleClear();
+								Employee_list = changeDetails(Employee_list);
+								break;
+								
+							case 4:
+								input.nextLine();
+								consoleClear();
+								todayPayments(Employee_list);
+								break;
+								
+							case 5:
+								input.nextLine();
+								consoleClear();
+								Employee_list = serviceSubmit(Employee_list);
+								break;
+								
+							case 6:
+								input.nextLine();
+								consoleClear();
+								Employee_list = undoRedo(Employee_list);
+								break;
+								
+							case 7:
+								input.nextLine();
+								consoleClear();
+								Schedule_list = addSchedule(Schedule_list);
+								break;
+								
+							case 8:
+								input.nextLine();
+								consoleClear();
+								Schedule_list = delSchedule(Schedule_list);
+								break;
+								
+							case 9:
+								input.nextLine();
+								consoleClear();
+								showDetails(Employee_list);
+								break;
+								
+							case 10:
+								input.nextLine();
+								consoleClear();
+								showAllEmployees(Employee_list);
+								break;
+								
+							case 11:
+								consoleClear();
+								changePassword();
+								break;
+								
+							case 12:
+								choice = true;
+								break;
+								
+							default:
+								input.nextLine();
+								System.out.printf("\n\n Invalid Option!!\n Press enter to try again...");
+								input.nextLine();
+								break;
+						}
+					}
+					catch(InputMismatchException e)
+					{
+						input.nextLine();
+						System.out.printf("\n\n The typed value is not an integer!!\n Press enter to try again...\n\n\n\n");
+						input.nextLine();
+					}
+					if(isChange())
+					{
+						saveState(Employee_list);
+						setChange(false);
+					}
+				}
+			}
+			else if(option == 2)
+			{
+				while(choice)
+				{
+					System.out.printf("\n\n Insert the Employee Password (Default: '0000'): ");given_pass = input.nextLine();System.out.printf("\n");
+					if(given_pass.equalsIgnoreCase(employee_pass))
+					{
+						choice = false;
+					}
+					else
+					{
+						System.out.printf("\n\n Incorrect Password!!\n Insert 'back' to go back to menu or simply press enter to try again");
+						if(input.nextLine().equalsIgnoreCase("back"))
+						{
+							break;
+						}
+					}
+				}
+				while(!choice)
+				{
+					consoleClear();
+					System.out.printf("\n       ////////////////////////////////////////////////////\n");
+					System.out.printf("       ///                                              ///\n");
+					System.out.printf("       ///             *Employee Functions*             ///\n");
+					System.out.printf("       ///                                              ///\n");
+					System.out.printf("       /// 1 - Launch a TimeCard                        ///\n");
+					System.out.printf("       /// 2 - Launch a Selling                         ///\n");
+					System.out.printf("       /// 3 - Change an Employee's Details             ///\n");
+					System.out.printf("       /// 4 - Payment Schedules                        ///\n");
+					System.out.printf("       /// 5 - Undo / Redo                              ///\n");
+					System.out.printf("       /// 6 - Show Details of an Employee              ///\n");
+					System.out.printf("       /// 7 - Back to Main Menu                        ///\n");
+					System.out.printf("       ///                                              ///\n");
+					System.out.printf("       ////////////////////////////////////////////////////\n\n");
+					
+					if(day < 10 && month < 10)
+			               System.out.printf("       Date : 0%d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
+			           else if(day < 10)
+			               System.out.printf("       Date : 0%d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
+			           else if(month < 10)
+			               System.out.printf("       Date : %d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
+			           else
+			               System.out.printf("       Date : %d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
+					
+					System.out.printf("\n\n       Option: ");
+					
+					try {
+						switch(input.nextInt())
+						{
+							case 1:
+								input.nextLine();
+								consoleClear();
+								Employee_list = timeCard(Employee_list);
+								break;
+								
+							case 2:
+								input.nextLine();
+								consoleClear();
+								Employee_list = sellingSubmit(Employee_list);
+								break;
+								
+							case 3:
+								input.nextLine();
+								consoleClear();
+								Employee_list = changeDetails(Employee_list);
+								break;
+								
+							case 4:
+								input.nextLine();
+								consoleClear();
+								Employee_list = chooseSchedule(Employee_list, Schedule_list);
+								break;
+								
+							case 5:
+								input.nextLine();
+								consoleClear();
+								Employee_list = undoRedo(Employee_list);
+								break;
+								
+							case 6:
+								input.nextLine();
+								consoleClear();
+								showDetails(Employee_list);
+								break;
+								
+							case 7:
+								input.nextLine();
+								choice = true;
+								break;
+								
+							default:
+								input.nextLine();
+								System.out.printf("\n\n  Invalid Option!!\n  Press enter to try again...");
+								input.nextLine();
+								break;
+						}
+					}
+					catch(InputMismatchException e)
+					{
+						input.nextLine();
+						System.out.printf("\n\n  The typed value is not an integer!!\n  Press enter to try again...\n\n\n\n");
+						input.nextLine();
+					}
+					if(isChange())
+					{
+						saveState(Employee_list);
+						setChange(false);
+					}
+				}
+			}
+			else if(option == 3)
+			{
+				spendDay(Employee_list);
+			}
+			else if(option == 4)
+			{
+				System.out.printf("\n\n\n  Program Stopped!!\n\n");
+				input.close();
+				System.exit(0);
+			}
+			else
+			{
+				System.out.printf("\n\n  Invalid operation !!\n  Press enter to try again...");
 				input.nextLine();
 			}
 		}
@@ -432,7 +432,7 @@ public class Main extends Functions{
 					input.nextLine();
 					break;
 				}
-				catch(Exception e)
+				catch(InputMismatchException e)
 				{
 					input.nextLine();
 					System.out.printf("\n\n\n  the option is not an integer!!\n\n  Press enter to try again...\n\n\n");
@@ -498,19 +498,19 @@ public class Main extends Functions{
 				if(list[i] instanceof Hourly)
 				{
 					System.out.println(" Hourly");
-		                System.out.printf(" Salary per hour worked: 30,00\n Salary (No Extra): %.2f\n Extra Salary: %.2f\n Payment: ", list[i].getSalary(), ( (Hourly) list[i]).getExtra_hour());
+		            System.out.printf(" Salary per hour worked: 30,00\n Salary (No Extra): %.2f\n Extra Salary: %.2f\n Payment: ", list[i].getSalary(), ( (Hourly) list[i]).getExtra_hour());
 				}
 				else if(list[i] instanceof Salaried)
 				{
 					result = list[i].getSalary() * ( (Salaried) list[i]).getDays_worked();
-		                System.out.println(" Salaried");
-		                System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Payment: ", list[i].getSalary(), result);
+		            System.out.println(" Salaried");
+		            System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Payment: ", list[i].getSalary(), result);
 				}
 				else if(list[i] instanceof Commissioned)
 				{
 					result = list[i].getSalary() * ( (Commissioned) list[i]).getDays_worked();
-		                System.out.println(" Commissioned");
-		                System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Selling Results: %.2f\n Payment: ", list[i].getSalary(), result, ( (Commissioned) list[i]).getSellings());
+		            System.out.println(" Commissioned");
+		            System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Selling Results: %.2f\n Payment: ", list[i].getSalary(), result, ( (Commissioned) list[i]).getSellings());
 				}
 				else
 				{
@@ -801,7 +801,7 @@ public class Main extends Functions{
 		if(list1[id] == null)
 		{
 			System.out.printf("\n\n\n  There's no Employee with the ID: %d int the System!!\n\n  Press enter to return to Functions...\n\n\n\n");
-			input.hasNextLine();
+			input.nextLine();
 			return list1;
 		}
 		System.out.printf("\n\n       //////////////////////////////////////////////////////////////////////\n");

@@ -9,7 +9,7 @@ public class Employee extends Syndicate{ // coloquei extends aqui (testar depois
 	private boolean syndicate;
 	private int payment_method;
 	private String arrival_time;
-	
+
 	public String getArrival_time() {
 		return arrival_time;
 	}
