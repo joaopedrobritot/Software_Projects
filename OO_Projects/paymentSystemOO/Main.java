@@ -1,22 +1,17 @@
 package paymentSystemOO;
 
 import java.util.InputMismatchException;
+
+import systemFunctions.EmployeeRelated;
+import systemFunctions.PaymentSchedules;
+import systemFunctions.UndoRedo;
 import java.util.Scanner;
 
-public class Main extends Functions{
+public class Main extends UtilityFunctions{
 
 	private static Scanner input = new Scanner(System.in);
 	private static String system_pass = "admin";
 	private static String employee_pass = "0000";
-	
-	// Undo \ Redo
-	
-		protected static boolean change;
-		private static Employee state_list[][] = new Employee[51][1000];
-		private static int state_index = 0;
-		private static int states_size = 0;
-	
-	////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public static void main(String[] args) {
 		
@@ -123,7 +118,7 @@ public class Main extends Functions{
 								{
 									if(Employee_list[i] == null)
 									{
-										Employee_list[i] = addEmployee(Employee_list[i], i);
+										Employee_list[i] = EmployeeRelated.addEmployee(Employee_list[i], i, month);
 										break;
 									}
 								}
@@ -154,7 +149,7 @@ public class Main extends Functions{
 								{
 									Employee_list[a] = null;
 									System.out.printf("\n\n\n  Employee Removed from the System!!\n\n  Press enter to return to Adminstrator Functions...\n\n\n");
-									setChange(true);
+									UndoRedo.setChange_made(true);
 								}
 								else
 								{
@@ -167,7 +162,7 @@ public class Main extends Functions{
 							case 3:
 								input.nextLine();
 								consoleClear();
-								Employee_list = changeDetails(Employee_list);
+								Employee_list = EmployeeRelated.changeDetails(Employee_list, month);
 								break;
 								
 							case 4:
@@ -185,19 +180,19 @@ public class Main extends Functions{
 							case 6:
 								input.nextLine();
 								consoleClear();
-								Employee_list = undoRedo(Employee_list);
+								Employee_list = UndoRedo.undoRedo(Employee_list);
 								break;
 								
 							case 7:
 								input.nextLine();
 								consoleClear();
-								Schedule_list = addSchedule(Schedule_list);
+								Schedule_list = PaymentSchedules.addSchedule(Schedule_list, week_name);
 								break;
 								
 							case 8:
 								input.nextLine();
 								consoleClear();
-								Schedule_list = delSchedule(Schedule_list);
+								Schedule_list = PaymentSchedules.delSchedule(Schedule_list);
 								break;
 								
 							case 9:
@@ -234,10 +229,10 @@ public class Main extends Functions{
 						System.out.printf("\n\n The typed value is not an integer!!\n Press enter to try again...\n\n\n\n");
 						input.nextLine();
 					}
-					if(isChange_made())
+					if(UndoRedo.isChange_made())
 					{
-						saveState(Employee_list);
-						setChange(false);
+						UndoRedo.saveState(Employee_list);
+						UndoRedo.setChange_made(false);
 					}
 				}
 			}
@@ -293,31 +288,31 @@ public class Main extends Functions{
 							case 1:
 								input.nextLine();
 								consoleClear();
-								Employee_list = timeCard(Employee_list);
+								Employee_list = EmployeeRelated.timeCard(Employee_list, month);
 								break;
 								
 							case 2:
 								input.nextLine();
 								consoleClear();
-								Employee_list = sellingSubmit(Employee_list);
+								Employee_list = EmployeeRelated.sellingSubmit(Employee_list);
 								break;
 								
 							case 3:
 								input.nextLine();
 								consoleClear();
-								Employee_list = changeDetails(Employee_list);
+								Employee_list = EmployeeRelated.changeDetails(Employee_list, month);
 								break;
 								
 							case 4:
 								input.nextLine();
 								consoleClear();
-								Employee_list = chooseSchedule(Employee_list, Schedule_list);
+								Employee_list = PaymentSchedules.chooseSchedule(Employee_list, Schedule_list, month);
 								break;
 								
 							case 5:
 								input.nextLine();
 								consoleClear();
-								Employee_list = undoRedo(Employee_list);
+								Employee_list = UndoRedo.undoRedo(Employee_list);
 								break;
 								
 							case 6:
@@ -344,10 +339,10 @@ public class Main extends Functions{
 						System.out.printf("\n\n  The typed value is not an integer!!\n  Press enter to try again...\n\n\n\n");
 						input.nextLine();
 					}
-					if(isChange_made())
+					if(UndoRedo.isChange_made())
 					{
-						saveState(Employee_list);
-						setChange(false);
+						UndoRedo.saveState(Employee_list);
+						UndoRedo.setChange_made(false);
 					}
 				}
 			}
@@ -367,126 +362,6 @@ public class Main extends Functions{
 				input.nextLine();
 			}
 		}
-	}
-
-	private static boolean isChange_made()
-	{
-		return change;
-	}
-	
-	private static void saveState(Employee list[])
-	{
-		int i,j;
-		if(states_size < 50)
-		{
-			state_index++;
-			states_size = state_index; // previne redos indesejados
-			for(i = 0;i<1000;i++)
-			{
-				state_list[state_index][i] = list[i];
-			}
-			
-			for(i = states_size + 1;i<51;i++) // cleaning unwanted states (i think this save some memory :p )
-			{
-				for(j = 0;j<1000;j++)
-				{
-					state_list[i][j] = null;
-				}
-			}
-		}
-		else
-		{
-			System.out.printf("\n\n\n  Can't add anymore state (undoRedo capacity full!!)\n  Reseting the UndoRedo Configurations...\n\n");
-            states_size = 0;
-            state_index = 0;
-            System.out.printf(" Press enter to continue...\n\n\n");
-            input.nextLine();
-		}
-	}
-	
-	private static Employee[] applyState(Employee list[])
-	{
-		for(int i = 0;i<1000;i++)
-		{
-			list[i] = state_list[state_index][i];
-		}
-		return list;
-	}
-	
-	private static Employee[] undoRedo(Employee list[])
-	{
-		int choice;
-		while(true)
-		{
-			while(true)
-			{
-				try {
-					consoleClear();
-				    System.out.printf("\n       ////////////////////////////////////\n");
-					System.out.printf("       ///                              ///\n");
-					System.out.printf("       ///          Undo / Redo         ///\n");
-					System.out.printf("       ///                              ///\n");
-					System.out.printf("       /// 1 - Undo                     ///\n");
-					System.out.printf("       /// 2 - Redo                     ///\n");
-					System.out.printf("       /// 3 - Cancel                   ///\n");
-					System.out.printf("       ///                              ///\n");
-					System.out.printf("       ////////////////////////////////////\n\n\n       Option: ");
-					choice = input.nextInt();
-					input.nextLine();
-					break;
-				}
-				catch(InputMismatchException e)
-				{
-					input.nextLine();
-					System.out.printf("\n\n\n  the option is not an integer!!\n\n  Press enter to try again...\n\n\n");
-					input.nextLine();
-				}
-			}
-			if(choice == 1)
-			{
-				if(state_index > 0)
-	            {
-					consoleClear();
-	                state_index--;
-	                list = applyState(list);
-	                System.out.printf("\n\n\n\n    Settings UN-done!!\n\n    Press enter to return to Undo / Redo Functions..\n\n\n\n");
-	                input.nextLine();
-	            }
-	            else
-	            {
-	            	System.out.printf("\n\n\n\n    Undo Limit reached!!\n\n    Press enter to return to Undo / Redo Functions...\n\n\n\n");
-	            	input.nextLine();
-	            }
-	                
-					
-			}
-			else if(choice == 2)
-			{
-				if(state_index < states_size && state_index < 50)
-	            {
-					consoleClear();
-	                state_index++;
-	                list = applyState(list);
-	                System.out.printf("\n\n\n\n    Settings RE-done!!\n\n    Press enter to return to Undo / Redo Functions..\n\n\n\n");
-	                input.nextLine();
-	            }
-	            else
-	            {
-	            	System.out.printf("\n\n\n\n    Redo Limit reached!!\n\n    Press enter to return to Undo / Redo Functions...\n\n\n\n");
-	            	input.nextLine();
-	            }
-			}
-			else if(choice == 3)
-			{
-				break;
-			}
-			else
-			{
-				System.out.printf("\n\n\n\n  Invalid Option!!\n\n Press enter to try again...\n\n\n");
-				input.nextLine();
-			}
-		}
-		return list;
 	}
 
 	private static void changePassword()
@@ -545,374 +420,5 @@ public class Main extends Functions{
 		}
 		
 	}
-	
-	private static Schedule[] addSchedule(Schedule list[])
-	{
-		int i;
-        int choice;
-        boolean flag = false;
-        int week;
-        consoleClear();
-        for(i = 0;i<1000;i++)
-        {
-            if(list[i] == null)
-            {
-            	while(true)
-            	{
-            		consoleClear();
-            		try {
-            			System.out.printf("\n\n       //////////////////////////////////////////////////////////////////////\n");
-                        System.out.printf("       ///                                                                ///\n");
-                        System.out.printf("       ///    Insert the type of the new Schedule:                        ///\n");
-                        System.out.printf("       ///                                                                ///\n");
-                        System.out.printf("       ///  1 - Weekly (Hourly) / BiWeekly (Commissioned)                 ///\n");
-                        System.out.printf("       ///  2 - Monthly                                                   ///\n");
-                        System.out.printf("       ///                                                                ///\n");
-                        System.out.printf("       //////////////////////////////////////////////////////////////////////\n");
-                        System.out.printf("\n\n       Your choice: ");
-                        choice = input.nextInt();
-                        input.nextLine();
-            			break;
-            		}
-            		catch(InputMismatchException e)
-            		{
-            			input.nextLine();
-            			System.out.printf("\n\n\n The given type is not an integer!!\n\n  Press enter to trya agin...\n\n\n");
-            			input.nextLine();
-            		}
-            	}
-                list[i] = new Schedule();
-                consoleClear();
-                switch(choice)
-                {
-                    case 1:
-                        list[i].setSchedule_id(i);
-                        list[i].setSchedule_type(1);
-                        while(true)
-                        {
-                        	consoleClear();
-                        	try {
-                        		System.out.printf("\n\n       //////////////////////////////////////////////////////////////////////\n");
-                                System.out.printf("       ///                                                                ///\n");
-                                System.out.printf("       ///    Insert the day of the week from the new Schedule:           ///\n");
-                                System.out.printf("       ///                                                                ///\n");
-                                System.out.printf("       ///  0 - Monday                                                    ///\n");
-                                System.out.printf("       ///  1 - Tuesday                                                   ///\n");
-                                System.out.printf("       ///  2 - Wednesday                                                 ///\n");
-                                System.out.printf("       ///  3 - Thursday                                                  ///\n");
-                                System.out.printf("       ///  4 - Friday (Default)                                          ///\n");
-                                System.out.printf("       ///                                                                ///\n");
-                                System.out.printf("       //////////////////////////////////////////////////////////////////////\n");
-                                System.out.printf("\n\n       Your choice: ");
-                                week = input.nextInt();
-                                input.nextLine();
-                                break;
-                        	}
-                        	catch(InputMismatchException e)
-                        	{
-                        		input.nextLine();
-                        		System.out.printf("\n\n\n\n  The given choice is not an integer!!\n\n  Press enter to try again...\n\n\n");
-                        		input.nextLine();
-                        	}
-                        }
-                        
-                        if(week >= 0 && week < 5)
-                        {
-                            list[i].setSchedule_option(week_name[week]);
 
-                        }
-                        else
-                        {
-                            System.out.printf("\n\n Invalid option, setting to default day: 'Friday'\n\n");
-                            list[i].setSchedule_option(week_name[4]);
-                            System.out.printf("\n Press enter to continue...\n\n\n\n");
-                            input.nextLine();
-                            
-                        }
-                        System.out.printf("\n\n\n\n");
-                        list[i].printSchedule();
-                        System.out.printf("\n\n\n  Schedule added in the System!!\n");
-                        System.out.printf("\n\n  Press enter to continue...\n\n\n\n");
-                        input.nextLine();
-                        break;
-
-                    case 2:
-                        list[i].setSchedule_id(i);
-                        list[i].setSchedule_type(2);
-                        System.out.printf("\n\n       //////////////////////////////////////////////////////////////////////\n");
-                        System.out.printf("       ///                                                                ///\n");
-                        System.out.printf("       ///      Insert the day of the month from the new Schedule:        ///\n");
-                        System.out.printf("       ///                                                                ///\n");
-                        System.out.printf("       ///         (  Must be between or equal to 1 and 28!!  )           ///\n");
-                        System.out.printf("       ///  (  Insert 'last' to put on last business day of the month )   ///\n");
-                        System.out.printf("       ///                                                                ///\n");
-                        System.out.printf("       //////////////////////////////////////////////////////////////////////\n");
-                        System.out.printf("\n\n       Your choice: ");
-                        String day = input.nextLine();
-                        try {
-                        	
-	                        if(day.equalsIgnoreCase("last"))
-	                        {
-	                            list[i].setSchedule_option(day);
-	                        }
-	                      
-	                        else if(Integer.parseInt(day) >= 1 && Integer.parseInt(day) < 29)
-	                        {
-	                          	list[i].setSchedule_option(day);
-	                        }
-	                        else
-	                        {
-	                            System.out.printf("\n\n\n\n  Invalid option!!, setting to default: 'last'...");
-	                            list[i].setSchedule_option("last");
-	                            System.out.printf("\n\n  Press enter to continue...\n\n\n\n");
-	                            input.nextLine();
-	                        }
-                        }
-                        catch(NumberFormatException e)
-                        {
-                        	System.out.printf("\n\n\n\n  Invalid option!!, setting to default: 'last'...");
-                            list[i].setSchedule_option("last");
-                            System.out.printf("\n\n  Press enter to continue...\n\n\n\n");
-                            input.nextLine();
-                        }
-                        System.out.printf("\n\n\n\n");
-                        list[i].printSchedule();
-                        System.out.printf("\n\n\n  Schedule added in the System!!\n");
-                        System.out.printf("\n  Press enter to continue...\n\n\n\n");
-                        input.nextLine();
-                        break;
-
-                    default :
-                        System.out.printf("\n\n  Invalid option!!\n\n  executing default action: 'return to Functions...'.\n\n\n");
-                        System.out.printf("\n\n  Press enter to continue...\n\n\n\n");
-                        input.nextLine();
-                        
-                        return list;
-                }
-                flag = true;
-                break;
-            }
-        }
-        if(!flag)
-        {
-        	System.out.printf("\n\n  Schedule limit Reached!!\n\n  Press enter to return to Functions...\n\n\n\n");
-        	input.nextLine();
-        }
-		
-		return list;
-	}
-	
-	private static Employee[] chooseSchedule(Employee list1[], Schedule list2[])
-	{
-		int choice;
-		int i,id;
-		int aux;
-		boolean flag = false;
-		while(true)
-		{
-			try {
-				System.out.printf("\n\n  Insert your ID: ");
-				id = input.nextInt();
-				input.nextLine();
-				break;
-			}
-			catch(InputMismatchException e)
-			{
-				input.nextLine();
-				System.out.printf("\n\n  the given ID is not an integer!!\n\n  Press enter to try again...\n\n\n\n");
-				input.nextLine();
-			}
-		}
-		if(list1[id] == null)
-		{
-			System.out.printf("\n\n\n  There's no Employee with the ID: %d int the System!!\n\n  Press enter to return to Functions...\n\n\n\n");
-			input.nextLine();
-			return list1;
-		}
-		System.out.printf("\n\n       //////////////////////////////////////////////////////////////////////\n");
-        System.out.printf("       ///                                                                ///\n");
-        System.out.printf("       ///                      Payment Schedules                         ///\n");
-        System.out.printf("       ///                                                                ///\n");
-        System.out.printf("       //////////////////////////////////////////////////////////////////////\n\n\n\n\n");
-        for(i = 0;i<1000;i++)
-        {
-        	if(list2[i] != null)
-        	{
-        		list2[i].printSchedule();
-        		flag = true;
-        	}
-        }
-        if(!flag)
-        {
-        	System.out.printf("\n       There's no Schedules in the System!!\n\n\n");
-        }
-        while(true)
-        {
-        	while(true)
-        	{
-        		try {
-        			System.out.printf("\n\n  Insert the Schedule ID you want to change to ('-1' to Cancel): ");
-                    choice = input.nextInt();
-                    input.nextLine();
-                    break;
-        		}
-        		catch(InputMismatchException e)
-        		{
-        			input.nextLine();
-        			System.out.printf("\n\n  The schedule id is not an integer!!\n\n  Press enter to try again...\n\n\n\n");
-        			input.nextLine();
-        		}
-        	}
-            if(choice == -1)
-            {
-            	return list1;
-            }
-            if(list2[choice] != null)
-            {
-                switch(list2[choice].getSchedule_type())
-                {
-                    case 1:
-                        if(list1[id] instanceof Hourly)
-                        {
-                            switch(list2[choice].getSchedule_option())
-                            {
-                                case "Monday":
-                                    ( (Hourly)list1[id]).setPayment_date(0);
-                                    break;
-
-                                case "Tuesday":
-                                	( (Hourly)list1[id]).setPayment_date(1);
-                                    break;
-
-                                case "Wednesday":
-                                	( (Hourly)list1[id]).setPayment_date(2);
-                                    break;
-
-                                case "Thursday":
-                                	( (Hourly)list1[id]).setPayment_date(3);
-                                    break;
-
-                                case "Friday":
-                                	( (Hourly)list1[id]).setPayment_date(4);
-                                    break;
-                            }
-                            System.out.printf("\n\n\n\n  Change Done!!\n\n");
-                        }
-                        else if(list1[id] instanceof Commissioned)
-                        {
-                        	( (Commissioned)list1[id]).setTwo_week(0);
-                        	switch(list2[choice].getSchedule_option())
-                            {
-                                case "Monday":
-                                    ( (Commissioned)list1[id]).setPayment_date(0);
-                                    break;
-
-                                case "Tuesday":
-                                	( (Commissioned)list1[id]).setPayment_date(1);
-                                    break;
-
-                                case "Wednesday":
-                                	( (Commissioned)list1[id]).setPayment_date(2);
-                                    break;
-
-                                case "Thursday":
-                                	( (Commissioned)list1[id]).setPayment_date(3);
-                                    break;
-
-                                case "Friday":
-                                	( (Commissioned)list1[id]).setPayment_date(4);
-                                    break;
-                            }
-                            System.out.printf("\n\n\n\n  Change Done!!\n\n");
-                        }
-                        else
-                        {
-                        	System.out.printf("\n\n\n  This Employee is not an Hourly OR Commissioned!!\n\n  Please move to 'Change an Employee Details' on menu.\n\n\n");
-                        }
-                        break;
-
-                    case 2:
-                        if(list1[id] instanceof Salaried)
-                        {
-                            if(list2[choice].getSchedule_option().equalsIgnoreCase("last"))
-                            {
-                                ( (Salaried)list1[id]).setPayment_date(dayUtil(month));
-                                ( (Salaried)list1[id]).setSalaried_default(true);
-                            }
-                            else
-                            {
-                            	( (Salaried)list1[id]).setSalaried_default(false);
-                            	aux = Integer.parseInt(list2[choice].getSchedule_option());//           POSSIVEL ERRO (favor verificar addSchedule)
-                            	( (Salaried)list1[id]).setPayment_date(aux);
-                                
-                            }
-                            System.out.printf("\n\n\n  Change Done!!");
-                        }
-                        else
-                        {
-                            System.out.printf("\n\n\n  This Employee is not an Salaried!!\n\n  Please move to 'Change an Employee Details' on menu.\n\n\n");
-                        }
-                        break;
-                        
-                }
-                System.out.printf("\n\n  Press enter to continue...\n\n\n\n");
-                input.nextLine();
-                break;
-            }
-            else
-            {
-                System.out.printf("\n\n\n\n  Invalid Schedule ID!!");
-                System.out.printf("\n\n  Press enter to try again...\n\n\n\n");
-                input.nextLine();
-                System.out.printf("\n\n\n\n");
-            }
-        }
-		
-		return list1;
-	}
-	
-	private static Schedule[] delSchedule(Schedule list[])
-	{
-		int i,choice;
-		System.out.printf("\n\n       //////////////////////////////////////////////////////////////////////\n");
-        System.out.printf("       ///                                                                ///\n");
-        System.out.printf("       ///                      Payment Schedules                         ///\n");
-        System.out.printf("       ///                                                                ///\n");
-        System.out.printf("       //////////////////////////////////////////////////////////////////////\n\n\n\n\n");
-        for(i = 0;i<1000;i++)
-        {
-        	if(list[i] != null)
-        	{
-        		list[i].printSchedule();
-        	}
-        }
-        while(true)
-    	{
-    		try {
-    			System.out.printf("\n\n\n  Insert the Schedule ID you want to change to: ");
-                choice = input.nextInt();
-                input.nextLine();
-                break;
-    		}
-    		catch(InputMismatchException e)
-    		{
-    			input.nextLine();
-    			System.out.printf("\n\n  The schedule id is not an integer!!\n\n  Press enter to try again...\n\n\n\n");
-    			input.nextLine();
-    		}
-    	}
-        if(list[choice] != null)
-        {
-        	list[choice] = null;
-        	System.out.printf("\n\n\n\n  Schedule Number: %d Removed from the System!!\n\n  Press enter to return to Functions...\n\n\n", choice);
-        	input.nextLine();
-        }
-        else
-        {
-        	System.out.printf("\n\n\n\n  There's no Schedule with the ID: %d int the System!!\n\n  Press enter to return to Functions...\n\n\n", choice);
-        	input.nextLine();
-        }
-		
-		return list;
-	}
 }

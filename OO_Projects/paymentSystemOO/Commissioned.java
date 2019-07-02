@@ -62,5 +62,20 @@ public class Commissioned extends Employee implements GeneralInterface{
 	public void setTwo_week(int two_week) {
 		this.two_week = two_week;
 	}
+
+	@Override
+	public String toString() {
+		String payment_date;
+		switch(this.payment_week)
+		{
+			case 0: payment_date = "\n  Week day to be payed: Monday";
+			case 1: payment_date = "\n  Week day to be payed: Tuesday";
+			case 2: payment_date = "\n  Week day to be payed: Wednesday";
+			case 3: payment_date = "\n  Week day to be payed: Thursday";
+			case 4: payment_date = "\n  Week day to be payed: Friday";
+			default: payment_date = null;
+		}
+		return super.toString() + "\n  Sellings: " + this.sellings + payment_date + "\n  Days worked: " + this.days_worked + "\n\n\n";
+	}
 	
 }

@@ -24,7 +24,10 @@ public class Hourly extends Employee implements GeneralInterface{
 	
 	public void setExtra_salary(double extra_hour)
 	{
-		this.extra_salary = extra_hour;
+		if(extra_hour >= 0)
+		{
+			this.extra_salary = extra_hour;
+		}
 	}
 	public double getExtra_salary() {
 		return extra_salary;
@@ -40,15 +43,46 @@ public class Hourly extends Employee implements GeneralInterface{
 	}
 	public void addExtra(double extra)
 	{
-		this.extra_salary += extra;
+		if(extra >= 0)
+		{
+			this.extra_salary += extra;
+		}
 	}
 	public void addHours(int hours)
 	{
-		this.total_hours += hours;
+		if(hours >= 0)
+		{
+			this.total_hours += hours;
+		}
+		
 	}
 	public void setTotal_hours(int hours)
 	{
-		this.total_hours = hours;
+		if(hours >= 0)
+		{
+			this.total_hours = hours;
+		}
+		
 	}
+
+	@Override
+	public String toString() 
+	{
+		String result;
+		String extra = "\n  Type: Hourly\n  Extra Salary: " + this.extra_salary;
+		String payment_date;
+		switch(this.payment_week)
+		{
+			case 0: payment_date = "\n  Week day to be payed: Monday";
+			case 1: payment_date = "\n  Week day to be payed: Tuesday";
+			case 2: payment_date = "\n  Week day to be payed: Wednesday";
+			case 3: payment_date = "\n  Week day to be payed: Thursday";
+			case 4: payment_date = "\n  Week day to be payed: Friday";
+			default: payment_date = null;
+		}
+		result = super.toString() + extra + payment_date + "\n  Total hours worked: " + this.total_hours + "\n\n\n";
+		return result;
+	}
+	
 	
 }

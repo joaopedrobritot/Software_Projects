@@ -27,7 +27,14 @@ public class Salaried extends Employee implements GeneralInterface{
 		return payment_day;
 	}
 	public void setPayment_date(int payment_day) {
-		this.payment_day = payment_day;
+		if(payment_day < 0)
+		{
+			this.payment_day = 0;
+		}
+		else
+		{
+			this.payment_day = payment_day;
+		}
 	}
 	public boolean isSalaried_default() {
 		return salaried_default;
@@ -43,7 +50,21 @@ public class Salaried extends Employee implements GeneralInterface{
 		return days_worked;
 	}
 	public void setDays_worked(int days_worked) {
-		this.days_worked = days_worked;
+		if(days_worked < 0)
+		{
+			this.days_worked = 0;
+		}
+		else
+		{
+			this.days_worked = days_worked;
+		}
 	}
+
+	
+	@Override
+	public String toString() {
+		return super.toString() + "\n  Type: Salaried" + "\n  Day to be payed: " + this.payment_day + "\n  Days Worked: " + this.days_worked + "\n\n\n";
+	}
+	
 	
 }
