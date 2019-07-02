@@ -1,5 +1,7 @@
 package paymentSystemOO;
 
+import systemUtilities.GeneralInterface;
+
 public class Commissioned extends Employee implements GeneralInterface{
 	
 	private double sellings;
@@ -7,9 +9,9 @@ public class Commissioned extends Employee implements GeneralInterface{
 	private int two_week;
 	private int days_worked;
 	
-	public Commissioned(int iD, String name, String address, double salary, boolean syndicate, int payment_method, String arrival_time, double sell, int payment, int two, int days_w)
+	public Commissioned(int iD, String name, String address, double salary, boolean syndicate, int syndicate_id, double syndicate_tax, double service_taxes, boolean received_tax, boolean card_submit, int payment_method, String arrival_time, double sell, int payment, int two, int days_w)
 	{
-		super(iD, name, address, salary, syndicate, payment_method, arrival_time);
+		super(iD, name, address, salary, syndicate, syndicate_id, syndicate_tax, service_taxes, received_tax, card_submit, payment_method, arrival_time);
 		this.sellings = sell;
 		this.payment_week = payment;
 		this.two_week = two;
@@ -19,7 +21,7 @@ public class Commissioned extends Employee implements GeneralInterface{
 	
 	public Commissioned()
 	{
-		super(-1, null, null, 0, false, 0, null);
+		super(-1, null, null, 0, false, -1, 0, 0, false, false, -1, null);
 		this.sellings = 0;
 		this.payment_week = 4;
 		this.two_week = 0;
@@ -61,6 +63,12 @@ public class Commissioned extends Employee implements GeneralInterface{
 	}
 	public void setTwo_week(int two_week) {
 		this.two_week = two_week;
+	}
+	
+	public Employee clone()
+	{
+		Employee new_copy = new Commissioned(super.getID(), super.getName(), super.getAddress(), super.getSalary(), super.isSyndicate(), super.getSyndicate_id(), super.getSyndicate_tax(), super.getService_taxes(), super.isReceived_tax(), super.isCard_submit(), super.getPayment_method(), super.getArrival_time(), this.sellings, this.payment_week, this.two_week, this.days_worked);
+		return new_copy;
 	}
 
 	@Override

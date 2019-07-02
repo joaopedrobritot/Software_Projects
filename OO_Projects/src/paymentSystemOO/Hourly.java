@@ -1,14 +1,16 @@
 package paymentSystemOO;
 
+import systemUtilities.GeneralInterface;
+
 public class Hourly extends Employee implements GeneralInterface{
 	
 	private double extra_salary;
 	private int payment_week;
 	private int total_hours;
 	
-	public Hourly(int iD, String name, String address, double salary, boolean syndicate, int payment_method, String arrival_time, double extra, int payment, int hour)
+	public Hourly(int iD, String name, String address, double salary, boolean syndicate, int syndicate_id, double syndicate_tax, double service_taxes, boolean received_tax, boolean card_submit, int payment_method, String arrival_time, double extra, int payment, int hour)
 	{
-		super(iD, name, address, salary, syndicate, payment_method, arrival_time);
+		super(iD, name, address, salary, syndicate, syndicate_id, syndicate_tax, service_taxes, received_tax, card_submit, payment_method, arrival_time);
 		this.extra_salary = extra;
 		this.payment_week = payment;
 		this.total_hours = hour;
@@ -16,7 +18,7 @@ public class Hourly extends Employee implements GeneralInterface{
 	
 	public Hourly()
 	{
-		super(0, null, null, 0, false, 0, null);
+		super(-1, null, null, 0, false, -1, 0, 0, false, false, -1, null);
 		this.extra_salary = 0;
 		this.payment_week = 4;
 		this.total_hours = 0;
@@ -84,5 +86,9 @@ public class Hourly extends Employee implements GeneralInterface{
 		return result;
 	}
 	
-	
+	public Employee clone()
+	{
+		Employee new_copy = new Hourly(super.getID(), super.getName(), super.getAddress(), super.getSalary(), super.isSyndicate(), super.getSyndicate_id(), super.getSyndicate_tax(), super.getService_taxes(), super.isReceived_tax(), super.isCard_submit(), super.getPayment_method(), super.getArrival_time(), this.extra_salary, this.payment_week, this.total_hours);
+		return new_copy;
+	}
 }

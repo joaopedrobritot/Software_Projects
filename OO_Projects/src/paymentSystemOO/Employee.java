@@ -1,5 +1,7 @@
 package paymentSystemOO;
 
+import systemUtilities.Syndicate;
+
 public class Employee extends Syndicate{
 	
 	private int ID;
@@ -7,13 +9,14 @@ public class Employee extends Syndicate{
 	private String address;
 	private double salary;
 	private boolean syndicate;
+	private boolean card_submit;
 	private int payment_method;
 	private String arrival_time;
 
-	public Employee(int iD, String name, String address, double salary, boolean syndicate, int payment_method, String arrival_time) 
+	public Employee(int iD, String name, String address, double salary, boolean syndicate, int syndicate_id, double syndicate_tax, double service_taxes, boolean received_tax, boolean card_submit, int payment_method, String arrival_time) 
 	{
 		super();
-		ID = iD;
+		this.ID = iD;
 		this.name = name;
 		this.address = address;
 		if(salary < 0)
@@ -26,6 +29,15 @@ public class Employee extends Syndicate{
 		}
 		
 		this.syndicate = syndicate;
+		if(this.syndicate)
+		{
+			this.setSyndicate_id(syndicate_id);
+			this.setSyndicate_tax(syndicate_tax);
+			this.setService_taxes(service_taxes);
+			this.setReceived_tax(received_tax);
+		}
+		this.card_submit = card_submit;
+		this.card_submit = false;
 		this.payment_method = payment_method;
 		this.arrival_time = arrival_time;
 	}
@@ -86,6 +98,13 @@ public class Employee extends Syndicate{
 	}
 	public void setPayment_method(int payment_method) {
 		this.payment_method = payment_method;
+	}
+	public boolean isCard_submit() {
+		return card_submit;
+	}
+
+	public void setCard_submit(boolean card_submit) {
+		this.card_submit = card_submit;
 	}
 
 	

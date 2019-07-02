@@ -1,18 +1,19 @@
 package paymentSystemOO;
 
 import java.util.InputMismatchException;
-
-import systemFunctions.EmployeeRelated;
-import systemFunctions.PaymentSchedules;
-import systemFunctions.UndoRedo;
 import java.util.Scanner;
 
-public class Main extends UtilityFunctions{
+import systemUtilities.EmployeeRelated;
+import systemUtilities.PaymentSchedules;
+import systemUtilities.Schedule;
+import systemUtilities.UndoRedo;
+
+public class Main{
 
 	private static Scanner input = new Scanner(System.in);
 	private static String system_pass = "admin";
 	private static String employee_pass = "0000";
-	
+
 	public static void main(String[] args) {
 		
 		String given_pass;
@@ -20,12 +21,17 @@ public class Main extends UtilityFunctions{
 		int i;
 		boolean choice = true;
 		
+		
+		
 		Employee Employee_list[] = new Employee[1000];
 		Schedule Schedule_list[] = new Schedule[1000];
+		ExtraFunctions extra_func = new ExtraFunctions();
+		EmployeeRelated employee_func = new EmployeeRelated();
+		UndoRedo system_state = new UndoRedo();
 		
 		while(true)
 		{
-			consoleClear();
+			ExtraFunctions.consoleClear();
 		    System.out.printf("\n       ////////////////////////////////////\n");
 			System.out.printf("       ///                              ///\n");
 			System.out.printf("       ///          Main Menu           ///\n");
@@ -37,14 +43,14 @@ public class Main extends UtilityFunctions{
 			System.out.printf("       ///                              ///\n");
 			System.out.printf("       ////////////////////////////////////\n\n");
 			
-			if(day < 10 && month < 10)
-                System.out.printf("       Date : 0%d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-            else if(day < 10)
-                System.out.printf("       Date : 0%d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-            else if(month < 10)
-                System.out.printf("       Date : %d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
+			if(extra_func.getDay() < 10 && extra_func.getMonth() < 10)
+                System.out.printf("       Date : 0%d / 0%d / 2019\n       %s\n", extra_func.getDay(), extra_func.getMonth(), extra_func.getWeek_name(extra_func.getDay_of_week()));
+            else if(extra_func.getDay() < 10)
+                System.out.printf("       Date : 0%d / %d / 2019\n       %s\n", extra_func.getDay(), extra_func.getMonth(), extra_func.getWeek_name(extra_func.getDay_of_week()));
+            else if(extra_func.getMonth() < 10)
+                System.out.printf("       Date : %d / 0%d / 2019\n       %s\n", extra_func.getDay(), extra_func.getMonth(), extra_func.getWeek_name(extra_func.getDay_of_week()));
             else
-                System.out.printf("       Date : %d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
+                System.out.printf("       Date : %d / %d / 2019\n       %s\n", extra_func.getDay(), extra_func.getMonth(), extra_func.getWeek_name(extra_func.getDay_of_week()));
 			
 			try {
 				System.out.printf("\n\n Option: ");
@@ -74,11 +80,15 @@ public class Main extends UtilityFunctions{
 						{
 							break;
 						}
+						else
+						{
+							System.out.printf("\n\n\n   Invalid Option!!\n\n  Try Again...\n\n\n");
+						}
 					}
 				}
 				while(!choice)
 				{
-					consoleClear();
+					ExtraFunctions.consoleClear();
 					System.out.printf("\n       ////////////////////////////////////////////////////\n");
 					System.out.printf("       ///                                              ///\n");
 					System.out.printf("       ///           *Administrator Functions*          ///\n");
@@ -98,14 +108,14 @@ public class Main extends UtilityFunctions{
 					System.out.printf("       ///                                              ///\n");
 					System.out.printf("       ////////////////////////////////////////////////////\n\n");
 					
-					if(day < 10 && month < 10)
-			               System.out.printf("       Date : 0%d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-			           else if(day < 10)
-			               System.out.printf("       Date : 0%d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-			           else if(month < 10)
-			               System.out.printf("       Date : %d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-			           else
-			               System.out.printf("       Date : %d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
+					if(extra_func.getDay() < 10 && extra_func.getMonth() < 10)
+		                System.out.printf("       Date : 0%d / 0%d / 2019\n       %s\n", extra_func.getDay(), extra_func.getMonth(), extra_func.getWeek_name(extra_func.getDay_of_week()));
+		            else if(extra_func.getDay() < 10)
+		                System.out.printf("       Date : 0%d / %d / 2019\n       %s\n", extra_func.getDay(), extra_func.getMonth(), extra_func.getWeek_name(extra_func.getDay_of_week()));
+		            else if(extra_func.getMonth() < 10)
+		                System.out.printf("       Date : %d / 0%d / 2019\n       %s\n", extra_func.getDay(), extra_func.getMonth(), extra_func.getWeek_name(extra_func.getDay_of_week()));
+		            else
+		                System.out.printf("       Date : %d / %d / 2019\n       %s\n", extra_func.getDay(), extra_func.getMonth(), extra_func.getWeek_name(extra_func.getDay_of_week()));
 					
 					System.out.printf("\n\n       Option: ");
 					try {
@@ -113,12 +123,12 @@ public class Main extends UtilityFunctions{
 						{
 							case 1:
 								input.nextLine();
-								consoleClear();
+								ExtraFunctions.consoleClear();
 								for(i = 0; i< 1000;i++)
 								{
 									if(Employee_list[i] == null)
 									{
-										Employee_list[i] = EmployeeRelated.addEmployee(Employee_list[i], i, month);
+										Employee_list[i] = employee_func.addEmployee(Employee_list[i], extra_func, system_state, i, extra_func.getMonth());
 										break;
 									}
 								}
@@ -126,7 +136,7 @@ public class Main extends UtilityFunctions{
 								
 							case 2:
 								input.nextLine();
-								consoleClear();
+								ExtraFunctions.consoleClear();
 								int a;
 								
 								while(true)
@@ -149,7 +159,7 @@ public class Main extends UtilityFunctions{
 								{
 									Employee_list[a] = null;
 									System.out.printf("\n\n\n  Employee Removed from the System!!\n\n  Press enter to return to Adminstrator Functions...\n\n\n");
-									UndoRedo.setChange_made(true);
+									system_state.setChange_made(true);
 								}
 								else
 								{
@@ -161,54 +171,54 @@ public class Main extends UtilityFunctions{
 								
 							case 3:
 								input.nextLine();
-								consoleClear();
-								Employee_list = EmployeeRelated.changeDetails(Employee_list, month);
+								ExtraFunctions.consoleClear();
+								Employee_list = employee_func.changeDetails(Employee_list, extra_func, system_state, extra_func.getMonth());
 								break;
 								
 							case 4:
 								input.nextLine();
-								consoleClear();
-								todayPayments(Employee_list);
+								ExtraFunctions.consoleClear();
+								extra_func.todayPayments(Employee_list, system_state);
 								break;
 								
 							case 5:
 								input.nextLine();
-								consoleClear();
-								Employee_list = serviceSubmit(Employee_list);
+								ExtraFunctions.consoleClear();
+								Employee_list = employee_func.serviceSubmit(Employee_list, system_state);
 								break;
 								
 							case 6:
 								input.nextLine();
-								consoleClear();
-								Employee_list = UndoRedo.undoRedo(Employee_list);
+								ExtraFunctions.consoleClear();
+								Employee_list = system_state.undoRedo(Employee_list);
 								break;
 								
 							case 7:
 								input.nextLine();
-								consoleClear();
-								Schedule_list = PaymentSchedules.addSchedule(Schedule_list, week_name);
+								ExtraFunctions.consoleClear();
+								Schedule_list = PaymentSchedules.addSchedule(Schedule_list, extra_func.getWeek_name());
 								break;
 								
 							case 8:
 								input.nextLine();
-								consoleClear();
+								ExtraFunctions.consoleClear();
 								Schedule_list = PaymentSchedules.delSchedule(Schedule_list);
 								break;
 								
 							case 9:
 								input.nextLine();
-								consoleClear();
-								showDetails(Employee_list);
+								ExtraFunctions.consoleClear();
+								extra_func.showDetails(Employee_list);
 								break;
 								
 							case 10:
 								input.nextLine();
-								consoleClear();
-								showAllEmployees(Employee_list);
+								ExtraFunctions.consoleClear();
+								extra_func.showAllEmployees(Employee_list);
 								break;
 								
 							case 11:
-								consoleClear();
+								ExtraFunctions.consoleClear();
 								changePassword();
 								break;
 								
@@ -229,10 +239,10 @@ public class Main extends UtilityFunctions{
 						System.out.printf("\n\n The typed value is not an integer!!\n Press enter to try again...\n\n\n\n");
 						input.nextLine();
 					}
-					if(UndoRedo.isChange_made())
+					if(system_state.isChange_made())
 					{
-						UndoRedo.saveState(Employee_list);
-						UndoRedo.setChange_made(false);
+						system_state.saveState(Employee_list);
+						system_state.setChange_made(false);
 					}
 				}
 			}
@@ -256,7 +266,7 @@ public class Main extends UtilityFunctions{
 				}
 				while(!choice)
 				{
-					consoleClear();
+					ExtraFunctions.consoleClear();
 					System.out.printf("\n       ////////////////////////////////////////////////////\n");
 					System.out.printf("       ///                                              ///\n");
 					System.out.printf("       ///             *Employee Functions*             ///\n");
@@ -271,14 +281,14 @@ public class Main extends UtilityFunctions{
 					System.out.printf("       ///                                              ///\n");
 					System.out.printf("       ////////////////////////////////////////////////////\n\n");
 					
-					if(day < 10 && month < 10)
-			               System.out.printf("       Date : 0%d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-			           else if(day < 10)
-			               System.out.printf("       Date : 0%d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-			           else if(month < 10)
-			               System.out.printf("       Date : %d / 0%d / 2019\n       %s\n", day, month, week_name[day_of_week]);
-			           else
-			               System.out.printf("       Date : %d / %d / 2019\n       %s\n", day, month, week_name[day_of_week]);
+					if(extra_func.getDay() < 10 && extra_func.getMonth() < 10)
+		                System.out.printf("       Date : 0%d / 0%d / 2019\n       %s\n", extra_func.getDay(), extra_func.getMonth(), extra_func.getWeek_name(extra_func.getDay_of_week()));
+		            else if(extra_func.getDay() < 10)
+		                System.out.printf("       Date : 0%d / %d / 2019\n       %s\n", extra_func.getDay(), extra_func.getMonth(), extra_func.getWeek_name(extra_func.getDay_of_week()));
+		            else if(extra_func.getMonth() < 10)
+		                System.out.printf("       Date : %d / 0%d / 2019\n       %s\n", extra_func.getDay(), extra_func.getMonth(), extra_func.getWeek_name(extra_func.getDay_of_week()));
+		            else
+		                System.out.printf("       Date : %d / %d / 2019\n       %s\n", extra_func.getDay(), extra_func.getMonth(), extra_func.getWeek_name(extra_func.getDay_of_week()));
 					
 					System.out.printf("\n\n       Option: ");
 					
@@ -287,38 +297,38 @@ public class Main extends UtilityFunctions{
 						{
 							case 1:
 								input.nextLine();
-								consoleClear();
-								Employee_list = EmployeeRelated.timeCard(Employee_list, month);
+								ExtraFunctions.consoleClear();
+								Employee_list = employee_func.timeCard(Employee_list, system_state, extra_func.getMonth());
 								break;
 								
 							case 2:
 								input.nextLine();
-								consoleClear();
-								Employee_list = EmployeeRelated.sellingSubmit(Employee_list);
+								ExtraFunctions.consoleClear();
+								Employee_list = employee_func.sellingSubmit(Employee_list, system_state);
 								break;
 								
 							case 3:
 								input.nextLine();
-								consoleClear();
-								Employee_list = EmployeeRelated.changeDetails(Employee_list, month);
+								ExtraFunctions.consoleClear();
+								Employee_list = employee_func.changeDetails(Employee_list, extra_func, system_state, extra_func.getMonth());
 								break;
 								
 							case 4:
 								input.nextLine();
-								consoleClear();
-								Employee_list = PaymentSchedules.chooseSchedule(Employee_list, Schedule_list, month);
+								ExtraFunctions.consoleClear();
+								Employee_list = PaymentSchedules.chooseSchedule(Employee_list, Schedule_list, extra_func, extra_func.getMonth());
 								break;
 								
 							case 5:
 								input.nextLine();
-								consoleClear();
-								Employee_list = UndoRedo.undoRedo(Employee_list);
+								ExtraFunctions.consoleClear();
+								Employee_list = system_state.undoRedo(Employee_list);
 								break;
 								
 							case 6:
 								input.nextLine();
-								consoleClear();
-								showDetails(Employee_list);
+								ExtraFunctions.consoleClear();
+								extra_func.showDetails(Employee_list);
 								break;
 								
 							case 7:
@@ -339,16 +349,16 @@ public class Main extends UtilityFunctions{
 						System.out.printf("\n\n  The typed value is not an integer!!\n  Press enter to try again...\n\n\n\n");
 						input.nextLine();
 					}
-					if(UndoRedo.isChange_made())
+					if(system_state.isChange_made())
 					{
-						UndoRedo.saveState(Employee_list);
-						UndoRedo.setChange_made(false);
+						system_state.saveState(Employee_list);
+						system_state.setChange_made(false);
 					}
 				}
 			}
 			else if(option == 3)
 			{
-				spendDay(Employee_list);
+				extra_func.spendDay(Employee_list);
 			}
 			else if(option == 4)
 			{
@@ -374,7 +384,7 @@ public class Main extends UtilityFunctions{
 		{
 			while(true)
 			{
-				consoleClear();
+				ExtraFunctions.consoleClear();
 				while(true)
 				{
 					try {
