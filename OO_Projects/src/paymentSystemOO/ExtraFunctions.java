@@ -339,6 +339,7 @@ public class ExtraFunctions {
 	protected void todayPayments(Employee list[], UndoRedo system_state)
 	{
 		double result;
+		double salaryresult;
 		int flag = 0;
 		int cont = 1;
 		System.out.printf("\n\n       //////////////////////////////////////////////////////////////////////\n");
@@ -357,7 +358,12 @@ public class ExtraFunctions {
                     {
                         if(list[i].isSyndicate() && !list[i].isReceived_tax())
                         {
-                            System.out.printf("       /// %d - ID: %d   Name: %s   Type: Hourly   Salary ( - Syndicate Taxes + Extra Salary): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, list[i].getName() , (list[i].getSalary() + ( (Hourly)list[i]).getExtra_salary() - list[i].getSyndicate_tax() - list[i].getService_taxes()), list[i].getSyndicate_id());
+                        	salaryresult =  (list[i].getSalary() + ( (Hourly)list[i]).getExtra_salary() - list[i].getSyndicate_tax() - list[i].getService_taxes());
+                            if(salaryresult < 0)
+                            {
+                            	salaryresult = 0;
+                            }
+                        	System.out.printf("       /// %d - ID: %d   Name: %s   Type: Hourly   Salary ( - Syndicate Taxes + Extra Salary): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, list[i].getName() , salaryresult, list[i].getSyndicate_id());
                             list[i].setReceived_tax(true);
                             list[i].setService_taxes(0);
                         }
@@ -386,9 +392,14 @@ public class ExtraFunctions {
                     {
                         if(day == dayUtil(month))
                         {
+                        	salaryresult = (result - list[i].getSyndicate_tax() - list[i].getService_taxes());
+                        	if(salaryresult < 0)
+                        	{
+                        		salaryresult = 0;
+                        	}
                             if(list[i].isSyndicate() && !list[i].isReceived_tax())
                             {
-                                System.out.printf("       /// %d - ID: %d   Name: %s   Type: Salaried   Salary ( - Syndicate Taxes): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, list[i].getName(), (result - list[i].getSyndicate_tax() - list[i].getService_taxes()), list[i].getSyndicate_id());
+                                System.out.printf("       /// %d - ID: %d   Name: %s   Type: Salaried   Salary ( - Syndicate Taxes): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, list[i].getName(), salaryresult, list[i].getSyndicate_id());
                                 list[i].setReceived_tax(true);
                                 list[i].setService_taxes(0);
                             }
@@ -415,7 +426,12 @@ public class ExtraFunctions {
                         {
                         	if(list[i].isSyndicate() && !list[i].isReceived_tax())
                             {
-                                System.out.printf("       /// %d - ID: %d   Name: %s   Type: Salaried   Salary ( - Syndicate Taxes): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, list[i].getName(), (result - list[i].getSyndicate_tax() - list[i].getService_taxes()), list[i].getSyndicate_id());
+                        		salaryresult = (result - list[i].getSyndicate_tax() - list[i].getService_taxes());
+                            	if(salaryresult < 0)
+                            	{
+                            		salaryresult = 0;
+                            	}
+                                System.out.printf("       /// %d - ID: %d   Name: %s   Type: Salaried   Salary ( - Syndicate Taxes): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, list[i].getName(), salaryresult, list[i].getSyndicate_id());
                                 list[i].setReceived_tax(true);
                                 list[i].setService_taxes(0);
                             }
@@ -446,7 +462,12 @@ public class ExtraFunctions {
                         double commissioned_tax = (i/10000) + 0.2;
                         if(list[i].isSyndicate() && !list[i].isReceived_tax())
                         {
-                            System.out.printf("       /// %d - ID: %d   Name: %s   Type: Commissioned   Salary ( - Syndicate Taxes + Commissions): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, list[i].getName() , result + ((( Commissioned)list[i]).getSellings() * commissioned_tax) - list[i].getSyndicate_tax() - list[i].getService_taxes(), list[i].getSyndicate_id());
+                        	salaryresult =  result + ((( Commissioned)list[i]).getSellings() * commissioned_tax) - list[i].getSyndicate_tax() - list[i].getService_taxes();
+                        	if(salaryresult < 0)
+                        	{
+                        		salaryresult = 0;
+                        	}
+                            System.out.printf("       /// %d - ID: %d   Name: %s   Type: Commissioned   Salary ( - Syndicate Taxes + Commissions): %.2f   Syndicate: Yes   Syndicate ID: %d  Payment Method: ", cont, i, list[i].getName() , salaryresult, list[i].getSyndicate_id());
                             list[i].setReceived_tax(true);
                             list[i].setService_taxes(0);
                         }

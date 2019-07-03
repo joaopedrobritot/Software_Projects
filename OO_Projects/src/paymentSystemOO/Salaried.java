@@ -75,5 +75,4 @@ public class Salaried extends Employee implements GeneralInterface{
 		return super.toString() + "\n  Type: Salaried" + "\n  Day to be payed: " + this.payment_day + "\n  Days Worked: " + this.days_worked + "\n\n\n";
 	}
 	
-	
 }

@@ -102,7 +102,6 @@ public class Employee extends Syndicate{
 	public boolean isCard_submit() {
 		return card_submit;
 	}
-
 	public void setCard_submit(boolean card_submit) {
 		this.card_submit = card_submit;
 	}
