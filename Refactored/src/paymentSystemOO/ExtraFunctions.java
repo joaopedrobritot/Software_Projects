@@ -8,7 +8,7 @@ import java.util.InputMismatchException;
 
 public class ExtraFunctions {
 	
-	private static Scanner input = new Scanner(System.in);
+		private static Scanner input = new Scanner(System.in);
 	
 	// Date Settings
 
@@ -88,22 +88,7 @@ public class ExtraFunctions {
 	
 	protected void showDetails(Employee list[])
 	{
-		int id;
-		while(true)
-		{
-			try {
-				System.out.printf("\n\n  Insert the ID from the Employee: ");
-				id = input.nextInt();
-				input.nextLine();
-				break;
-			}
-			catch(InputMismatchException e)
-			{
-				input.nextLine();
-				System.out.printf("\n\n\n  the typed ID is not an integer!!\n\n  Press enter to try again...\n\n\n\n");
-				input.nextLine();
-			}
-		}
+		int id = this.integerScan("\n\n  Insert the ID from the Employee: ");
 		if(list[id] != null)
 		{
 			list[id].myDetails();
@@ -260,6 +245,47 @@ public class ExtraFunctions {
         consoleClear();
 	}
 	
+	public int integerScan(String message)
+	{
+		int integer;
+		while(true)
+		{
+			try {
+				System.out.printf(message);
+				integer = input.nextInt();
+				input.nextLine();
+				break;
+			}
+			catch(InputMismatchException e)
+			{
+				input.nextLine();
+				System.out.printf("\n\n  The given value is not a integer!!\n  Press enter to try again...\n\n\n");
+				input.nextLine();
+			}
+		}
+		return integer;
+	}
+	
+	public double doubleScan(String message)
+	{
+		double number;
+		while(true)
+		{
+			try {
+				System.out.printf(message);
+				number = input.nextDouble();
+				input.nextLine();
+				break;
+			}
+			catch(InputMismatchException e)
+			{
+				input.nextLine();
+				System.out.printf("\n\n  The given value is not a number!!\n  Press enter to try again...\n\n\n");
+				input.nextLine();
+			}
+		}
+		return number;
+	}
 	////////////////////////////////////////////////////////
 
 }

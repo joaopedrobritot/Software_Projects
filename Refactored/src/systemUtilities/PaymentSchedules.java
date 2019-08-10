@@ -3,16 +3,14 @@ package systemUtilities;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import paymentSystemOO.Commissioned;
 import paymentSystemOO.Employee;
 import paymentSystemOO.ExtraFunctions;
-import paymentSystemOO.Hourly;
-import paymentSystemOO.Salaried;
 import systemUtilities.Schedule;
 
 public abstract class PaymentSchedules {
 	
 	private static Scanner input = new Scanner(System.in);
+	private static ExtraFunctions extra_func = new ExtraFunctions();
 	
 	public static Schedule[] addSchedule(Schedule list[], String week_name[])
 	{
@@ -185,21 +183,8 @@ public abstract class PaymentSchedules {
         		list[i].printSchedule();
         	}
         }
-        while(true)
-    	{
-    		try {
-    			System.out.printf("\n\n\n  Insert the Schedule ID you want to change to: ");
-                choice = input.nextInt();
-                input.nextLine();
-                break;
-    		}
-    		catch(InputMismatchException e)
-    		{
-    			input.nextLine();
-    			System.out.printf("\n\n  The schedule id is not an integer!!\n\n  Press enter to try again...\n\n\n\n");
-    			input.nextLine();
-    		}
-    	}
+        choice = extra_func.integerScan("\n\n\n  Insert the Schedule ID you want to change to: ");
+        
         if(list[choice] != null)
         {
         	list[choice] = null;
@@ -218,24 +203,10 @@ public abstract class PaymentSchedules {
 	public static Employee[] chooseSchedule(Employee list1[], Schedule list2[], ExtraFunctions extra_func)
 	{
 		int choice;
-		int i,id;
-		int aux;
+		int i;
 		boolean flag = false;
-		while(true)
-		{
-			try {
-				System.out.printf("\n\n  Insert your ID: ");
-				id = input.nextInt();
-				input.nextLine();
-				break;
-			}
-			catch(InputMismatchException e)
-			{
-				input.nextLine();
-				System.out.printf("\n\n  the given ID is not an integer!!\n\n  Press enter to try again...\n\n\n\n");
-				input.nextLine();
-			}
-		}
+		int id = extra_func.integerScan("\n\n  Insert your ID: ");
+		
 		if(list1[id] == null)
 		{
 			System.out.printf("\n\n\n  There's no Employee with the ID: %d int the System!!\n\n  Press enter to return to Functions...\n\n\n\n");
@@ -261,113 +232,14 @@ public abstract class PaymentSchedules {
         }
         while(true)
         {
-        	while(true)
-        	{
-        		try {
-        			System.out.printf("\n\n  Insert the Schedule ID you want to change to ('-1' to Cancel): ");
-                    choice = input.nextInt();
-                    input.nextLine();
-                    break;
-        		}
-        		catch(InputMismatchException e)
-        		{
-        			input.nextLine();
-        			System.out.printf("\n\n  The schedule id is not an integer!!\n\n  Press enter to try again...\n\n\n\n");
-        			input.nextLine();
-        		}
-        	}
-            if(choice == -1)
+        	choice = extra_func.integerScan("\n\n  Insert the Schedule ID you want to change to ('-1' to Cancel): ");
+            if(choice < 0)
             {
             	return list1;
             }
             if(list2[choice] != null)
             {
-                switch(list2[choice].getSchedule_type())
-                {
-                    case 1:
-                        if(list1[id] instanceof Hourly)// TODO
-                        {
-                            switch(list2[choice].getSchedule_option())
-                            {
-                                case "Monday":
-                                    ( (Hourly)list1[id]).setPayment_date(0);
-                                    break;
-
-                                case "Tuesday":
-                                	( (Hourly)list1[id]).setPayment_date(1);
-                                    break;
-
-                                case "Wednesday":
-                                	( (Hourly)list1[id]).setPayment_date(2);
-                                    break;
-
-                                case "Thursday":
-                                	( (Hourly)list1[id]).setPayment_date(3);
-                                    break;
-
-                                case "Friday":
-                                	( (Hourly)list1[id]).setPayment_date(4);
-                                    break;
-                            }
-                            System.out.printf("\n\n\n\n  Change Done!!\n\n");
-                        }
-                        else if(list1[id] instanceof Commissioned)
-                        {
-                        	( (Commissioned)list1[id]).setTwo_week(0);
-                        	switch(list2[choice].getSchedule_option())
-                            {
-                                case "Monday":
-                                    ( (Commissioned)list1[id]).setPayment_date(0);
-                                    break;
-
-                                case "Tuesday":
-                                	( (Commissioned)list1[id]).setPayment_date(1);
-                                    break;
-
-                                case "Wednesday":
-                                	( (Commissioned)list1[id]).setPayment_date(2);
-                                    break;
-
-                                case "Thursday":
-                                	( (Commissioned)list1[id]).setPayment_date(3);
-                                    break;
-
-                                case "Friday":
-                                	( (Commissioned)list1[id]).setPayment_date(4);
-                                    break;
-                            }
-                            System.out.printf("\n\n\n\n  Change Done!!\n\n");
-                        }
-                        else
-                        {
-                        	System.out.printf("\n\n\n  This Employee is not an Hourly OR Commissioned!!\n\n  Please move to 'Change an Employee Details' on menu.\n\n\n");
-                        }
-                        break;
-
-                    case 2:
-                        if(list1[id] instanceof Salaried)
-                        {
-                            if(list2[choice].getSchedule_option().equalsIgnoreCase("last"))
-                            {
-                                ( (Salaried)list1[id]).setPayment_date(extra_func.dayUtil(extra_func.getMonth()));
-                                ( (Salaried)list1[id]).setSalaried_default(true);
-                            }
-                            else
-                            {
-                            	( (Salaried)list1[id]).setSalaried_default(false);
-                            	aux = Integer.parseInt(list2[choice].getSchedule_option());//           POSSIVEL ERRO (favor verificar addSchedule)
-                            	( (Salaried)list1[id]).setPayment_date(aux);
-                                
-                            }
-                            System.out.printf("\n\n\n  Change Done!!");
-                        }
-                        else
-                        {
-                            System.out.printf("\n\n\n  This Employee is not an Salaried!!\n\n  Please move to 'Change an Employee Details' on menu.\n\n\n");
-                        }
-                        break;
-                        
-                }
+                list1[id].applySchedule(list2[choice], extra_func);
                 System.out.printf("\n\n  Press enter to continue...\n\n\n\n");
                 input.nextLine();
                 break;
@@ -383,6 +255,5 @@ public abstract class PaymentSchedules {
 		
 		return list1;
 	}
-	
 	
 }

@@ -1,11 +1,10 @@
 package paymentSystemOO;
 
-import employeeSpecificTreatment.EmployeeSpecific;
 import systemUtilities.GeneralInterface;
 import systemUtilities.Schedule;
 import systemUtilities.UndoRedo;
 
-public class Commissioned extends Employee implements GeneralInterface, EmployeeSpecific{
+public class Commissioned extends Employee implements GeneralInterface{
 	
 	private double sellings;
 	private int payment_week;
@@ -92,10 +91,11 @@ public class Commissioned extends Employee implements GeneralInterface, Employee
 
 	@Override
 	public void receivePayment(int day, UndoRedo system_state, int index, int ID) {
-		double salaryresult;
-		double result = this.getSalary() * this.getDays_worked();
+		
         if(this.getTwo_week() >= 2)
         {
+        	double salaryresult;
+    		double result = this.getSalary() * this.getDays_worked();
             double commissioned_tax = (ID/10000) + 0.2;
             if(this.isSyndicate() && !this.isReceived_tax())
             {
@@ -151,11 +151,38 @@ public class Commissioned extends Employee implements GeneralInterface, Employee
 	    }
 	    System.out.printf("\n\n  Arrival Time: %s\n\n", this.getArrival_time());
 	}
-
-	@Override
-	public void chooseSchedule(Schedule selected) {
-		// TODO Auto-generated method stub
-		
-	}
 	
+	@Override
+	public void applySchedule(Schedule target, ExtraFunctions extra_func)
+	{
+		if(target.getSchedule_type() == 1)
+		{
+			this.setTwo_week(0);
+	    	switch(target.getSchedule_option())
+	        {
+	            case "Monday":
+	                this.setPayment_date(0);
+	                break;
+
+	            case "Tuesday":
+	            	this.setPayment_date(1);
+	                break;
+
+	            case "Wednesday":
+	            	this.setPayment_date(2);
+	                break;
+
+	            case "Thursday":
+	            	this.setPayment_date(3);
+	                break;
+
+	            case "Friday":
+	            	this.setPayment_date(4);
+	                break;
+	        }
+	        System.out.printf("\n\n\n\n  Change Done!!\n\n");
+		}
+		else
+			System.out.printf("\n\n\n  This Employee is not an Hourly OR Commissioned!!\n\n  Please move to 'Change an Employee Details' on menu.\n\n\n");
+	}
 }

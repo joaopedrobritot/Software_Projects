@@ -1,5 +1,6 @@
 package paymentSystemOO;
 
+import systemUtilities.Schedule;
 import systemUtilities.Syndicate;
 import systemUtilities.UndoRedo;
 
@@ -128,11 +129,15 @@ public abstract class Employee extends Syndicate{
 	public abstract Employee copy();
 	public abstract void myDetails();
 	public abstract void receivePayment(int date, UndoRedo system_state, int index, int ID);
+	public abstract void addDay();
 	
 	@Override
 	public String toString() {
 		return gatherData();
 	}
 	
-	
+	public void applySchedule(Schedule target, ExtraFunctions extra_func)
+	{
+		System.out.printf("\n\n  This employee is not instantieted!!\n\n");
+	}
 }

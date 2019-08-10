@@ -1,11 +1,10 @@
 package paymentSystemOO;
 
-import employeeSpecificTreatment.EmployeeSpecific;
 import systemUtilities.GeneralInterface;
 import systemUtilities.Schedule;
 import systemUtilities.UndoRedo;
 
-public class Salaried extends Employee implements GeneralInterface, EmployeeSpecific{
+public class Salaried extends Employee implements GeneralInterface{
 	
 	private int payment_day;
 	private boolean salaried_default;
@@ -81,10 +80,11 @@ public class Salaried extends Employee implements GeneralInterface, EmployeeSpec
 
 	@Override
 	public void receivePayment(int day, UndoRedo system_state, int index, int ID) {
-		double salaryresult;
-		double result = this.getSalary() * this.getDays_worked();
+		
         if(day == this.getPayment_date())
         {
+        	double salaryresult;
+    		double result = this.getSalary() * this.getDays_worked();
         	if(this.isSyndicate() && !this.isReceived_tax())
             {
         		salaryresult = (result - this.getSyndicate_tax() - this.getService_taxes());
@@ -137,11 +137,27 @@ public class Salaried extends Employee implements GeneralInterface, EmployeeSpec
 	    }
 	    System.out.printf("\n\n  Arrival Time: %s\n\n", this.getArrival_time());
 	}
-
-	@Override
-	public void chooseSchedule(Schedule selected) {
-		// TODO Auto-generated method stub
+	
+	public void applySchedule(Schedule target, ExtraFunctions extra_func)
+	{
+		if(target.getSchedule_type() == 2)
+		{
+			if(target.getSchedule_option().equalsIgnoreCase("last"))
+	        {
+	            this.setPayment_date(extra_func.dayUtil(extra_func.getMonth()));
+	            this.setSalaried_default(true);
+	        }
+	        else
+	        {
+	        	this.setSalaried_default(false);
+	        	int aux = Integer.parseInt(target.getSchedule_option());
+	        	this.setPayment_date(aux);
+	            
+	        }
+	        System.out.printf("\n\n\n  Change Done!!");
+		}
+		else
+			System.out.printf("\n\n\n  This Employee is not an Salaried!!\n\n  Please move to 'Change an Employee Details' on menu.\n\n\n");
 		
 	}
-	
 }

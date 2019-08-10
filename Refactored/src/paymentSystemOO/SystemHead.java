@@ -1,6 +1,5 @@
 package paymentSystemOO;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import systemUtilities.EmployeeRelated;
@@ -16,7 +15,7 @@ public class SystemHead{
 	
 	Employee Employee_list[];
 	Schedule Schedule_list[];
-	ExtraFunctions extra_func;
+	static ExtraFunctions extra_func = new ExtraFunctions();
 	EmployeeRelated employee_func;
 	UndoRedo system_state;
 	
@@ -28,7 +27,6 @@ public class SystemHead{
 		
 		Employee_list = new Employee[1000];
 		Schedule_list = new Schedule[1000];
-		extra_func = new ExtraFunctions();
 		employee_func = new EmployeeRelated();
 		system_state = new UndoRedo();
 		
@@ -48,18 +46,7 @@ public class SystemHead{
 			
 			showDate();
 			
-			try {
-				System.out.printf("\n\n Option: ");
-				option = input.nextInt();
-				input.nextLine();
-				System.out.printf("\n\n");
-			}
-			catch(InputMismatchException e)
-			{
-				input.nextLine();
-				System.out.printf("\n\n  The typed value is not a Integer!!\n Press enter to try again...\n\n\n\n");
-				input.nextLine();
-			}
+			option = extra_func.integerScan("\n\n Option: ");
 			if(option == 1)
 			{
 				while(choice)
@@ -148,21 +135,7 @@ public class SystemHead{
 			while(true)
 			{
 				ExtraFunctions.consoleClear();
-				while(true)
-				{
-					try {
-						System.out.printf("\n\n\n  Insert the Password you want to change:\n\n  1 - System Password / Current Password: %s\n  2 - Employee Password / Current Password: %s\n  3 - Return to Admin Functions\n\n\n  Your Option: ");
-						choice = input.nextInt();
-						input.nextLine();
-						break;
-					}
-					catch(InputMismatchException e)
-					{
-						input.nextLine();
-						System.out.printf("\n\n\n  The given password is not an integer...\n\n\n");
-						input.nextLine();
-					}
-				}
+				choice = extra_func.integerScan("\n\n\n  Insert the Password you want to change:\n\n  1 - System Password / Current Password: %s\n  2 - Employee Password / Current Password: %s\n  3 - Return to Admin Functions\n\n\n  Your Option: ");
 				switch(choice)
 				{
 					case 1:
@@ -197,7 +170,7 @@ public class SystemHead{
 		{
 			if(Employee_list[i] == null) // found one!!
 			{
-				Employee_list[i] = employee_func.addEmployee(extra_func, system_state, i, extra_func.getMonth());
+				Employee_list[i] = employee_func.addEmployee(extra_func, system_state, i);
 				return;
 			}
 		}
@@ -205,27 +178,11 @@ public class SystemHead{
 	
 	private void deleteEmployee()
 	{
-		int a;
+		int id = extra_func.integerScan("\n\n\n  Insert the ID from the Employee you want to Remove: ");
 		
-		while(true)
+		if(Employee_list[id] != null)
 		{
-			try {
-				System.out.printf("\n\n\n  Insert the ID from the Employee you want to Remove: ");
-				a = input.nextInt();
-				input.nextLine();
-				break;
-			}
-			catch(Exception e)
-			{
-				input.nextLine();
-				System.out.printf("\n\n\n  The given ID is not an integer!!\n\n  Press enter to Try Again...\n\n\n");
-				input.nextLine();
-			}
-		}
-		
-		if(Employee_list[a] != null)
-		{
-			Employee_list[a] = null;
+			Employee_list[id] = null;
 			System.out.printf("\n\n\n  Employee Removed from the System!!\n\n  Press enter to return to Adminstrator Functions...\n\n\n");
 			system_state.setChange_made(true);
 		}
@@ -273,91 +230,85 @@ public class SystemHead{
 		
 		showDate();
 		
-		System.out.printf("\n\n       Option: ");
-		try {
-			switch(input.nextInt())
-			{
-				case 1:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					hasVacancy();
-					break;
-					
-				case 2:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					deleteEmployee();
-					break;
-					
-				case 3:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					Employee_list = employee_func.changeDetails(Employee_list, extra_func, system_state);
-					break;
-					
-				case 4:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					extra_func.todayPayments(Employee_list, system_state);
-					break;
-					
-				case 5:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					Employee_list = employee_func.serviceSubmit(Employee_list, system_state);
-					break;
-					
-				case 6:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					Employee_list = system_state.undoRedo(Employee_list);
-					break;
-					
-				case 7:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					Schedule_list = PaymentSchedules.addSchedule(Schedule_list, extra_func.getWeek_name());
-					break;
-					
-				case 8:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					Schedule_list = PaymentSchedules.delSchedule(Schedule_list);
-					break;
-					
-				case 9:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					extra_func.showDetails(Employee_list);
-					break;
-					
-				case 10:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					extra_func.showAllEmployees(Employee_list);
-					break;
-					
-				case 11:
-					ExtraFunctions.consoleClear();
-					changePassword();
-					break;
-					
-				case 12:
-					return true;
-					
-				default:
-					input.nextLine();
-					System.out.printf("\n\n Invalid Option!!\n Press enter to try again...");
-					input.nextLine();
-					break;
-			}
-		}
-		catch(InputMismatchException e)
+		int option = extra_func.integerScan("\n\n       Option: ");
+		
+		switch(option)
 		{
-			input.nextLine();
-			System.out.printf("\n\n The typed value is not an integer!!\n Press enter to try again...\n\n\n\n");
-			input.nextLine();
+			case 1:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				hasVacancy();
+				break;
+				
+			case 2:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				deleteEmployee();
+				break;
+				
+			case 3:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				Employee_list = employee_func.changeDetails(Employee_list, extra_func, system_state);
+				break;
+				
+			case 4:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				extra_func.todayPayments(Employee_list, system_state);
+				break;
+				
+			case 5:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				Employee_list = employee_func.serviceSubmit(Employee_list, system_state);
+				break;
+				
+			case 6:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				Employee_list = system_state.undoRedo(Employee_list);
+				break;
+				
+			case 7:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				Schedule_list = PaymentSchedules.addSchedule(Schedule_list, extra_func.getWeek_name());
+				break;
+				
+			case 8:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				Schedule_list = PaymentSchedules.delSchedule(Schedule_list);
+				break;
+				
+			case 9:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				extra_func.showDetails(Employee_list);
+				break;
+				
+			case 10:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				extra_func.showAllEmployees(Employee_list);
+				break;
+				
+			case 11:
+				ExtraFunctions.consoleClear();
+				changePassword();
+				break;
+				
+			case 12:
+				return true;
+				
+			default:
+				input.nextLine();
+				System.out.printf("\n\n Invalid Option!!\n Press enter to try again...");
+				input.nextLine();
+				break;
 		}
+		
 		return false;
 	}
 	
@@ -378,64 +329,58 @@ public class SystemHead{
 		System.out.printf("       ///                                              ///\n");
 		System.out.printf("       ////////////////////////////////////////////////////\n\n");
 		showDate();
-		System.out.printf("\n\n       Option: ");
 		
-		try {
-			switch(input.nextInt())
-			{
-				case 1:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					Employee_list = employee_func.timeCard(Employee_list, system_state, extra_func.getMonth());
-					break;
-					
-				case 2:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					Employee_list = employee_func.sellingSubmit(Employee_list, system_state);
-					break;
-					
-				case 3:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					Employee_list = employee_func.changeDetails(Employee_list, extra_func, system_state);
-					break;
-					
-				case 4:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					Employee_list = PaymentSchedules.chooseSchedule(Employee_list, Schedule_list, extra_func);
-					break;
-					
-				case 5:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					Employee_list = system_state.undoRedo(Employee_list);
-					break;
-					
-				case 6:
-					input.nextLine();
-					ExtraFunctions.consoleClear();
-					extra_func.showDetails(Employee_list);
-					break;
-					
-				case 7:
-					input.nextLine();
-					return true;
-					
-				default:
-					input.nextLine();
-					System.out.printf("\n\n  Invalid Option!!\n  Press enter to try again...");
-					input.nextLine();
-					break;
-			}
-		}
-		catch(InputMismatchException e)
+		int option = extra_func.integerScan("\n\n       Option: ");
+		
+		switch(option)
 		{
-			input.nextLine();
-			System.out.printf("\n\n  The typed value is not an integer!!\n  Press enter to try again...\n\n\n\n");
-			input.nextLine();
+			case 1:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				Employee_list = employee_func.timeCard(Employee_list, system_state, extra_func.getMonth());
+				break;
+				
+			case 2:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				Employee_list = employee_func.sellingSubmit(Employee_list, system_state);
+				break;
+				
+			case 3:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				Employee_list = employee_func.changeDetails(Employee_list, extra_func, system_state);
+				break;
+				
+			case 4:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				Employee_list = PaymentSchedules.chooseSchedule(Employee_list, Schedule_list, extra_func);
+				break;
+				
+			case 5:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				Employee_list = system_state.undoRedo(Employee_list);
+				break;
+				
+			case 6:
+				input.nextLine();
+				ExtraFunctions.consoleClear();
+				extra_func.showDetails(Employee_list);
+				break;
+				
+			case 7:
+				input.nextLine();
+				return true;
+				
+			default:
+				input.nextLine();
+				System.out.printf("\n\n  Invalid Option!!\n  Press enter to try again...");
+				input.nextLine();
+				break;
 		}
+		
 		return false;
 	}
 }
