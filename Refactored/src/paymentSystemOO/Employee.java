@@ -128,7 +128,7 @@ public abstract class Employee extends Syndicate{
 
 	public abstract Employee copy();
 	public abstract void myDetails();
-	public abstract void receivePayment(int date, UndoRedo system_state, int index, int ID);
+	public abstract boolean receivePayment(int date, UndoRedo system_state, int index, int ID);
 	public abstract void addDay();
 	
 	@Override

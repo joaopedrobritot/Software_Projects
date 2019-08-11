@@ -186,7 +186,7 @@ public class ExtraFunctions {
                     {
                     	if(( (Salaried)list[i]).isSalaried_default())
                     	{
-                    		( (Salaried)list[i]).setPayment_date(dayUtil(month)); // refresh salaried default day of payment for each month
+                    		( (Salaried)list[i]).WEK.setPayment_date(dayUtil(month)); // refresh salaried default day of payment for each month
                     	}
                     }
                 }
@@ -199,7 +199,7 @@ public class ExtraFunctions {
             	list[i].setCard_submit(false);
                 if(list[i] instanceof Commissioned)// this instanceof is necessary too
                 {
-                	if(( (Commissioned)list[i]).getPayment_date() == day_of_week)
+                	if(( (Commissioned)list[i]).WEK.getPayment_date() == day_of_week)
                 	{
                 		( (Commissioned)list[i]).addWeek();
                 	}
@@ -238,7 +238,7 @@ public class ExtraFunctions {
             System.out.printf("       ///                     No Payments Today!!!                       \n");
         }
         System.out.printf("       ///                                                                \n");
-        System.out.printf("       ///        Press any key to continue...                            \n");
+        System.out.printf("       ///      Press enter to return to Administrator Functions...       \n");
         System.out.printf("       ///                                                                \n");
         System.out.printf("       ///________________________________________________________________\n\n");
         input.nextLine();

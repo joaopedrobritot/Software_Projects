@@ -1,5 +1,7 @@
 package paymentSystemOO;
 
+import DesignPatterns.WeeklyEmployee;
+import DesignPatterns.weeklyEmployeeStrategy;
 import systemUtilities.GeneralInterface;
 import systemUtilities.Schedule;
 import systemUtilities.UndoRedo;
@@ -7,15 +9,16 @@ import systemUtilities.UndoRedo;
 public class Commissioned extends Employee implements GeneralInterface{
 	
 	private double sellings;
-	private int payment_week;
 	private int two_week;
 	private int days_worked;
+	public weeklyEmployeeStrategy WEK = new WeeklyEmployee();
 	
 	public Commissioned(int iD, String name, String address, double salary, boolean syndicate, int syndicate_id, double syndicate_tax, double service_taxes, boolean received_tax, boolean card_submit, int payment_method, String arrival_time, double sell, int payment, int two, int days_w)
 	{
 		super(iD, name, address, salary, syndicate, syndicate_id, syndicate_tax, service_taxes, received_tax, card_submit, payment_method, arrival_time);
 		this.sellings = sell;
-		this.payment_week = payment;
+		WEK.setPayment_date(payment);
+		//TODO ajustar o dia do pagamento aqui
 		this.two_week = two;
 		this.days_worked = days_w;
 		
@@ -24,13 +27,6 @@ public class Commissioned extends Employee implements GeneralInterface{
 	public Commissioned()
 	{
 		this(-1, null, null, 0, false, -1, 0, 0, false, false, -1, null, 0, 4, 0, 0);
-	}
-	
-	public int getPayment_date() {
-		return payment_week;
-	}
-	public void setPayment_date(int payment_week) {
-		this.payment_week = payment_week;
 	}
 	public int getDays_worked() {
 		return days_worked;
@@ -65,14 +61,14 @@ public class Commissioned extends Employee implements GeneralInterface{
 	
 	public Employee copy()
 	{
-		Employee new_copy = new Commissioned(super.getID(), super.getName(), super.getAddress(), super.getSalary(), super.isSyndicate(), super.getSyndicate_id(), super.getSyndicate_tax(), super.getService_taxes(), super.isReceived_tax(), super.isCard_submit(), super.getPayment_method(), super.getArrival_time(), this.sellings, this.payment_week, this.two_week, this.days_worked);
+		Employee new_copy = new Commissioned(super.getID(), super.getName(), super.getAddress(), super.getSalary(), super.isSyndicate(), super.getSyndicate_id(), super.getSyndicate_tax(), super.getService_taxes(), super.isReceived_tax(), super.isCard_submit(), super.getPayment_method(), super.getArrival_time(), this.sellings, WEK.getPayment_date(), this.two_week, this.days_worked);
 		return new_copy;
 	}
 	
 	public String gatherData()
 	{
 		String payment_date;
-		switch(this.payment_week)
+		switch(WEK.getPayment_date())
 		{
 			case 0: payment_date = "\n  Week day to be payed: Monday";
 			case 1: payment_date = "\n  Week day to be payed: Tuesday";
@@ -90,7 +86,7 @@ public class Commissioned extends Employee implements GeneralInterface{
 	}
 
 	@Override
-	public void receivePayment(int day, UndoRedo system_state, int index, int ID) {
+	public boolean receivePayment(int day, UndoRedo system_state, int index, int ID) {
 		
         if(this.getTwo_week() >= 2)
         {
@@ -123,7 +119,9 @@ public class Commissioned extends Employee implements GeneralInterface{
             this.setTwo_week(0);
             this.setDays_worked(0);
             system_state.setChange_made(true);
+            return true;
         }
+        return false;
 	}
 
 	public void myDetails() {
@@ -161,23 +159,23 @@ public class Commissioned extends Employee implements GeneralInterface{
 	    	switch(target.getSchedule_option())
 	        {
 	            case "Monday":
-	                this.setPayment_date(0);
+	                WEK.setPayment_date(0);
 	                break;
 
 	            case "Tuesday":
-	            	this.setPayment_date(1);
+	            	WEK.setPayment_date(1);
 	                break;
 
 	            case "Wednesday":
-	            	this.setPayment_date(2);
+	            	WEK.setPayment_date(2);
 	                break;
 
 	            case "Thursday":
-	            	this.setPayment_date(3);
+	            	WEK.setPayment_date(3);
 	                break;
 
 	            case "Friday":
-	            	this.setPayment_date(4);
+	            	WEK.setPayment_date(4);
 	                break;
 	        }
 	        System.out.printf("\n\n\n\n  Change Done!!\n\n");

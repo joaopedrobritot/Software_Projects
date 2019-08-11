@@ -1,5 +1,7 @@
 package paymentSystemOO;
 
+import DesignPatterns.NonWeeklyEmployee;
+import DesignPatterns.weeklyEmployeeStrategy;
 import systemUtilities.GeneralInterface;
 import systemUtilities.Schedule;
 import systemUtilities.UndoRedo;
@@ -9,11 +11,12 @@ public class Salaried extends Employee implements GeneralInterface{
 	private int payment_day;
 	private boolean salaried_default;
 	private int days_worked;
+	public weeklyEmployeeStrategy WEK = new NonWeeklyEmployee();
 	
 	public Salaried(int iD, String name, String address, double salary, boolean syndicate, int syndicate_id, double syndicate_tax, double service_taxes, boolean received_tax, boolean card_submit, int payment_method, String arrival_time, int payment, boolean salaried, int days_w)
 	{
 		super(iD, name, address, salary, syndicate, syndicate_id, syndicate_tax, service_taxes, received_tax, card_submit, payment_method, arrival_time);
-		this.payment_day = payment;
+		WEK.setPayment_date(payment);
 		this.salaried_default = salaried;
 		this.days_worked = days_w;
 		
@@ -22,20 +25,6 @@ public class Salaried extends Employee implements GeneralInterface{
 	public Salaried()
 	{
 		this(-1, null, null, 0, false, -1, 0, 0, false, false, -1, null, 0, true, 0);
-	}
-	
-	public int getPayment_date() {
-		return payment_day;
-	}
-	public void setPayment_date(int payment_day) {
-		if(payment_day < 0)
-		{
-			this.payment_day = 0;
-		}
-		else
-		{
-			this.payment_day = payment_day;
-		}
 	}
 	public boolean isSalaried_default() {
 		return salaried_default;
@@ -60,7 +49,6 @@ public class Salaried extends Employee implements GeneralInterface{
 			this.days_worked = days_worked;
 		}
 	}
-	
 	public String gatherData()
 	{
 		return super.toString() + "\n  Type: Salaried" + "\n  Day to be payed: " + this.payment_day + "\n  Days Worked: " + this.days_worked + "\n\n\n";
@@ -79,9 +67,9 @@ public class Salaried extends Employee implements GeneralInterface{
 	}
 
 	@Override
-	public void receivePayment(int day, UndoRedo system_state, int index, int ID) {
+	public boolean receivePayment(int day, UndoRedo system_state, int index, int ID) {
 		
-        if(day == this.getPayment_date())
+        if(day == WEK.getPayment_date())
         {
         	double salaryresult;
     		double result = this.getSalary() * this.getDays_worked();
@@ -109,7 +97,9 @@ public class Salaried extends Employee implements GeneralInterface{
             }
             this.setDays_worked(0);
             system_state.setChange_made(true);
+            return true;
         }
+        return false;
 	}
 
 	public void myDetails() {
@@ -144,14 +134,14 @@ public class Salaried extends Employee implements GeneralInterface{
 		{
 			if(target.getSchedule_option().equalsIgnoreCase("last"))
 	        {
-	            this.setPayment_date(extra_func.dayUtil(extra_func.getMonth()));
+	            WEK.setPayment_date(extra_func.dayUtil(extra_func.getMonth()));
 	            this.setSalaried_default(true);
 	        }
 	        else
 	        {
 	        	this.setSalaried_default(false);
 	        	int aux = Integer.parseInt(target.getSchedule_option());
-	        	this.setPayment_date(aux);
+	        	WEK.setPayment_date(aux);
 	            
 	        }
 	        System.out.printf("\n\n\n  Change Done!!");

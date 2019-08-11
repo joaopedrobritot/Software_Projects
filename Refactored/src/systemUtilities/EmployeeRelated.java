@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import DesignPatterns.EmployeeFactory;
 import paymentSystemOO.Commissioned;
 import paymentSystemOO.Employee;
 import paymentSystemOO.ExtraFunctions;

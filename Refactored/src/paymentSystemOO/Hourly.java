@@ -1,5 +1,7 @@
 package paymentSystemOO;
 
+import DesignPatterns.WeeklyEmployee;
+import DesignPatterns.weeklyEmployeeStrategy;
 import systemUtilities.GeneralInterface;
 import systemUtilities.Schedule;
 import systemUtilities.UndoRedo;
@@ -7,14 +9,14 @@ import systemUtilities.UndoRedo;
 public class Hourly extends Employee implements GeneralInterface{
 	
 	private double extra_salary;
-	private int payment_week;
 	private int total_hours;
+	public weeklyEmployeeStrategy WEK = new WeeklyEmployee();
 	
 	public Hourly(int iD, String name, String address, double salary, boolean syndicate, int syndicate_id, double syndicate_tax, double service_taxes, boolean received_tax, boolean card_submit, int payment_method, String arrival_time, double extra, int payment, int hour)
 	{
 		super(iD, name, address, salary, syndicate, syndicate_id, syndicate_tax, service_taxes, received_tax, card_submit, payment_method, arrival_time);
 		this.extra_salary = extra;
-		this.payment_week = payment;
+		WEK.setPayment_date(payment);
 		this.total_hours = hour;
 	}
 	
@@ -32,12 +34,6 @@ public class Hourly extends Employee implements GeneralInterface{
 	}
 	public double getExtra_salary() {
 		return extra_salary;
-	}
-	public int getPayment_date() {
-		return payment_week;
-	}
-	public void setPayment_date(int payment_week) {
-		this.payment_week = payment_week;
 	}
 	public int getTotal_hours() {
 		return total_hours;
@@ -70,7 +66,7 @@ public class Hourly extends Employee implements GeneralInterface{
 	{
 		String extra = "\n  Type: Hourly\n  Extra Salary: " + this.extra_salary;
 		String payment_date;
-		switch(this.payment_week)
+		switch(WEK.getPayment_date())
 		{
 			case 0: payment_date = "\n  Week day to be payed: Monday";
 			case 1: payment_date = "\n  Week day to be payed: Tuesday";
@@ -90,14 +86,14 @@ public class Hourly extends Employee implements GeneralInterface{
 	
 	public Employee copy()
 	{
-		Employee new_copy = new Hourly(super.getID(), super.getName(), super.getAddress(), super.getSalary(), super.isSyndicate(), super.getSyndicate_id(), super.getSyndicate_tax(), super.getService_taxes(), super.isReceived_tax(), super.isCard_submit(), super.getPayment_method(), super.getArrival_time(), this.extra_salary, this.payment_week, this.total_hours);
+		Employee new_copy = new Hourly(super.getID(), super.getName(), super.getAddress(), super.getSalary(), super.isSyndicate(), super.getSyndicate_id(), super.getSyndicate_tax(), super.getService_taxes(), super.isReceived_tax(), super.isCard_submit(), super.getPayment_method(), super.getArrival_time(), this.extra_salary, WEK.getPayment_date(), this.total_hours);
 		return new_copy;
 	}
 
 	@Override
-	public void receivePayment(int day_of_week, UndoRedo system_state, int index, int ID) {
+	public boolean receivePayment(int day_of_week, UndoRedo system_state, int index, int ID) {
 		
-		if(day_of_week == this.getPayment_date())// pagos dia de sexta por default
+		if(day_of_week == WEK.getPayment_date())// pagos dia de sexta por default
         {
 			double salaryresult;
             if(this.isSyndicate() && !this.isReceived_tax())
@@ -124,7 +120,9 @@ public class Hourly extends Employee implements GeneralInterface{
             this.setExtra_salary(0);
             this.setSalary(0);
             system_state.setChange_made(true);
+            return true;
         }
+		return false;
 	}
 
 	public void myDetails() {
@@ -169,23 +167,23 @@ public class Hourly extends Employee implements GeneralInterface{
 			switch(target.getSchedule_option())
 	        {
 	            case "Monday":
-	                this.setPayment_date(0);
+	                WEK.setPayment_date(0);
 	                break;
 
 	            case "Tuesday":
-	            	this.setPayment_date(1);
+	            	WEK.setPayment_date(1);
 	                break;
 
 	            case "Wednesday":
-	            	this.setPayment_date(2);
+	            	WEK.setPayment_date(2);
 	                break;
 
 	            case "Thursday":
-	            	this.setPayment_date(3);
+	            	WEK.setPayment_date(3);
 	                break;
 
 	            case "Friday":
-	            	this.setPayment_date(4);
+	            	WEK.setPayment_date(4);
 	                break;
 	        }
 	        System.out.printf("\n\n\n\n  Change Done!!\n\n");

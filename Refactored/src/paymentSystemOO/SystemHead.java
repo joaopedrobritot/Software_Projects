@@ -235,61 +235,51 @@ public class SystemHead{
 		switch(option)
 		{
 			case 1:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				hasVacancy();
 				break;
 				
 			case 2:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				deleteEmployee();
 				break;
 				
 			case 3:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				Employee_list = employee_func.changeDetails(Employee_list, extra_func, system_state);
 				break;
 				
 			case 4:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				extra_func.todayPayments(Employee_list, system_state);
 				break;
 				
 			case 5:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				Employee_list = employee_func.serviceSubmit(Employee_list, system_state);
 				break;
 				
 			case 6:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				Employee_list = system_state.undoRedo(Employee_list);
 				break;
 				
 			case 7:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				Schedule_list = PaymentSchedules.addSchedule(Schedule_list, extra_func.getWeek_name());
 				break;
 				
 			case 8:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				Schedule_list = PaymentSchedules.delSchedule(Schedule_list);
 				break;
 				
 			case 9:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				extra_func.showDetails(Employee_list);
 				break;
 				
 			case 10:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				extra_func.showAllEmployees(Employee_list);
 				break;
@@ -303,7 +293,6 @@ public class SystemHead{
 				return true;
 				
 			default:
-				input.nextLine();
 				System.out.printf("\n\n Invalid Option!!\n Press enter to try again...");
 				input.nextLine();
 				break;
@@ -335,47 +324,39 @@ public class SystemHead{
 		switch(option)
 		{
 			case 1:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				Employee_list = employee_func.timeCard(Employee_list, system_state, extra_func.getMonth());
 				break;
 				
 			case 2:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				Employee_list = employee_func.sellingSubmit(Employee_list, system_state);
 				break;
 				
 			case 3:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				Employee_list = employee_func.changeDetails(Employee_list, extra_func, system_state);
 				break;
 				
 			case 4:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				Employee_list = PaymentSchedules.chooseSchedule(Employee_list, Schedule_list, extra_func);
 				break;
 				
 			case 5:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				Employee_list = system_state.undoRedo(Employee_list);
 				break;
 				
 			case 6:
-				input.nextLine();
 				ExtraFunctions.consoleClear();
 				extra_func.showDetails(Employee_list);
 				break;
 				
 			case 7:
-				input.nextLine();
 				return true;
 				
 			default:
-				input.nextLine();
 				System.out.printf("\n\n  Invalid Option!!\n  Press enter to try again...");
 				input.nextLine();
 				break;
