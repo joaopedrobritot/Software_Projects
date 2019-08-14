@@ -8,6 +8,12 @@ import paymentSystemOO.ExtraFunctions;
 
 public class UndoRedoSingleton {
 	
+	/*
+	 * This Design prevents more than one instance of this object
+	 * i will use only one system state to work with Undo and Redo
+	 * in case of trying to create another state, it won't happen
+	 */
+	
 	private static Scanner input = new Scanner(System.in);
 	private Employee state_list[][] = new Employee[51][1000];
 	private static UndoRedoSingleton system_state = null;
