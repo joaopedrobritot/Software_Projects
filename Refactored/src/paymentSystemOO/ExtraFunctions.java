@@ -2,7 +2,7 @@ package paymentSystemOO;
 
 import java.util.Scanner;
 
-import systemUtilities.UndoRedo;
+import DesignPatterns.UndoRedoSingleton;
 
 import java.util.InputMismatchException;
 
@@ -12,8 +12,8 @@ public class ExtraFunctions {
 	
 	// Date Settings
 
-		private int day = 31;// starts in 26th June
-		private int month = 7; //
+		private int day = 14;// starts in 14th
+		private int month = 8; //
 		private String week_name[] = {"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};// aux for printing the day of week
 		private int day_of_week = 2;// this controls the day of week // starts in Wednesday
 		private int last_day_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};// last day of every month (not considering bisect years)
@@ -208,7 +208,7 @@ public class ExtraFunctions {
         }
     }
 	
-	protected void todayPayments(Employee list[], UndoRedo system_state)
+	protected void todayPayments(Employee list[], UndoRedoSingleton system_state)
 	{
 		boolean flag = false;
 		int cont = 1;

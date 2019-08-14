@@ -4,7 +4,7 @@ import DesignPatterns.WeeklyEmployee;
 import DesignPatterns.weeklyEmployeeStrategy;
 import systemUtilities.GeneralInterface;
 import systemUtilities.Schedule;
-import systemUtilities.UndoRedo;
+import DesignPatterns.UndoRedoSingleton;
 
 public class Commissioned extends Employee implements GeneralInterface{
 	
@@ -86,7 +86,7 @@ public class Commissioned extends Employee implements GeneralInterface{
 	}
 
 	@Override
-	public boolean receivePayment(int day, UndoRedo system_state, int index, int ID) {
+	public boolean receivePayment(int day, UndoRedoSingleton system_state, int index, int ID) {
 		
         if(this.getTwo_week() >= 2)
         {

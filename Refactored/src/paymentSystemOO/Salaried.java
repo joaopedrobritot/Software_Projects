@@ -4,7 +4,7 @@ import DesignPatterns.NonWeeklyEmployee;
 import DesignPatterns.weeklyEmployeeStrategy;
 import systemUtilities.GeneralInterface;
 import systemUtilities.Schedule;
-import systemUtilities.UndoRedo;
+import DesignPatterns.UndoRedoSingleton;
 
 public class Salaried extends Employee implements GeneralInterface{
 	
@@ -67,7 +67,7 @@ public class Salaried extends Employee implements GeneralInterface{
 	}
 
 	@Override
-	public boolean receivePayment(int day, UndoRedo system_state, int index, int ID) {
+	public boolean receivePayment(int day, UndoRedoSingleton system_state, int index, int ID) {
 		
         if(day == WEK.getPayment_date())
         {

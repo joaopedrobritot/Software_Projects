@@ -5,7 +5,7 @@ import java.util.Scanner;
 import systemUtilities.EmployeeRelated;
 import systemUtilities.PaymentSchedules;
 import systemUtilities.Schedule;
-import systemUtilities.UndoRedo;
+import DesignPatterns.UndoRedoSingleton;
 
 public class SystemHead{
 	
@@ -17,7 +17,7 @@ public class SystemHead{
 	Schedule Schedule_list[];
 	static ExtraFunctions extra_func = new ExtraFunctions();
 	EmployeeRelated employee_func;
-	UndoRedo system_state;
+	UndoRedoSingleton system_state;
 	
 	public void initiateSystem()
 	{
@@ -28,7 +28,7 @@ public class SystemHead{
 		Employee_list = new Employee[1000];
 		Schedule_list = new Schedule[1000];
 		employee_func = new EmployeeRelated();
-		system_state = new UndoRedo();
+		system_state = UndoRedoSingleton.getInstance();
 		
 		while(true)
 		{
@@ -72,6 +72,11 @@ public class SystemHead{
 				while(!choice)
 				{
 					choice = showAdministratorMenu();
+					if(system_state.isChange_made())
+					{
+						system_state.saveState(Employee_list);
+						system_state.setChange_made(false);
+					}
 				}
 			}
 			else if(option == 2)
@@ -95,6 +100,11 @@ public class SystemHead{
 				while(!choice)
 				{
 					choice = showEmployeeMenu();
+					if(system_state.isChange_made())
+					{
+						system_state.saveState(Employee_list);
+						system_state.setChange_made(false);
+					}
 				}
 			}
 			else if(option == 3)
@@ -113,14 +123,7 @@ public class SystemHead{
 				input.nextLine();
 			}
 			
-			if(option == 2 || option == 1)
-			{
-				if(system_state.isChange_made())
-				{
-					system_state.saveState(Employee_list);
-					system_state.setChange_made(false);
-				}
-			}
+			
 		}
 	}
 	

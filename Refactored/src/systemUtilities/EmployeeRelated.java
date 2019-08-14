@@ -7,6 +7,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import DesignPatterns.EmployeeFactory;
+import DesignPatterns.UndoRedoSingleton;
 import paymentSystemOO.Commissioned;
 import paymentSystemOO.Employee;
 import paymentSystemOO.ExtraFunctions;
@@ -18,7 +19,7 @@ public class EmployeeRelated {
 	private EmployeeFactory EFactory = new EmployeeFactory();
 	private ExtraFunctions extra_func = new ExtraFunctions();
 	
-	public Employee addEmployee(ExtraFunctions extra_func, UndoRedo system_state, int id)
+	public Employee addEmployee(ExtraFunctions extra_func, UndoRedoSingleton system_state, int id)
 	{
 		int choice;
 		Employee new_employee;
@@ -95,7 +96,7 @@ public class EmployeeRelated {
         return new_employee;
 	}
 	
-	public Employee[] timeCard(Employee list[], UndoRedo system_state, int day_of_week)
+	public Employee[] timeCard(Employee list[], UndoRedoSingleton system_state, int day_of_week)
 	{
 		int given;
 		int choice;
@@ -195,7 +196,7 @@ public class EmployeeRelated {
 		return list;
 	}
 	
-	public Employee[] changeDetails(Employee list[], ExtraFunctions extra_func, UndoRedo system_state)
+	public Employee[] changeDetails(Employee list[], ExtraFunctions extra_func, UndoRedoSingleton system_state)
 	{
 		int i = extra_func.integerScan("\n\n  Insert the ID from the Employee: ");
 		
@@ -358,7 +359,7 @@ public class EmployeeRelated {
 		return list;
 	}
 	
-	public Employee[] sellingSubmit(Employee list[], UndoRedo system_state)
+	public Employee[] sellingSubmit(Employee list[], UndoRedoSingleton system_state)
 	{
 		int i = extra_func.integerScan("\n\n\n  Insert Your ID: ");
 		
@@ -384,7 +385,7 @@ public class EmployeeRelated {
 		return list;
 	}
 	
-	public Employee[] serviceSubmit(Employee list[], UndoRedo system_state)
+	public Employee[] serviceSubmit(Employee list[], UndoRedoSingleton system_state)
 	{
 		boolean flag = false;
 		int s_id = extra_func.integerScan("\n\n\n  Insert the Syndicate ID from the Employee: ");

@@ -4,7 +4,7 @@ import DesignPatterns.WeeklyEmployee;
 import DesignPatterns.weeklyEmployeeStrategy;
 import systemUtilities.GeneralInterface;
 import systemUtilities.Schedule;
-import systemUtilities.UndoRedo;
+import DesignPatterns.UndoRedoSingleton;
 
 public class Hourly extends Employee implements GeneralInterface{
 	
@@ -91,7 +91,7 @@ public class Hourly extends Employee implements GeneralInterface{
 	}
 
 	@Override
-	public boolean receivePayment(int day_of_week, UndoRedo system_state, int index, int ID) {
+	public boolean receivePayment(int day_of_week, UndoRedoSingleton system_state, int index, int ID) {
 		
 		if(day_of_week == WEK.getPayment_date())// pagos dia de sexta por default
         {
