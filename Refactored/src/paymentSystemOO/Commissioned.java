@@ -4,9 +4,10 @@ import DesignPatterns.WeeklyEmployee;
 import DesignPatterns.weeklyEmployeeStrategy;
 import systemUtilities.GeneralInterface;
 import systemUtilities.Schedule;
+import DesignPatterns.Prototype;
 import DesignPatterns.UndoRedoSingleton;
 
-public class Commissioned extends Employee implements GeneralInterface{
+public class Commissioned extends Employee implements GeneralInterface, Prototype{
 	
 	private double sellings;
 	private int two_week;
@@ -59,9 +60,15 @@ public class Commissioned extends Employee implements GeneralInterface{
 		this.two_week = two_week;
 	}
 	
-	public Employee copy()
+	public Prototype makeCopy()
 	{
-		Employee new_copy = new Commissioned(super.getID(), super.getName(), super.getAddress(), super.getSalary(), super.isSyndicate(), super.getSyndicate_id(), super.getSyndicate_tax(), super.getService_taxes(), super.isReceived_tax(), super.isCard_submit(), super.getPayment_method(), super.getArrival_time(), this.sellings, WEK.getPayment_date(), this.two_week, this.days_worked);
+		Prototype new_copy = null;
+		try {
+			new_copy = (Commissioned) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		//new Commissioned(super.getID(), super.getName(), super.getAddress(), super.getSalary(), super.isSyndicate(), super.getSyndicate_id(), super.getSyndicate_tax(), super.getService_taxes(), super.isReceived_tax(), super.isCard_submit(), super.getPayment_method(), super.getArrival_time(), this.sellings, WEK.getPayment_date(), this.two_week, this.days_worked);
 		return new_copy;
 	}
 	
@@ -126,7 +133,7 @@ public class Commissioned extends Employee implements GeneralInterface{
 
 	public void myDetails() {
 		System.out.printf("\n\n ID: %d\n Name: %s\n Address: %s\n Type:", this.getID(), this.getName(), this.getAddress());
-		System.out.println(" Commissioned");
+		System.out.println(" " + this.getClass().getSimpleName());
         System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Selling Results: %.2f\n Payment: ", this.getSalary(), (this.getSalary() * this.getDays_worked()), this.getSellings());
         switch(this.getPayment_method())
 	    {

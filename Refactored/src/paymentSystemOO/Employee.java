@@ -2,6 +2,7 @@ package paymentSystemOO;
 
 import systemUtilities.Schedule;
 import systemUtilities.Syndicate;
+import DesignPatterns.Prototype;
 import DesignPatterns.UndoRedoSingleton;
 
 public abstract class Employee extends Syndicate{
@@ -126,10 +127,10 @@ public abstract class Employee extends Syndicate{
 		return normal_info + payment_info + syndicate_info;
 	}
 
-	public abstract Employee copy();
 	public abstract void myDetails();
 	public abstract boolean receivePayment(int date, UndoRedoSingleton system_state, int index, int ID);
 	public abstract void addDay();
+	public abstract Prototype makeCopy();
 	
 	@Override
 	public String toString() {

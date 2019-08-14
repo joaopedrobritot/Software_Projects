@@ -1,12 +1,13 @@
 package paymentSystemOO;
 
 import DesignPatterns.NonWeeklyEmployee;
+import DesignPatterns.Prototype;
 import DesignPatterns.weeklyEmployeeStrategy;
 import systemUtilities.GeneralInterface;
 import systemUtilities.Schedule;
 import DesignPatterns.UndoRedoSingleton;
 
-public class Salaried extends Employee implements GeneralInterface{
+public class Salaried extends Employee implements GeneralInterface, Prototype{
 	
 	private int payment_day;
 	private boolean salaried_default;
@@ -54,9 +55,15 @@ public class Salaried extends Employee implements GeneralInterface{
 		return super.toString() + "\n  Type: Salaried" + "\n  Day to be payed: " + this.payment_day + "\n  Days Worked: " + this.days_worked + "\n\n\n";
 	}
 	
-	public Employee copy()
+	public Prototype makeCopy()
 	{
-		Employee new_copy = new Salaried(super.getID(), super.getName(), super.getAddress(), super.getSalary(), super.isSyndicate(), super.getSyndicate_id(), super.getSyndicate_tax(), super.getService_taxes(), super.isReceived_tax(), super.isCard_submit(), super.getPayment_method(), super.getArrival_time(), this.payment_day, this.salaried_default, this.days_worked);
+		Prototype new_copy = null;
+		try {
+			new_copy = (Salaried) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		// = new Salaried(super.getID(), super.getName(), super.getAddress(), super.getSalary(), super.isSyndicate(), super.getSyndicate_id(), super.getSyndicate_tax(), super.getService_taxes(), super.isReceived_tax(), super.isCard_submit(), super.getPayment_method(), super.getArrival_time(), this.payment_day, this.salaried_default, this.days_worked);
 		return new_copy;
 	}
 
@@ -104,7 +111,7 @@ public class Salaried extends Employee implements GeneralInterface{
 
 	public void myDetails() {
 		System.out.printf("\n\n ID: %d\n Name: %s\n Address: %s\n Type:", this.getID(), this.getName(), this.getAddress());
-        System.out.println(" Salaried");
+		System.out.println(" " + this.getClass().getSimpleName());
         System.out.printf(" Salary per day worked: %.2f\n Salary: %.2f\n Payment: ", this.getSalary(), (this.getSalary() * this.getDays_worked()));
         switch(this.getPayment_method())
 	    {

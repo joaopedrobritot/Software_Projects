@@ -4,9 +4,10 @@ import DesignPatterns.WeeklyEmployee;
 import DesignPatterns.weeklyEmployeeStrategy;
 import systemUtilities.GeneralInterface;
 import systemUtilities.Schedule;
+import DesignPatterns.Prototype;
 import DesignPatterns.UndoRedoSingleton;
 
-public class Hourly extends Employee implements GeneralInterface{
+public class Hourly extends Employee implements GeneralInterface, Prototype{
 	
 	private double extra_salary;
 	private int total_hours;
@@ -84,9 +85,15 @@ public class Hourly extends Employee implements GeneralInterface{
 		return gatherData();
 	}
 	
-	public Employee copy()
+	public Prototype makeCopy()
 	{
-		Employee new_copy = new Hourly(super.getID(), super.getName(), super.getAddress(), super.getSalary(), super.isSyndicate(), super.getSyndicate_id(), super.getSyndicate_tax(), super.getService_taxes(), super.isReceived_tax(), super.isCard_submit(), super.getPayment_method(), super.getArrival_time(), this.extra_salary, WEK.getPayment_date(), this.total_hours);
+		Prototype new_copy = null;
+		try {
+			new_copy = (Hourly) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		//new Hourly(super.getID(), super.getName(), super.getAddress(), super.getSalary(), super.isSyndicate(), super.getSyndicate_id(), super.getSyndicate_tax(), super.getService_taxes(), super.isReceived_tax(), super.isCard_submit(), super.getPayment_method(), super.getArrival_time(), this.extra_salary, WEK.getPayment_date(), this.total_hours);
 		return new_copy;
 	}
 
@@ -127,7 +134,7 @@ public class Hourly extends Employee implements GeneralInterface{
 
 	public void myDetails() {
 		System.out.printf("\n\n ID: %d\n Name: %s\n Address: %s\n Type:", this.getID(), this.getName(), this.getAddress());
-		System.out.println(" Hourly");
+		System.out.println(" " + this.getClass().getSimpleName());
         System.out.printf(" Salary per hour worked: 30,00\n Salary (No Extra): %.2f\n Extra Salary: %.2f\n Payment: ", this.getSalary(), this.getExtra_salary());
         switch(this.getPayment_method())
 	    {

@@ -47,7 +47,7 @@ public class UndoRedoSingleton {
 			{
 				if(list[i] != null)
 				{
-					state_list[state_index][i] = list[i].copy();
+					state_list[state_index][i] = (Employee) list[i].makeCopy();
 				}
 				
 			}
