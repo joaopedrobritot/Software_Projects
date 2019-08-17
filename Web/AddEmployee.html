@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head class="FadeIn">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web Project</title>
+    
+    <div width=500 >
+        <br><br>
+        <header style="text-align: center">
+                <h1 onclick="ReturntoIndex()" class="headertxt">
+                Payment System
+            </h1>
+        </header>
+
+        <div >
+                <button onclick="AddEmployee()" class="button"><img src="Icones/sword.png" alt="" class="iconbutton">  Add Employee                  </button>
+                <button onclick="RemoveEmployee()" class="button"><img src="Icones/pentagon.png" alt="" class="iconbutton">  Remove Employee                     </button>
+                <button onclick="OpenList()" class="button"><img src="Icones/skill.png" alt="" class="iconbutton">  List All Employees  </button>
+        </div>
+        
+    </div>  
+    <link rel="stylesheet" href="maincss.css">
+</head>
+<body class="FadeIn">
+        <div style="margin: 0 auto;" id="ola">
+            <header style="text-align: center;opacity: 0.9; animation: fadeinout 2.2s 0s forwards; animation-iteration-count: infinite;">
+                 <h1>
+                     Insert Your Information:
+                 </h1>
+            </header>
+            <br> Name: <input type="text" id='Rname' class="inputValue">
+            <br> Address: <input type="text" id='Raddress' class="inputValue">
+            <br>Type: <select name="Rtype" id="Rtype">
+                <option value="Hourly">Hourly</option>
+                <option value="Salaried">Salaried</option>
+                <option value="Commissioned">Commissioned</option>
+            </select>
+            <br>Payment Method: <select name="Rpayment" id="Rpayment">
+                <option value="Postal Check">Postal Check</option>
+                <option value="Receive"> Receive personally</option>
+                <option value="Bank"> Bank Deposit</option>
+            </select>
+            <br>Syndicated? <select name="" id="Rsyndicate" onchange="showSyndicateOP()">
+                <option value='No' > No</option>
+                <option value='Yes' > Yes</option>
+            </select>
+            <div id="syndicateinfo" style="visibility: hidden" style="margin: 0;">
+                <br>Insert your Syndicate ID: <input type="number" id="Rsyndicateid" class="inputValue" min="0">
+                <br>Insert your syndicate Tax: <input type="number" id="Rsyndicatetax" class="inputValue" min="0">
+            </div>
+            <button onclick="Register()" class="button">
+                Submit
+            </button>
+            <!---<br> Name: <input type="" id='Rname' class="inputValue">-->
+        </div>
+        <script src="Scripts/MainScript.js"></script>
+        <script src="Scripts/AddScript.js"></script>
+</body>

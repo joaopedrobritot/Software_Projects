@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head class="FadeIn">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web Project</title>
+    
+    <div width=500 >
+        <br><br>
+        <header style="text-align: center">
+                <h1 onclick="ReturntoIndex()" class="headertxt">
+                Payment System
+            </h1>
+        </header>
+
+        <div >
+                <button onclick="AddEmployee()" class="button"><img src="Icones/sword.png" alt="" class="iconbutton">  Add Employee                  </button>
+                <button onclick="RemoveEmployee()" class="button"><img src="Icones/pentagon.png" alt="" class="iconbutton">  Remove Employee                     </button>
+                <button onclick="OpenList()" class="button"><img src="Icones/skill.png" alt="" class="iconbutton">  List All Employees  </button>
+        </div>
+        
+    </div>  
+    <link rel="stylesheet" href="maincss.css">
+</head>
+<body class="FadeIn">
+        <div style="margin: 0 auto; text-align: center;" id="ola">
+                <header style="text-align: center;opacity: 0.9; animation: fadeinout 2.2s 0s forwards; animation-iteration-count: infinite;">
+                     <h1>
+                         Insert the ID from the Employee to remove:
+                     </h1>
+                </header>
+                
+        </div>
+        <br><br> ID: <input type="number" style="height: 50px; width: 200px; font-size: 20px;" min="0" id='Rid' class="inputValue">
+        <button onclick="Remove()" class="button">
+            Submit
+        </button>
+        <script src="Scripts/RemoveScript.js"></script>
+        <script src="Scripts/MainScript.js"></script>
+</body>
