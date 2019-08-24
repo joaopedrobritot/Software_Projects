@@ -1,0 +1,196 @@
+@font-face{
+    font-family: 'nier';
+    src: url('../Fonts/NierFont/NierMenu.ttf');
+}
+
+@keyframes sitefade {
+    0% { opacity: 0; }
+    100% { opacity: 1; }    
+}
+
+.FadeIn {
+    animation: siteFade 3s ease-in-out;
+}
+
+input {
+    height: 25px;
+    font-size: 16px;
+    font-family: 'nier';
+}
+
+.headertxt {
+    display: inline-block;
+    background-color:  #4E4B46;
+    background-size: 25px;
+    border-radius: 30px;
+    color: #CDC9AE;
+    font-weight: bold;
+    text-align: center;
+    opacity: 0.4;
+    animation: fadeinout 2.2s 0s forwards;
+    animation-iteration-count:infinite;
+}
+
+hr {
+    margin: 5px;
+}
+button {
+    cursor: url('../Images/Button.png'), auto;
+}
+
+.button{
+    font-family: 'nier';
+    font-size: 13pt;
+    opacity: 0.6;
+    display: inline-block;
+    margin-top: 10px;
+    padding: 15px 20px;
+    color:  #CDC9AE;
+    text-align: center;
+    border-color: #4E4B46;
+    background-color: #4E4B46;
+}
+
+#FButtons {
+    width: 80%;
+    margin-top: 5px;
+    margin-bottom: auto;
+}
+
+.mbutton{
+    background-image: url("../Images/MenuButton.png");
+    background-repeat: no-repeat;
+    font-family: 'nier';
+    font-size: 13pt;
+    opacity: 0.6;
+    display: inline-block;
+    margin-top: 10px;
+    padding: 15px 20px;
+    color:  #CDC9AE;
+    text-align: center;
+    border-color: #4E4B46;
+    background-color: #4E4B46;
+}
+
+@keyframes fadeinout {
+    50% {opacity: 1;}
+}
+
+.button:hover {
+    animation: fadeinout 2.2s 0s forwards;
+    animation-iteration-count:infinite;
+}
+#message {
+    animation: fadeinout 2.2s 0s forwards;
+    animation-iteration-count:infinite;
+}
+
+.mbutton:hover {
+    animation: fadeinout 2.2s 0s forwards;
+    animation-iteration-count:infinite;
+}
+
+#main{
+    font-family: 'nier';
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+body{
+    cursor: url('../Images/Cursor.png'), auto;
+    font-family: 'nier';
+    text-align: center;
+    opacity: 0;
+    transition: 1.5s;
+    scroll-margin-right: unset;
+     /* Set rules to fill background */
+    min-height: 100%;
+    min-width: 200px;
+
+    /* Set up proportionate scaling */
+    width: auto;
+    height: auto;
+
+    /* Set up positioning */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    /* Setting the bottom to fit the site content*/
+    margin-bottom: auto;
+
+    background-image: url('../Images/strange7.gif'),  url('../Images/nierBack.png');
+    background-color: white;
+    /*filter: blur(2px);*/
+    background-repeat: no-repeat, repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    color:  #4E4B46;
+}
+
+select {
+    margin-right: 5px;
+    display: inline-block;
+    background-color:  #4E4B46;
+    background-size: 25px;
+    color: #CDC9AE;
+    text-align: center;
+    opacity: 0.8;
+    animation: fadeinout 2.2s 0s forwards;
+    animation-iteration-count:infinite;
+}
+
+.option {
+    opacity: 0.8;
+    animation: fadeinout 2.2s 0s forwards;
+    animation-iteration-count:infinite;
+}
+
+option:hover {
+    background-color: #4E4B46;
+    opacity: 0.3;
+    animation: fadeinout 2.2s 0s forwards;
+    animation-iteration-count:infinite;
+}
+
+h1{
+    display: inline-block;
+    min-width: 200px;
+    background-size: 25px;
+    color: #CDC9AE;
+    text-align: center;
+}
+
+.iconbutton {
+    width: 18px;
+    height: 18px;
+}
+
+.select {
+    width: 29px;
+    height: 29px;
+    margin-right: 6px;
+    display: none;
+}
+
+.inputValue {
+    display: inline-block;
+    background-color:  #4E4B46;
+    background-size: 25px;
+    color: #CDC9AE;
+    text-align: center;
+    opacity: 0.8;
+    animation: fadeinout 2.2s 0s forwards;
+    animation-iteration-count:infinite;
+}
+
+header{
+    font-family: 'nier';
+    border-radius: 20px;
+    background-color: #4E4B46;
+}

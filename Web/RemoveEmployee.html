@@ -1,41 +1,57 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head class="FadeIn">
+<script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+        <link rel="icon" href="Icones/niercursor.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Web Project</title>
-    
+    <h1 style="color:#CDC9AE; font-size: 16px;background-color: #4D4A41;" data-text="Made by joaopedrobritot" class="glitch" class="headertext">
+        Made by Joao Pedro Brito Tomé.    <a href="https://github.com/joaopedrobritot" style="cursor: url('Images/Button.png'), auto; color: #CDC9AE;" target="_blank">Github</a>
+    </h1>
     <div width=500 >
-        <br><br>
-        <header style="text-align: center">
-                <h1 onclick="ReturntoIndex()" class="headertxt">
-                Payment System
-            </h1>
-        </header>
+            <br><br><hr>
+            <div onclick="ReturntoIndex()" style="cursor: url('Images/Button.png'), auto; background-image: url('Images/GlitchLogo.gif'); background-size: 420px; background-repeat: no-repeat; height: 100px; background-position: center;">
+                <img src="" id="indeximg" alt="">
+            </div>
+            <hr>
 
         <div >
-                <button onclick="AddEmployee()" class="button"><img src="Icones/sword.png" alt="" class="iconbutton">  Add Employee                  </button>
-                <button onclick="RemoveEmployee()" class="button"><img src="Icones/pentagon.png" alt="" class="iconbutton">  Remove Employee                     </button>
-                <button onclick="OpenList()" class="button"><img src="Icones/skill.png" alt="" class="iconbutton">  List All Employees  </button>
+                <button onclick="AddEmployee()" class="mbutton" ><img src="Icones/sword.png" alt="" class="iconbutton">  Add Employee                  </button>
+                <button onclick="RemoveEmployee()" class="mbutton" id="alo"><img src="Icones/pentagon.png" alt="" class="iconbutton"><h1 style="font-size: 17px; display: inline; font-weight: 600;" data-text='ReEmployeeme' class="glitch">Remove Employee</h1>                       <hr></button>
+                <button onclick="OpenList()" class="mbutton"><img src="Icones/skill.png" alt="" class="iconbutton">  List All Employees  </button>
+                <button onclick="RChangeEmployee()" class="mbutton"><img src="Icones/crystal.png" alt="" class="iconbutton">  Change Employee  </button>
+                <button onclick="Payment()" class="mbutton"><img src="Icones/lure.png" alt="" class="iconbutton">  Payment</button>
         </div>
         
     </div>  
-    <link rel="stylesheet" href="maincss.css">
+    <link rel="stylesheet" href="Stylesheets/maincss.css">
+    <link rel="stylesheet" href="Stylesheets/glitch.css">
 </head>
 <body class="FadeIn">
-        <div style="margin: 0 auto; text-align: center;" id="ola">
-                <header style="text-align: center;opacity: 0.9; animation: fadeinout 2.2s 0s forwards; animation-iteration-count: infinite;">
+    
+        <div style="text-align: center; margin-top: 20px;" id="ola">
+                <header style="text-align: center;opacity: 0.9; animation: fadeinout 2.2s 0s forwards; animation-iteration-count: infinite; margin-left: auto;margin-right: auto;">
                      <h1>
                          Insert the ID from the Employee to remove:
                      </h1>
                 </header>
                 
         </div>
-        <br><br> ID: <input type="number" style="height: 50px; width: 200px; font-size: 20px;" min="0" id='Rid' class="inputValue">
+        <form onsubmit="return false;">
+                <fieldset>
+                <legend>Remove an Employee</legend>
+        <br> ID: <center><input type="number" style="height: 50px; width: 200px; font-size: 20px;" min="0" id='Rid' class="inputValue"></center>
         <button onclick="Remove()" class="button">
             Submit
         </button>
+    </fieldset>
+    </form>
+        <script>
+            document.getElementById('alo').style = 'animation: fadeinout 2.2s 0s forwards;animation-iteration-count:infinite;';
+        </script>
         <script src="Scripts/RemoveScript.js"></script>
         <script src="Scripts/MainScript.js"></script>
 </body>

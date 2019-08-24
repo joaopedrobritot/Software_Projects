@@ -1,60 +1,78 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head class="FadeIn">
+        <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+        <link rel="icon" href="Icones/niercursor.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Web Project</title>
-    
+    <h1 style="color:#CDC9AE; font-size: 16px;background-color: #4D4A41;" data-text="Made by joaopedrobritot" class="glitch" class="headertext">
+        Made by Joao Pedro Brito Tomé.    <a href="https://github.com/joaopedrobritot" style="cursor: url('Images/Button.png'), auto; color: #CDC9AE;" target="_blank">Github</a>
+    </h1>
     <div width=500 >
-        <br><br>
-        <header style="text-align: center">
-                <h1 onclick="ReturntoIndex()" class="headertxt">
-                Payment System
-            </h1>
-        </header>
-
+            <br><br><hr>
+                <div onclick="ReturntoIndex()" style="cursor: url('Images/Button.png'), auto; background-image: url('Images/GlitchLogo.gif'); background-size: 420px; background-repeat: no-repeat; height: 100px; background-position: center;">
+                <img src="" id="indeximg" alt="">
+                </div>
+            <hr>
         <div >
-                <button onclick="AddEmployee()" class="button"><img src="Icones/sword.png" alt="" class="iconbutton">  Add Employee                  </button>
-                <button onclick="RemoveEmployee()" class="button"><img src="Icones/pentagon.png" alt="" class="iconbutton">  Remove Employee                     </button>
-                <button onclick="OpenList()" class="button"><img src="Icones/skill.png" alt="" class="iconbutton">  List All Employees  </button>
+                <button onclick="AddEmployee()" class="mbutton" style="font-size: 20px;" id="alo"><img src="Icones/sword.png" alt="" class="iconbutton"> <h1 style="font-size: 17px; display: inline; font-weight: 600;" data-text="AdEmdPloyee" class="glitch">Add Employee</h1>                   <hr></button>
+                <button onclick="RemoveEmployee()" class="mbutton"><img src="Icones/pentagon.png" alt="" class="iconbutton">  Remove Employee                     </button>
+                <button onclick="OpenList()" class="mbutton"><img src="Icones/skill.png" alt="" class="iconbutton">  List All Employees  </button>
+                <button onclick="RChangeEmployee()" class="mbutton"><img src="Icones/crystal.png" alt="" class="iconbutton">  Change Employee  </button>
+                <button onclick="Payment()" class="mbutton"><img src="Icones/lure.png" alt="" class="iconbutton">  Payment</button>
         </div>
         
     </div>  
-    <link rel="stylesheet" href="maincss.css">
+    <link rel="stylesheet" href="Stylesheets/maincss.css">
+    <link rel="stylesheet" href="Stylesheets/glitch.css">
 </head>
 <body class="FadeIn">
-        <div style="margin: 0 auto;" id="ola">
+        <div style="text-align: center;margin-top: 20px;" id="ola">
             <header style="text-align: center;opacity: 0.9; animation: fadeinout 2.2s 0s forwards; animation-iteration-count: infinite;">
                  <h1>
                      Insert Your Information:
                  </h1>
             </header>
-            <br> Name: <input type="text" id='Rname' class="inputValue">
-            <br> Address: <input type="text" id='Raddress' class="inputValue">
-            <br>Type: <select name="Rtype" id="Rtype">
+            <form onsubmit="return false;">
+                <fieldset>
+                    <legend>Create new Employee</legend>
+            <br> Name: <center><input type="text" id='Rname' class="inputValue"></center>
+            <br> Address: <center><input type="text" id='Raddress' class="inputValue"></center>
+            <br> CPF: <center><input type="text" id='Rcpf' maxlength="14" class="inputValue" onkeydown="formatar('###.###.###-##', this)"></center>
+            <br>Type: <center><select name="Rtype" id="Rtype" onchange="salaryString()"></center>
                 <option value="Hourly">Hourly</option>
                 <option value="Salaried">Salaried</option>
                 <option value="Commissioned">Commissioned</option>
             </select>
-            <br>Payment Method: <select name="Rpayment" id="Rpayment">
+            <br><br><pre id="displaysalary" style="color: #4E4B46; font-size: 16px; margin: 0;font-family: 'nier';"></pre><center><input type="number" id="Rsalary" min="0" class="inputValue"></center>
+            <br><br>Payment Method: <center><select name="Rpayment" id="Rpayment"></center>
                 <option value="Postal Check">Postal Check</option>
-                <option value="Receive"> Receive personally</option>
-                <option value="Bank"> Bank Deposit</option>
+                <option value="Receive in Hands"> Receive personally</option>
+                <option value="Bank Deposit"> Bank Deposit</option>
             </select>
-            <br>Syndicated? <select name="" id="Rsyndicate" onchange="showSyndicateOP()">
+            <br><br>Syndicated? <center><select name="" id="Rsyndicate" onchange="showSyndicateOP()"></center>
                 <option value='No' > No</option>
                 <option value='Yes' > Yes</option>
-            </select>
-            <div id="syndicateinfo" style="visibility: hidden" style="margin: 0;">
-                <br>Insert your Syndicate ID: <input type="number" id="Rsyndicateid" class="inputValue" min="0">
-                <br>Insert your syndicate Tax: <input type="number" id="Rsyndicatetax" class="inputValue" min="0">
+            </select><br>
+            <div id="syndicateinfo" style="display: none;">
+                    <br>Insert your Syndicate ID: <center><input type="number" id="Rsyndicateid" class="inputValue" min="0"></center><br>
+                    Insert your syndicate Tax: <center><input type="number" id="Rsyndicatetax" class="inputValue" min="0"></center>
             </div>
+            
             <button onclick="Register()" class="button">
                 Submit
             </button>
+            <br><br><br>
+        </fieldset>
+            </form>
             <!---<br> Name: <input type="" id='Rname' class="inputValue">-->
         </div>
+        <script>
+            document.getElementById('alo').style = 'animation: fadeinout 2.2s 0s forwards;animation-iteration-count:infinite;';
+        </script>
         <script src="Scripts/MainScript.js"></script>
         <script src="Scripts/AddScript.js"></script>
 </body>

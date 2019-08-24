@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head class="FadeIn">
+<script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+        <link rel="icon" href="Icones/niercursor.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web Project</title>
+    <h1 style="color:#CDC9AE; font-size: 16px;background-color: #4D4A41;" data-text="Made by joaopedrobritot" class="glitch" class="headertext">
+        Made by Joao Pedro Brito Tomé.    <a href="https://github.com/joaopedrobritot" style="cursor: url('Images/Button.png'), auto; color: #CDC9AE;" target="_blank">Github</a>
+    </h1>
+    <div width=500 >
+        <br><br><hr>
+        <div onclick="ReturntoIndex()" style="cursor: url('Images/Button.png'), auto; background-image: url('Images/GlitchLogo.gif'); background-size: 420px; background-repeat: no-repeat; height: 100px; background-position: center;">
+            <img src="" id="indeximg" alt="">
+        </div>
+        <hr>
+
+        <div >
+                <button onclick="AddEmployee()" class="mbutton"><img src="Icones/sword.png" alt="" class="iconbutton">  Add Employee                  </button>
+                <button onclick="RemoveEmployee()" class="mbutton"><img src="Icones/pentagon.png" alt="" class="iconbutton">  Remove Employee                     </button>
+                <button onclick="OpenList()" class="mbutton"><img src="Icones/skill.png" alt="" class="iconbutton">  List All Employees  </button>
+                <button onclick="RChangeEmployee()" class="mbutton" ><img src="Icones/crystal.png" alt="" class="iconbutton"> Change Employee  </button>
+                <button onclick="Payment()" class="mbutton" id="alo"><img src="Icones/lure.png" alt="" class="iconbutton">   <h1 style="font-size: 17px; display: inline; font-weight: 600;" data-text="Pameynt" class="glitch">  Payment </h1><hr></button>
+        </div>
+        
+    </div>  
+    <link rel="stylesheet" href="Stylesheets/maincss.css">
+    <link rel="stylesheet" href="Stylesheets/glitch.css">
+</head>
+<body>
+    <form id="CForm" onsubmit="return false;">
+        <fieldset>
+            <legend>Payment Related Functions</legend>
+            <br> ID: <center><input type="number" style="height: 50px; width: 200px; font-size: 20px;" min="0" id='Rid' class="inputValue"></center>
+            <button onclick="checkIdFunction()" class="button">
+                Submit
+            </button>
+        </fieldset>
+    </form>
+    <form onsubmit="return false;">
+        <fieldset>
+            <div style=" width: 90%; height: 500px; margin-left: auto; margin-right: auto; display: none; margin-top: 25px;" id="view"> <!--fazer display none-->
+
+                <div style=" width: auto; height: 500px; float: left;">
+                    <h1 id="showid" style="color: #4D4A41;">
+
+                    </h1>
+                    <br>
+                    <img id="img1" class="select"><button class="button" onclick="TimeCard(document.getElementById('time'))" id="FButtons" name="b1" style="margin-top: 50%;">
+                        <img class="iconbutton" id="img01" style="background-color: #4D4A41; margin-right: 5px;">Time Card
+                    </button><br>
+                    <img id="img2" class="select"><button class="button" onclick="Selling(document.getElementById('sell'))" id="FButtons" name="b2">
+                        <img class="iconbutton" id="img02" style="background-color: #4D4A41; margin-right: 5px;">Selling Submit
+                    </button><br>
+                    <img id="img3" class="select"><button class="button" onclick="Service(document.getElementById('serv'))" id="FButtons" name="b3">
+                        <img class="iconbutton" id="img03" style="background-color: #4D4A41; margin-right: 5px;">Service Tax
+                    </button><br>
+                    <img id="img4" class="select"><button class="button" onclick="Pay(document.getElementById('pay'))" id="FButtons" name="b4" style="margin-bottom: 50%;">
+                        <img class="iconbutton" id="img04" style="background-color: #4D4A41; margin-right: 5px;">Pay This Employee
+                    </button>
+                </div>
+
+                <div id="time" style="text-align: center; height: 500px; float: right; display: none; width: 70%; text-align: center;">
+                    <fieldset>
+                        <div style="margin-left: auto; margin-right: auto;">
+                            <h1 style="color: #4D4A41;">
+                                Time Card Check
+                            </h1>
+                            <center><button class="button" onclick="check()">
+                                Check
+                            </button></center>
+                        </div>
+                    </fieldset>
+                </div> <!--check done-->
+                <div id="sell" style="text-align: center; height: 500px; float: right; display: none; width: 70%; text-align: center;">
+                    <fieldset>
+                        <div style="margin-left: auto; margin-right: auto; display: none;" id="sub">
+                            <h1 style="color: #4D4A41;">
+                                Selling Submit
+                            </h1>
+                            <center><input type="number" min="0" class="inputValue" id="selling"></center>
+                            <center><button class="button" onclick="submitSell();">
+                                Submit
+                            </button></center>
+                        </div>
+                        <div style="margin-left: auto; margin-right: auto; display: none;" id="suberror">
+                            <h1 style="color: #4D4A41;">
+                                This Employee is not Commissioned!
+                            </h1>
+                        </div>
+                    </fieldset>
+                </div> <!--selling done-->
+                <div id="serv" style="text-align: center; height: 500px; float: right; display: none; width: 70%; text-align: center;">
+                    <fieldset>
+                        <div style="margin-left: auto; margin-right: auto; display: none;" id="ser">
+                            <h1 style="color: #4D4A41;">
+                                Service Tax
+                            </h1>
+                            <center><input type="number" min="0" class="inputValue" id="service"></center>
+                            <center><button class="button" onclick="serviceReg();">
+                                Submit
+                            </button></center>
+                        </div>
+                        <div style="margin-left: auto; margin-right: auto; display: none;" id="sererror">
+                            <h1 style="color: #4D4A41;">
+                                This Employee is not Syndicated!
+                            </h1>
+                        </div>
+                    </fieldset>
+                </div> <!--service done-->
+                <div id="pay" style="text-align: center; height: 500px; float: right; display: none; width: 70%; text-align: center; background-color:">
+                    <fieldset>
+                        <div style="margin-left: auto; margin-right: auto; display: none;" id="p">
+                            <h1 style="color: #4D4A41;">
+                                Payment Roll
+                            </h1>
+                            <center>
+                                <div id="employee" style="margin-top: 20px;opacity: 0.9; animation: fadeinout 2.2s 0s forwards; animation-iteration-count: infinite; background-color: #4E4B46 ; color: #CDC9AE">
+                                </div>
+                            </center>
+                            <center>
+                                <button class="button" onclick="roll()">
+                                    Pay This Employee
+                                </button>
+                            </center>
+                        </div>
+                    </fieldset>
+                </div> <!--payment done-->
+            </div>
+        </fieldset>
+    </form>
+    <br><br><br>
+
+    <script>
+        document.getElementById('alo').style = 'animation: fadeinout 2.2s 0s forwards;animation-iteration-count:infinite;';
+    </script>
+    <script src="Scripts/Payment.js"></script>
+    <script src="Scripts/MainScript.js"></script>
+</body>

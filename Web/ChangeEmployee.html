@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head class="FadeIn">
+<script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+        <link rel="icon" href="Icones/niercursor.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web Project</title>
+    <h1 style="color:#CDC9AE; font-size: 16px;background-color: #4D4A41;" data-text="Made by joaopedrobritot" class="glitch" class="headertext">
+        Made by Joao Pedro Brito Tomé.    <a href="https://github.com/joaopedrobritot" style="cursor: url('Images/Button.png'), auto; color: #CDC9AE;" target="_blank">Github</a>
+    </h1>
+    <div width=500 >
+        <br><br><hr>
+        <div onclick="ReturntoIndex()" style="cursor: url('Images/Button.png'), auto; background-image: url('Images/GlitchLogo.gif'); background-size: 420px; background-repeat: no-repeat; height: 100px; background-position: center;">
+            <img src="" id="indeximg" alt="">
+        </div>
+        <hr>
+
+        <div >
+                <button onclick="AddEmployee()" class="mbutton"><img src="Icones/sword.png" alt="" class="iconbutton">  Add Employee                  </button>
+                <button onclick="RemoveEmployee()" class="mbutton"><img src="Icones/pentagon.png" alt="" class="iconbutton">  Remove Employee                     </button>
+                <button onclick="OpenList()" class="mbutton"><img src="Icones/skill.png" alt="" class="iconbutton">  List All Employees  </button>
+                <button onclick="RChangeEmployee()" class="mbutton" id="alo"><img src="Icones/crystal.png" alt="" class="iconbutton">  <h1 style="font-size: 17px; display: inline; font-weight: 600;" data-text="ChEmgePloyee" class="glitch"> Change Employee </h1><hr> </button>
+                <button onclick="Payment()" class="mbutton"><img src="Icones/lure.png" alt="" class="iconbutton">  Payment</button>
+        </div>
+        
+    </div>  
+    <link rel="stylesheet" href="Stylesheets/maincss.css">
+    <link rel="stylesheet" href="Stylesheets/glitch.css">
+</head>
+<body>
+    <form id="CForm" onsubmit="return false;">
+        <fieldset>
+            <legend>Change an Employee</legend>
+            <br> ID: <center><input type="number" style="height: 50px; width: 200px; font-size: 20px;" min="0" id='Rid' class="inputValue"></center>
+            <button onclick="ApplyChange()" class="button">
+                Submit
+            </button>
+        </fieldset>
+    </form>
+
+    <div id="info" style="display: none;">
+            
+            <h1 style="color: #4E4B46;">
+                Any Change on the values below will change<br> the Employee associated with the ID :<pre id="displayid" style="color: #4E4B46; font-size: 35px; margin: 0;font-family: 'nier';"></pre>
+            </h1>
+            <br> Name: <center><input type="text" id='Rname' class="inputValue"></center>
+            <br> Address: <center><input type="text" id='Raddress' class="inputValue"></center>
+            <br> CPF: <center><input type="text" id='Rcpf' maxlength="14" class="inputValue" onkeydown="formatar('###.###.###-##', this)"></center>
+            <br> Type: <center><select name="Rtype" id="Rtype"></center>
+                <option value="Hourly">Hourly</option>
+                <option value="Salaried">Salaried</option>
+                <option value="Commissioned">Commissioned</option>
+            </select>
+            <br><br>Payment Method: <center><select name="Rpayment" id="Rpayment"></center>
+                <option value="Postal Check">Postal Check</option>
+                <option value="Receive in Hands"> Receive personally</option>
+                <option value="Bank Deposit"> Bank Deposit</option>
+            </select>
+            <br><br>Syndicated? <center><select name="" id="Rsyndicate" onchange="showSyndicateOP()"></center>
+                <option value='No' > No</option>
+                <option value='Yes' > Yes</option>
+            </select><br>
+            <div id="syndicateinfo" style="display: none;">
+                    <br>Syndicate ID: <center><input type="number" id="Rsyndicateid" class="inputValue" min="0"></center><br>
+                    Syndicate Tax: <center><input type="number" id="Rsyndicatetax" class="inputValue" min="0"></center>
+            </div>
+            <button onclick="verify()" class="button">
+                Change
+            </button>
+            <!--<div style=" opacity: 0.7;position: absolute;left: 100px;top: 700px;width: 300px; height: 300px;" id="message">
+                <h1 style="color: #4E4B46; font-size: 20px;">
+                    Note: if you change, it will be applied to the real Employee
+                </h1>
+            </div>-->
+            <br><br><br>
+    </div>
+
+
+    <script src="Scripts/ChangeEmployee.js"></script>
+    <script src="Scripts/MainScript.js"></script>
+</body>
